@@ -1,0 +1,11 @@
+Running on host compute376.bc4.acrc.priv
+Time is Mon Feb 5 17:56:25 GMT 2018
+Directory is /mnt/storage/home/sm15504/year3CW/flat_mpi_better/hpc_two
+Slurm job ID is 736636
+This job runs on the following machines:
+compute376
+==done==
+Reynolds number:		9.757355690002E+00
+Elapsed time:			23.908030 (s)
+Elapsed user CPU time:		23.906480 (s)
+Elapsed system CPU time:	0.000999 (s)

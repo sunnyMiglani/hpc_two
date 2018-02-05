@@ -13,6 +13,8 @@ echo Directory is `pwd`
 echo Slurm job ID is $SLURM_JOB_ID
 echo This job runs on the following machines:
 echo `echo $SLURM_JOB_NODELIST | uniq`
+echo icc
+
 
 #! Run the executable
 ./d2q9-bgk input_128x128.params obstacles_128x128.dat
