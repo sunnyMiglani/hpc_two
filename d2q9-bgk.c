@@ -136,6 +136,8 @@ int main(int argc, char* argv[])
   double usrtim;                /* floating point number to record elapsed user CPU time */
   double systim;                /* floating point number to record elapsed system CPU time */
 
+
+
   /* parse the command line */
   if (argc != 3)
   {
@@ -147,8 +149,23 @@ int main(int argc, char* argv[])
     obstaclefile = argv[2];
   }
 
+
+
+
   /* initialise our data structures and load values from file */
   initialise(paramfile, obstaclefile, &params, &cells, &tmp_cells, &obstacles, &av_vels);
+
+  /**
+      Goal:
+      Initialise MPI at this point
+      The master thread should have all the data (for obstacles and cells done)
+      Can then split this data and send it to each thread with the extra rows.
+
+      - Maybe have functions that act as a blocker and wait for synchronization of the files.
+      - Could move communication to nodes so there's less workload on the master thread.
+      - But this would lead to more possible deadlocks.
+      
+  **/
 
   /* iterate for maxIters timesteps */
   gettimeofday(&timstr, NULL);
@@ -234,11 +251,6 @@ int accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
 
 int propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
 {
-  /*
-    Optimisation Notes
-    Double for loop -> Independent off each other, compiler should optimise.
-
-  */
 
 
   /* loop over _all_ cells */
@@ -522,6 +534,9 @@ int initialise(const char* paramfile, const char* obstaclefile,
   */
 
   /* main grid */
+
+    // Talk to master ,get some of dat numbers
+
   *cells_ptr = (t_speed*)malloc(sizeof(t_speed) * (params->ny * params->nx));
 
   if (*cells_ptr == NULL) die("cannot allocate memory for cells", __LINE__, __FILE__);
