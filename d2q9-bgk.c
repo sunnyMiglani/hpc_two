@@ -212,7 +212,7 @@ int main(int argc, char* argv[])
 }
 
 bool inLocalRows(int myStartInd, int myEndInd, int globalPos){
-  if(rank == MASTER){ return true;} 
+  if(rank == MASTER){ return true;}
   if(globalPos >= myStartInd){
   if( globalPos <= myEndInd){
           return true;
@@ -632,16 +632,18 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
   /* read-in the blocked cells list */
   while ((retval = fscanf(fp, "%d %d %d\n", &xx, &yy, &blocked)) != EOF)
   {
+    if(inLocalRows(params->startInd, params->endInd, yy) == false){ continue;}
+    yy = getLocalRows(params->startInd, params->endInd, yy); // convert to local representation
+    if( y < 0 || yy > params->ny -1){
+      printf("Obstacle y coord out of range! %d for worker %d with %d end \n",yy,rank,params->ny);
+    }
 
     /* some checks */
-    if(inLocalRows(params->startInd, params->endInd, yy) == false){ continue; }
     if (retval != 3) die("expected 3 values per line in obstacle file", __LINE__, __FILE__);
 
     if (xx < 0 || xx > params->nx - 1) die("obstacle x-coord out of range", __LINE__, __FILE__);
 
-    yy = getLocalRows(params->startInd, params->endInd, yy); // convert to local representation
     if (yy < 0 || yy > params->ny - 1){
-	 printf("Obstacle y coord out of range! %d for worker %d with max %d \n",yy,rank,params->ny); 
 	 die("obstacle y-coord out of range", __LINE__, __FILE__);
 	}
     if (blocked != 1) die("obstacle blocked value should be 1", __LINE__, __FILE__);
