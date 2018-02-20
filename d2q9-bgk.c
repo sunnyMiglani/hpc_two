@@ -175,7 +175,7 @@ int main(int argc, char* argv[])
 
 
   /* initialise our data structures and load values from file */
-  initialise(paramfile, obstaclefile, &params, &cells, &tmp_cells, &obstacles, &av_vels, rank);
+  func_initialise(paramfile, obstaclefile, &params, &cells, &tmp_cells, &obstacles, &av_vels, rank);
   /* iterate for maxIters timesteps */
   gettimeofday(&timstr, NULL);
   tic = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
@@ -213,11 +213,11 @@ int main(int argc, char* argv[])
 
 bool inLocalRows(int myStartInd, int myEndInd, int globalPos){
   if(rank == MASTER){ return true;}
-  return(if(globalPos >= myStartInd && globalPos <= myEndInd));
+  return (if(globalPos >= myStartInd && globalPos <= myEndInd));
 }
 
 int getLocalRows(int myStartInd, int myEndInd, int globalPos){
-  if(rank == MASTER){return globalPos};
+  if(rank == MASTER){return globalPos;};
   if(inLocalRows(myStartInd,myEndInd,globalPos)){
     return globalPos - myStartInd;
   }
