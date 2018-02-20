@@ -55,10 +55,23 @@
 #include <time.h>
 #include <sys/time.h>
 #include <sys/resource.h>
+#include <stdbool.h>
+#include "mpi.h"
 
 #define NSPEEDS         9
 #define FINALSTATEFILE  "final_state.dat"
 #define AVVELSFILE      "av_vels.dat"
+
+
+#define MASTER 0
+
+/*-------- Global Variables ------------ */
+int rank;                  // Variable to store the rank of the process
+int size;                  // Variable to store the size of the mpi processess.
+int local_rows;
+int local_cols;
+int bigX;
+int bigY;
 
 /* struct to hold the parameter values */
 typedef struct
@@ -70,6 +83,8 @@ typedef struct
   float density;       /* density per link */
   float accel;         /* density redistribution */
   float omega;         /* relaxation parameter */
+  int startInd;
+  int endInd;
 } t_param;
 
 /* struct to hold the 'speed' values */
@@ -83,21 +98,21 @@ typedef struct
 */
 
 /* load params, allocate memory, load obstacles & initialise fluid particle densities */
-int initialise(const char* paramfile, const char* obstaclefile,
+int func_initialise(const char* paramfile, const char* obstaclefile,
                t_param* params, t_speed** cells_ptr, t_speed** tmp_cells_ptr,
                int** obstacles_ptr, float** av_vels_ptr);
 
 /*
 ** The main calculation methods.
 ** timestep calls, in order, the functions:
-** accelerate_flow(), propagate(), rebound() & collision()
+** func_accelerate_flow(), func_propagate(), func_rebound() & func_collision()
 */
-int timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
-int accelerate_flow(const t_param params, t_speed* cells, int* obstacles);
-int propagate(const t_param params, t_speed* cells, t_speed* tmp_cells);
-int rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
-int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
-int write_values(const t_param params, t_speed* cells, int* obstacles, float* av_vels);
+int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
+int func_accelerate_flow(const t_param params, t_speed* cells, int* obstacles);
+int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells);
+int func_rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
+int func_collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
+int func_write_values(const t_param params, t_speed* cells, int* obstacles, float* av_vels);
 
 /* finalise, including freeing up allocated memory */
 int finalise(const t_param* params, t_speed** cells_ptr, t_speed** tmp_cells_ptr,
@@ -116,6 +131,8 @@ float calc_reynolds(const t_param params, t_speed* cells, int* obstacles);
 /* utility functions */
 void die(const char* message, const int line, const char* file);
 void usage(const char* exe);
+bool inLocalRows(int myStartInd, int myEndInd, int globalPos);
+int getLocalRows(int myStartInd, int myEndInd, int globalPos);
 
 /*
 ** main program:
@@ -138,6 +155,7 @@ int main(int argc, char* argv[])
 
 
 
+
   /* parse the command line */
   if (argc != 3)
   {
@@ -150,30 +168,21 @@ int main(int argc, char* argv[])
   }
 
 
+  MPI_Init(&argc, &argv);
+  MPI_Comm_size(MPI_COMM_WORLD, &size);
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
 
 
   /* initialise our data structures and load values from file */
-  initialise(paramfile, obstaclefile, &params, &cells, &tmp_cells, &obstacles, &av_vels);
-
-  /**
-      Goal:
-      Initialise MPI at this point
-      The master thread should have all the data (for obstacles and cells done)
-      Can then split this data and send it to each thread with the extra rows.
-
-      - Maybe have functions that act as a blocker and wait for synchronization of the files.
-      - Could move communication to nodes so there's less workload on the master thread.
-      - But this would lead to more possible deadlocks.
-      
-  **/
-
+  initialise(paramfile, obstaclefile, &params, &cells, &tmp_cells, &obstacles, &av_vels, rank);
   /* iterate for maxIters timesteps */
   gettimeofday(&timstr, NULL);
   tic = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
 
   for (int tt = 0; tt < params.maxIters; tt++)
   {
-    timestep(params, cells, tmp_cells, obstacles);
+    func_timestep(params, cells, tmp_cells, obstacles);
     av_vels[tt] = av_velocity(params, cells, obstacles);
 #ifdef DEBUG
     printf("==timestep: %d==\n", tt);
@@ -196,22 +205,39 @@ int main(int argc, char* argv[])
   printf("Elapsed time:\t\t\t%.6lf (s)\n", toc - tic);
   printf("Elapsed user CPU time:\t\t%.6lf (s)\n", usrtim);
   printf("Elapsed system CPU time:\t%.6lf (s)\n", systim);
-  write_values(params, cells, obstacles, av_vels);
+  func_write_values(params, cells, obstacles, av_vels);
   finalise(&params, &cells, &tmp_cells, &obstacles, &av_vels);
 
   return EXIT_SUCCESS;
 }
 
-int timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
+bool inLocalRows(int myStartInd, int myEndInd, int globalPos){
+  if(rank == MASTER){ return true;}
+  return(if(globalPos >= myStartInd && globalPos <= myEndInd));
+}
+
+int getLocalRows(int myStartInd, int myEndInd, int globalPos){
+  if(rank == MASTER){return globalPos};
+  if(inLocalRows(myStartInd,myEndInd,globalPos)){
+    return globalPos - myStartInd;
+  }
+  else{
+      printf("Error, Process %d tried to access out of bounds value! %d in (%d,%d) \n",rank,globalPos, myStartInd,myEndInd );
+      return -1;
+  }
+}
+
+
+int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
-  accelerate_flow(params, cells, obstacles);
-  propagate(params, cells, tmp_cells);
-  rebound(params, cells, tmp_cells, obstacles);
-  collision(params, cells, tmp_cells, obstacles);
+  func_accelerate_flow(params, cells, obstacles);
+  func_propagate(params, cells, tmp_cells);
+  func_rebound(params, cells, tmp_cells, obstacles);
+  func_collision(params, cells, tmp_cells, obstacles);
   return EXIT_SUCCESS;
 }
 
-int accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
+int func_accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
 {
 
   /*
@@ -249,7 +275,7 @@ int accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
   return EXIT_SUCCESS;
 }
 
-int propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
+int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
 {
 
 
@@ -282,7 +308,7 @@ int propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
   return EXIT_SUCCESS;
 }
 
-int rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
+int func_rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
   /* loop over the cells in the grid */
   for (int jj = 0; jj < params.ny; jj++)
@@ -309,7 +335,7 @@ int rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obsta
   return EXIT_SUCCESS;
 }
 
-int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
+int func_collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
   const float c_sq = 1.f / 3.f; /* square of speed of sound */
   const float w0 = 4.f / 9.f;  /* weighting factor */
@@ -463,7 +489,26 @@ float av_velocity(const t_param params, t_speed* cells, int* obstacles)
   return tot_u / (float)tot_cells;
 }
 
-int initialise(const char* paramfile, const char* obstaclefile,
+/*
+** Allocate memory.
+**
+** Remember C is pass-by-value, so we need to
+** pass pointers into the initialise function.
+**
+** NB we are allocating a 1D array, so that the
+** memory will be contiguous.  We still want to
+** index this memory as if it were a (row major
+** ordered) 2D array, however.  We will perform
+** some arithmetic using the row and column
+** coordinates, inside the square brackets, when
+** we want to access elements of this array.
+**
+** Note also that we are using a structure to
+** hold an array of 'speeds'.  We will allocate
+** a 1D array of these structs.
+*/
+
+int func_initialise(const char* paramfile, const char* obstaclefile,
                t_param* params, t_speed** cells_ptr, t_speed** tmp_cells_ptr,
                int** obstacles_ptr, float** av_vels_ptr)
 {
@@ -473,83 +518,68 @@ int initialise(const char* paramfile, const char* obstaclefile,
   int    blocked;        /* indicates whether a cell is blocked by an obstacle */
   int    retval;         /* to hold return value for checking */
 
-  /* open the parameter file */
-  fp = fopen(paramfile, "r");
 
-  if (fp == NULL)
-  {
-    sprintf(message, "could not open input parameter file: %s", paramfile);
-    die(message, __LINE__, __FILE__);
-  }
+    /* open the parameter file */
+    fp = fopen(paramfile, "r");
+    if (fp == NULL)
+    {
+      sprintf(message, "could not open input parameter file: %s", paramfile);
+      die(message, __LINE__, __FILE__);
+    }
+    /* read in the parameter values */
+    retval = fscanf(fp, "%d\n", &(params->nx));
+    if (retval != 1) die("could not read param file: nx", __LINE__, __FILE__);
+    retval = fscanf(fp, "%d\n", &(params->ny));
+    if (retval != 1) die("could not read param file: ny", __LINE__, __FILE__);
+    retval = fscanf(fp, "%d\n", &(params->maxIters));
+    if (retval != 1) die("could not read param file: maxIters", __LINE__, __FILE__);
+    retval = fscanf(fp, "%d\n", &(params->reynolds_dim));
+    if (retval != 1) die("could not read param file: reynolds_dim", __LINE__, __FILE__);
+    retval = fscanf(fp, "%f\n", &(params->density));
+    if (retval != 1) die("could not read param file: density", __LINE__, __FILE__);
+    retval = fscanf(fp, "%f\n", &(params->accel));
+    if (retval != 1) die("could not read param file: accel", __LINE__, __FILE__);
+    retval = fscanf(fp, "%f\n", &(params->omega));
+    if (retval != 1) die("could not read param file: omega", __LINE__, __FILE__);
+    /* and close up the file */
+    fclose(fp);
 
-  /* read in the parameter values */
-  retval = fscanf(fp, "%d\n", &(params->nx));
+    if(rank !=MASTER){
+      bigX = params->nx;
+      bigY = params->ny;
+      // Ranks should go 1,2,3,4 ... (size-1)
+      // startInd and endInd are global start and ends.
+      // params->ny is the end of the local rows.
+      if(rank < (size-1)){
+        params->ny = floor(bigY/size);
+        if(rank == 1){
+          params->startInd = 0;
+          params->endInd = params->ny * rank;
+        }
+        else{
+          params->startInd = params->ny *(rank-1);
+          params->endInd = params->ny *(rank);
+        }
+      }
+      if(rank == (size-1)){
+        int offset = floor(bigY/size);
+        params->startInd = offset*(rank-1);
+        params->endInd = bigY;
+      }
+      local_cols = params->nx;
+      local_rows = params->ny;
+    }
 
-  if (retval != 1) die("could not read param file: nx", __LINE__, __FILE__);
 
-  retval = fscanf(fp, "%d\n", &(params->ny));
-
-  if (retval != 1) die("could not read param file: ny", __LINE__, __FILE__);
-
-  retval = fscanf(fp, "%d\n", &(params->maxIters));
-
-  if (retval != 1) die("could not read param file: maxIters", __LINE__, __FILE__);
-
-  retval = fscanf(fp, "%d\n", &(params->reynolds_dim));
-
-  if (retval != 1) die("could not read param file: reynolds_dim", __LINE__, __FILE__);
-
-  retval = fscanf(fp, "%f\n", &(params->density));
-
-  if (retval != 1) die("could not read param file: density", __LINE__, __FILE__);
-
-  retval = fscanf(fp, "%f\n", &(params->accel));
-
-  if (retval != 1) die("could not read param file: accel", __LINE__, __FILE__);
-
-  retval = fscanf(fp, "%f\n", &(params->omega));
-
-  if (retval != 1) die("could not read param file: omega", __LINE__, __FILE__);
-
-  /* and close up the file */
-  fclose(fp);
-
-  /*
-  ** Allocate memory.
-  **
-  ** Remember C is pass-by-value, so we need to
-  ** pass pointers into the initialise function.
-  **
-  ** NB we are allocating a 1D array, so that the
-  ** memory will be contiguous.  We still want to
-  ** index this memory as if it were a (row major
-  ** ordered) 2D array, however.  We will perform
-  ** some arithmetic using the row and column
-  ** coordinates, inside the square brackets, when
-  ** we want to access elements of this array.
-  **
-  ** Note also that we are using a structure to
-  ** hold an array of 'speeds'.  We will allocate
-  ** a 1D array of these structs.
-  */
-
-  /* main grid */
-
-    // Talk to master ,get some of dat numbers
-
-  *cells_ptr = (t_speed*)malloc(sizeof(t_speed) * (params->ny * params->nx));
-
-  if (*cells_ptr == NULL) die("cannot allocate memory for cells", __LINE__, __FILE__);
-
-  /* 'helper' grid, used as scratch space */
-  *tmp_cells_ptr = (t_speed*)malloc(sizeof(t_speed) * (params->ny * params->nx));
-
-  if (*tmp_cells_ptr == NULL) die("cannot allocate memory for tmp_cells", __LINE__, __FILE__);
-
-  /* the map of obstacles */
-  *obstacles_ptr = malloc(sizeof(int) * (params->ny * params->nx));
-
-  if (*obstacles_ptr == NULL) die("cannot allocate column memory for obstacles", __LINE__, __FILE__);
+    /* main grid */
+    *cells_ptr = (t_speed*)malloc(sizeof(t_speed) * (params->ny * params->nx));
+    if (*cells_ptr == NULL) die("cannot allocate memory for cells", __LINE__, __FILE__);
+    /* 'helper' grid, used as scratch space */
+    *tmp_cells_ptr = (t_speed*)malloc(sizeof(t_speed) * (params->ny * params->nx));
+    if (*tmp_cells_ptr == NULL) die("cannot allocate memory for tmp_cells", __LINE__, __FILE__);
+    /* the map of obstacles */
+    *obstacles_ptr = malloc(sizeof(int) * (params->ny * params->nx));
+    if (*obstacles_ptr == NULL) die("cannot allocate column memory for obstacles", __LINE__, __FILE__);
 
   /* initialise densities */
   float w0 = params->density * 4.f / 9.f;
@@ -596,11 +626,14 @@ int initialise(const char* paramfile, const char* obstaclefile,
   /* read-in the blocked cells list */
   while ((retval = fscanf(fp, "%d %d %d\n", &xx, &yy, &blocked)) != EOF)
   {
+
     /* some checks */
+    if(inLocalRows(params->startInd, params->endInd, yy) == false){ continue; }
     if (retval != 3) die("expected 3 values per line in obstacle file", __LINE__, __FILE__);
 
     if (xx < 0 || xx > params->nx - 1) die("obstacle x-coord out of range", __LINE__, __FILE__);
 
+    yy = getLocalRows(params->startInd, params->endInd, yy); // convert to local representation
     if (yy < 0 || yy > params->ny - 1) die("obstacle y-coord out of range", __LINE__, __FILE__);
 
     if (blocked != 1) die("obstacle blocked value should be 1", __LINE__, __FILE__);
@@ -668,7 +701,7 @@ float total_density(const t_param params, t_speed* cells)
   return total;
 }
 
-int write_values(const t_param params, t_speed* cells, int* obstacles, float* av_vels)
+int func_write_values(const t_param params, t_speed* cells, int* obstacles, float* av_vels)
 {
   FILE* fp;                     /* file pointer */
   const float c_sq = 1.f / 3.f; /* sq. of speed of sound */
