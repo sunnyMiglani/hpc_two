@@ -634,7 +634,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
   {
     if(inLocalRows(params->startInd, params->endInd, yy) == false){ continue;}
     yy = getLocalRows(params->startInd, params->endInd, yy); // convert to local representation
-    if( y < 0 || yy > params->ny -1){
+    if( yy < 0 || yy > params->ny -1){
       printf("Obstacle y coord out of range! %d for worker %d with %d end \n",yy,rank,params->ny);
     }
 
