@@ -224,7 +224,8 @@ bool inLocalRows(int myStartInd, int myEndInd, int globalPos){
 int getLocalRows(int myStartInd, int myEndInd, int globalPos){
   if(rank == MASTER){return globalPos;};
   if(inLocalRows(myStartInd,myEndInd,globalPos)){
-    return globalPos - myStartInd;
+    printf("Returning %d in range (%d,%d) \n",globalPos, myStartInd,myEndInd);
+    return (globalPos - myStartInd);
   }
   else{
       printf("Error, Process %d tried to access out of bounds value! %d in (%d,%d) \n",rank,globalPos, myStartInd,myEndInd );
@@ -639,8 +640,10 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
     if (xx < 0 || xx > params->nx - 1) die("obstacle x-coord out of range", __LINE__, __FILE__);
 
     yy = getLocalRows(params->startInd, params->endInd, yy); // convert to local representation
-    if (yy < 0 || yy > params->ny - 1) die("obstacle y-coord out of range", __LINE__, __FILE__);
-
+    if (yy < 0 || yy > params->ny - 1){
+	 printf("Obstacle y coord out of range! %d for worker %d with max %d \n",yy,rank,params->ny); 
+	 die("obstacle y-coord out of range", __LINE__, __FILE__);
+	}
     if (blocked != 1) die("obstacle blocked value should be 1", __LINE__, __FILE__);
 
     /* assign to array */
