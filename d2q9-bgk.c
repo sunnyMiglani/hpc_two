@@ -213,7 +213,7 @@ int main(int argc, char* argv[])
 
 bool inLocalRows(int myStartInd, int myEndInd, int globalPos){
   if(rank == MASTER){ return true;}
-  return (if(globalPos >= myStartInd && globalPos <= myEndInd));
+  return (if(globalPos >= myStartInd && if( globalPos <= myEndInd)));
 }
 
 int getLocalRows(int myStartInd, int myEndInd, int globalPos){
