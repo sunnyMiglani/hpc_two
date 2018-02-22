@@ -139,7 +139,7 @@ void die(const char* message, const int line, const char* file);
 void usage(const char* exe);
 bool inLocalRows(int myStartInd, int myEndInd, int globalPos);
 int getLocalRows(int myStartInd, int myEndInd, int globalPos);
-
+int getHaloCellsForY(int attempt);
 /*
 ** main program:
 ** initialise, timestep loop, finalise
@@ -292,7 +292,7 @@ int func_accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
 }
 
 
-int getHaloCellsForY(int attempt, int rank){
+int getHaloCellsForY(int attempt){
     if(attempt > myEndInd){
       return haloTop;
     }
@@ -304,7 +304,8 @@ int getHaloCellsForY(int attempt, int rank){
 
 int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
 {
-
+	
+  printf("Made it into Propogate worker %d \n", rank);
   // This is the function that requries making sure that the loops look at Halo'd cells.
 
   /* loop over _all_ cells */
@@ -316,7 +317,7 @@ int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
       ** respecting periodic boundary conditions (wrap around) */
       int y_n = getHaloCellsForY(jj + 1);
       int x_e = (ii + 1) % params.nx;
-      int y_s = getHaloCells(jj);//(jj == 0) ? (jj + params.ny - 1) : (jj - 1);
+      int y_s = getHaloCellsForY(jj);//(jj == 0) ? (jj + params.ny - 1) : (jj - 1);
       int x_w = (ii == 0) ? (ii + params.nx - 1) : (ii - 1);
       /* propagate densities from neighbouring cells, following
       ** appropriate directions of travel and writing into
