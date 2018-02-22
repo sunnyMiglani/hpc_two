@@ -64,6 +64,7 @@
 
 
 #define MASTER 0
+#define NTYPES 9
 
 /*-------- Global Variables ------------ */
 int rank;                  // Variable to store the rank of the process
@@ -77,6 +78,12 @@ int haloBottom;
 
 int myStartInd;
 int myEndInd;
+
+int topRank;
+int botRank;
+
+MPI_Type cells_struct;
+
 
 
 /* struct to hold the parameter values */
@@ -160,7 +167,20 @@ int main(int argc, char* argv[])
   double systim;                /* floating point number to record elapsed system CPU time */
 
 
+  // int MPI_Type_create_struct(int count,
+  //                        const int array_of_blocklengths[],
+  //                        const MPI_Aint array_of_displacements[],
+  //                        const MPI_Datatype array_of_types[],
+  //                        MPI_Datatype *newtype)
 
+ int items = 1;
+ int block_lengths = {NSPEEDS};
+ MPI_Datatype this_type = {MPI_FLOAT};
+
+ MPI_Aint offset = {offsetof(t_speed,speeds)};
+
+ MPI_Type_create_struct(items,block_lengths,offset,this_type,&cells_struct);
+ MPI_Type_commit(&cells_struct);
 
   /* parse the command line */
   if (argc != 3)
@@ -243,12 +263,21 @@ int getLocalRows(int myStartInd, int myEndInd, int globalPos){
   }
 }
 
+void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
+
+  // Sending and recieving from bottom
+  int val = MPI_Sendrecv(cells[0 + myStartInd*params.nx], params.nx, cells_struct,botRank,1,params.nx,cells_struct,botRank,1);
+
+
+}
+
 
 int func_timestepWorkers(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
   func_accelerate_flow(params, cells, obstacles);
   func_propagate(params, cells, tmp_cells);
   func_rebound(params, cells, tmp_cells, obstacles);
   func_collision(params, cells, tmp_cells, obstacles);
+  func_haloExchange(params,cells,tmp_cells,obstacles);
 }
 
 int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
@@ -257,7 +286,7 @@ int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int*
     func_timestepWorkers(params, cells,  tmp_cells, obstacles);
   }
   if(rank == MASTER){
-    
+
   }
   return EXIT_SUCCESS;
 }
@@ -587,17 +616,25 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
     if(rank !=MASTER){
       int offset = floor(bigY/size);
       if(rank < (size-1)){
-        if(rank == 1){
+        if(rank == 1){ // First worker
           myStartInd = 0;
           myEndInd = offset*rank;
           haloBottom = bigY-1;
           haloTop = myEndInd +1;
+
+          topRank = rank+1;
+          botRank = size-1;
+
         }
-        else{
+        else{ // other workers
           myStartInd = offset *(rank-1);
           myEndInd = (offset *(rank) );
           haloBottom = myStartInd - 1;
           haloTop = myEndInd + 1;
+
+          topRank = rank+1;
+          botRank = rank-1;
+
         }
       }
       if(rank == (size-1)){ // last worker
@@ -605,6 +642,9 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
         myEndInd = bigY-1;
         haloTop = 0;
         haloBottom = myStartInd -1;
+
+        botRank = rank-1;
+        topRank = 1;
       }
       local_cols = params->nx;
       local_rows = params->ny;
