@@ -556,20 +556,20 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
 
 
 
-      printf("ny for worker %d is : %d \n",rank,params->ny);
       // Ranks should go 1,2,3,4 ... (size-1)
       // startInd and endInd are global start and ends.
       // params->ny is the end of the local rows.
       int offset = floor(bigY/size);
       params->ny = floor(bigY/size);
       if(rank < (size-1)){
+
         if(rank == 1){
           params->startInd = 0;
           params->endInd = offset * rank- 1;
         }
         else{
           params->startInd = offset *(rank-1);
-          params->endInd = offset *(rank)-1;
+          params->endInd = (offset *(rank) )-1;
         }
       }
       if(rank == (size-1)){
@@ -584,13 +584,13 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
 
 
     /* main grid */
-    *cells_ptr = (t_speed*)malloc(sizeof(t_speed) * (params->ny * params->nx));
+    *cells_ptr = (t_speed*)malloc(sizeof(t_speed) * (bigY * params->nx));
     if (*cells_ptr == NULL) die("cannot allocate memory for cells", __LINE__, __FILE__);
     /* 'helper' grid, used as scratch space */
-    *tmp_cells_ptr = (t_speed*)malloc(sizeof(t_speed) * (params->ny * params->nx));
+    *tmp_cells_ptr = (t_speed*)malloc(sizeof(t_speed) * (bigY * params->nx));
     if (*tmp_cells_ptr == NULL) die("cannot allocate memory for tmp_cells", __LINE__, __FILE__);
     /* the map of obstacles */
-    *obstacles_ptr = malloc(sizeof(int) * (params->ny * params->nx));
+    *obstacles_ptr = malloc(sizeof(int) * (bigY * params->nx));
     if (*obstacles_ptr == NULL) die("cannot allocate column memory for obstacles", __LINE__, __FILE__);
 
   /* initialise densities */
@@ -618,7 +618,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
   }
 
   /* first set all cells in obstacle array to zero */
-  for (int jj = 0; jj < params->ny; jj++)
+  for (int jj = 0; jj < local_rows; jj++)
   {
     for (int ii = 0; ii < params->nx; ii++)
     {
@@ -638,9 +638,9 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
   /* read-in the blocked cells list */
   while ((retval = fscanf(fp, "%d %d %d\n", &xx, &yy, &blocked)) != EOF)
   {
-    if(inLocalRows(params->startInd, params->endInd, yy) == false){ continue;}
-    yy = getLocalRows(params->startInd, params->endInd, yy); // convert to local representation
-    if( yy < 0 || yy > params->ny -1){
+    // if(inLocalRows(params->startInd, params->endInd, yy) == false){ continue;}
+    // yy = getLocalRows(params->startInd, params->endInd, yy); // convert to local representation
+    if( yy < 0 || yy > bigY -1){
       printf("Obstacle y coord out of range! %d for worker %d with %d end \n",yy,rank,params->ny);
     }
 
@@ -649,7 +649,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
 
     if (xx < 0 || xx > params->nx - 1) die("obstacle x-coord out of range", __LINE__, __FILE__);
 
-    if (yy < 0 || yy > params->ny - 1){
+    if (yy < 0 || yy > bigY - 1){
 	 die("obstacle y-coord out of range", __LINE__, __FILE__);
 	}
     if (blocked != 1) die("obstacle blocked value should be 1", __LINE__, __FILE__);
