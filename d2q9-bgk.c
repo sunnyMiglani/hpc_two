@@ -560,24 +560,25 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
       // Ranks should go 1,2,3,4 ... (size-1)
       // startInd and endInd are global start and ends.
       // params->ny is the end of the local rows.
+      int offset = floor(bigY/size);
+      params->ny = floor(bigY/size);
       if(rank < (size-1)){
         if(rank == 1){
           params->startInd = 0;
-          params->endInd = params->ny * rank;
+          params->endInd = offset * rank;
         }
         else{
-          params->startInd = params->ny *(rank-1);
-          params->endInd = params->ny *(rank);
+          params->startInd = offset *(rank-1);
+          params->endInd = offset *(rank);
         }
       }
       if(rank == (size-1)){
-        int offset = floor(bigY/size);
+        // int offset = floor(bigY/size);
         params->startInd = offset*(rank-1);
         params->endInd = bigY;
       }
       local_cols = params->nx;
       local_rows = params->ny;
-      params->ny = floor(bigY/size);
       printf("ny for worker %d is : %d \n",rank,params->endInd);
     }
 
