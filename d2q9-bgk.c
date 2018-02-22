@@ -225,7 +225,7 @@ int getLocalRows(int myStartInd, int myEndInd, int globalPos){
   if(rank == MASTER){return globalPos;};
   if(inLocalRows(myStartInd,myEndInd,globalPos)){
     printf("Returning %d in range (%d,%d) \n",globalPos, myStartInd,myEndInd);
-    return ((globalPos - myStartInd -1)% bigY);
+    return ((globalPos - myStartInd -1) + bigY)%bigY;
   }
   else{
       printf("Error, Process %d tried to access out of bounds value! %d in (%d,%d) \n",rank,globalPos, myStartInd,myEndInd );
