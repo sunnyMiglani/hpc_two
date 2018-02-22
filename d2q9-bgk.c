@@ -553,6 +553,8 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
     if(rank !=MASTER){
       bigX = params->nx;
       bigY = params->ny;
+    
+      printf("ny for worker %d is : %d \n",rank,params->ny);
       // Ranks should go 1,2,3,4 ... (size-1)
       // startInd and endInd are global start and ends.
       // params->ny is the end of the local rows.
