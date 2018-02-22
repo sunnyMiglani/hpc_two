@@ -176,9 +176,17 @@ int main(int argc, char* argv[])
 
   /* initialise our data structures and load values from file */
   func_initialise(paramfile, obstaclefile, &params, &cells, &tmp_cells, &obstacles, &av_vels);
+ 
+
+  /*
+   * At this point, each worker has the data + parameters + halo that's needed.
+   *
+   * */
+
   /* iterate for maxIters timesteps */
-  gettimeofday(&timstr, NULL);
-  tic = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
+
+   gettimeofday(&timstr, NULL);
+   tic = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
 
   for (int tt = 0; tt < params.maxIters; tt++)
   {
@@ -554,16 +562,13 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
     bigX = params->nx;
     bigY = params->ny;
     if(rank !=MASTER){
-     // bigX = params->nx;
-     // bigY = params->ny;
 
-      printf("Big Y : %d \n",bigY);
+     
 
       // Ranks should go 1,2,3,4 ... (size-1)
       // startInd and endInd are global start and ends.
       // params->ny is the end of the local rows.
       int offset = floor(bigY/size);
-      params->ny = floor(bigY/size);
       if(rank < (size-1)){
 
         if(rank == 1){
