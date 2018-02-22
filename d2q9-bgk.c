@@ -292,14 +292,14 @@ int func_accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
 }
 
 
-int getHaloCells(int attempt, int rank){
+int getHaloCellsForY(int attempt, int rank){
     if(attempt > myEndInd){
       return haloTop;
     }
     if(attempt < myStartInd){
       return haloBottom;
     }
-  return attempt;  
+  return attempt;
 }
 
 int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
@@ -314,9 +314,9 @@ int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
     {
       /* determine indices of axis-direction neighbours
       ** respecting periodic boundary conditions (wrap around) */
-      int y_n = (jj + 1) % params.ny;
+      int y_n = getHaloCellsForY(jj + 1);
       int x_e = (ii + 1) % params.nx;
-      int y_s = (jj == 0) ? (jj + params.ny - 1) : (jj - 1);
+      int y_s = getHaloCells(jj);//(jj == 0) ? (jj + params.ny - 1) : (jj - 1);
       int x_w = (ii == 0) ? (ii + params.nx - 1) : (ii - 1);
       /* propagate densities from neighbouring cells, following
       ** appropriate directions of travel and writing into
@@ -339,7 +339,7 @@ int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
 int func_rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
   /* loop over the cells in the grid */
-  for (int jj = 0; jj < params.ny; jj++)
+  for (int jj = myStartInd; jj < myEndInd; jj++)
   {
     for (int ii = 0; ii < params.nx; ii++)
     {
@@ -374,7 +374,7 @@ int func_collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int
   ** NB the collision step is called after
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
-  for (int jj = 0; jj < params.ny; jj++)
+  for (int jj = myStartInd; jj < myEndInd; jj++)
   {
     for (int ii = 0; ii < params.nx; ii++)
     {
@@ -475,7 +475,7 @@ float av_velocity(const t_param params, t_speed* cells, int* obstacles)
   tot_u = 0.f;
 
   /* loop over all non-blocked cells */
-  for (int jj = 0; jj < params.ny; jj++)
+  for (int jj = myStartInd; jj < myEndInd; jj++)
   {
     for (int ii = 0; ii < params.nx; ii++)
     {
