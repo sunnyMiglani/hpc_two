@@ -553,7 +553,9 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
     if(rank !=MASTER){
       bigX = params->nx;
       bigY = params->ny;
-    
+
+
+
       printf("ny for worker %d is : %d \n",rank,params->ny);
       // Ranks should go 1,2,3,4 ... (size-1)
       // startInd and endInd are global start and ends.
@@ -562,7 +564,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
         params->ny = floor(bigY/size);
         if(rank == 1){
           params->startInd = 0;
-          params->endInd = params->ny * rank;
+          params->endInd = offset * rank;
         }
         else{
           params->startInd = params->ny *(rank-1);
@@ -576,6 +578,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
       }
       local_cols = params->nx;
       local_rows = params->ny;
+      printf("ny for worker %d is : %d \n",rank,params->endInd);
     }
 
 
