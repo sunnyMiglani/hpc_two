@@ -550,11 +550,14 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
     /* and close up the file */
     fclose(fp);
 
+
+    bigX = params->nx;
+    bigY = params->ny;
     if(rank !=MASTER){
-      bigX = params->nx;
-      bigY = params->ny;
+     // bigX = params->nx;
+     // bigY = params->ny;
 
-
+      printf("Big Y : %d \n",bigY);
 
       // Ranks should go 1,2,3,4 ... (size-1)
       // startInd and endInd are global start and ends.
@@ -641,7 +644,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
     // if(inLocalRows(params->startInd, params->endInd, yy) == false){ continue;}
     // yy = getLocalRows(params->startInd, params->endInd, yy); // convert to local representation
     if( yy < 0 || yy > bigY -1){
-      printf("Obstacle y coord out of range! %d for worker %d with %d end \n",yy,rank,params->ny);
+      printf("Obstacle y coord out of range! %d for worker %d with (%d,%d) \n",yy,rank,params->startInd, params->endInd);
     }
 
     /* some checks */
