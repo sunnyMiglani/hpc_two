@@ -1,35 +1,16 @@
-Running on host compute485.bc4.acrc.priv
-Time is Thu Feb 22 19:05:44 GMT 2018
+Running on host compute174.bc4.acrc.priv
+Time is Thu Feb 22 22:05:30 GMT 2018
 Directory is /mnt/storage/home/sm15504/year3CW/flat_mpi_better/hpc_two
-Slurm job ID is 760558
+Slurm job ID is 760747
 This job runs on the following machines:
-compute[485-489]
+compute[174,182-183,188-189]
 icc
-Big Y : 128 
-ny for worker 2 is : 49 
-Big Y : 128 
-Big Y : 128 
-ny for worker 4 is : 127 
-ny for worker 1 is : 24 
-Big Y : 128 
-ny for worker 3 is : 74 
+rank : 1, myStartInd : 0, myEndInd :25, haloBottom :127, haloTop :26 
+rank : 2, myStartInd : 25, myEndInd :50, haloBottom :24, haloTop :51 
+rank : 3, myStartInd : 50, myEndInd :75, haloBottom :49, haloTop :76 
+rank : 4, myStartInd : 75, myEndInd :127, haloBottom :74, haloTop :0 
+Elapsed user CPU time:		21.598945 (s)
+Elapsed system CPU time:	0.017000 (s)
 ==done==
-Reynolds number:		2.525131988525E+01
-Elapsed time:			4.318215 (s)
-Elapsed user CPU time:		4.325070 (s)
-Elapsed system CPU time:	0.020015 (s)
-==done==
-Reynolds number:		2.525131988525E+01
-Elapsed time:			4.318618 (s)
-Elapsed user CPU time:		4.327716 (s)
-Elapsed system CPU time:	0.019023 (s)
-==done==
-Reynolds number:		2.525131988525E+01
-Elapsed time:			4.321326 (s)
-Elapsed user CPU time:		4.329987 (s)
-Elapsed system CPU time:	0.018021 (s)
-==done==
-Reynolds number:		2.525131988525E+01
-Elapsed time:			4.322173 (s)
-Elapsed user CPU time:		4.326682 (s)
-Elapsed system CPU time:	0.024003 (s)
+Reynolds number:		-NAN
+Elapsed time:			21.590649 (s)

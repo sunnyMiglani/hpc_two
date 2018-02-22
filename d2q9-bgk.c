@@ -299,6 +299,7 @@ int getHaloCells(int attempt, int rank){
     if(attempt < myStartInd){
       return haloBottom;
     }
+  return attempt;  
 }
 
 int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
@@ -307,7 +308,7 @@ int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
   // This is the function that requries making sure that the loops look at Halo'd cells.
 
   /* loop over _all_ cells */
-  for (int jj = startInd; jj < endInd; jj++)
+  for (int jj = myStartInd; jj < myEndInd; jj++)
   {
     for (int ii = 0; ii < params.nx; ii++)
     {
