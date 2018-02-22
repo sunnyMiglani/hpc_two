@@ -244,12 +244,21 @@ int getLocalRows(int myStartInd, int myEndInd, int globalPos){
 }
 
 
-int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
-{
+int func_timestepWorkers(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
   func_accelerate_flow(params, cells, obstacles);
   func_propagate(params, cells, tmp_cells);
   func_rebound(params, cells, tmp_cells, obstacles);
   func_collision(params, cells, tmp_cells, obstacles);
+}
+
+int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
+{
+  if(rank != MASTER){
+    func_timestepWorkers(params, cells,  tmp_cells, obstacles);
+  }
+  if(rank == MASTER){
+    
+  }
   return EXIT_SUCCESS;
 }
 
@@ -304,8 +313,7 @@ int getHaloCellsForY(int attempt){
 
 int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
 {
-	
-  printf("Made it into Propogate worker %d \n", rank);
+  // printf("Made it into Propogate worker %d \n", rank);
   // This is the function that requries making sure that the loops look at Halo'd cells.
 
   /* loop over _all_ cells */
