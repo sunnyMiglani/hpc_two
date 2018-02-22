@@ -565,17 +565,17 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
       if(rank < (size-1)){
         if(rank == 1){
           params->startInd = 0;
-          params->endInd = offset * rank;
+          params->endInd = offset * rank- 1;
         }
         else{
           params->startInd = offset *(rank-1);
-          params->endInd = offset *(rank);
+          params->endInd = offset *(rank)-1;
         }
       }
       if(rank == (size-1)){
         // int offset = floor(bigY/size);
         params->startInd = offset*(rank-1);
-        params->endInd = bigY;
+        params->endInd = bigY-1;
       }
       local_cols = params->nx;
       local_rows = params->ny;
