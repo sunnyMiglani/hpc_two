@@ -72,6 +72,12 @@ int local_rows;
 int local_cols;
 int bigX;
 int bigY;
+int haloTop;
+int haloBottom;
+
+int myStartInd;
+int myEndInd;
+
 
 /* struct to hold the parameter values */
 typedef struct
@@ -176,29 +182,25 @@ int main(int argc, char* argv[])
 
   /* initialise our data structures and load values from file */
   func_initialise(paramfile, obstaclefile, &params, &cells, &tmp_cells, &obstacles, &av_vels);
- 
 
-  /*
-   * At this point, each worker has the data + parameters + halo that's needed.
-   *
-   * */
 
   /* iterate for maxIters timesteps */
-
+  if(rank == MASTER){
    gettimeofday(&timstr, NULL);
    tic = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
-
+ }
   for (int tt = 0; tt < params.maxIters; tt++)
   {
     func_timestep(params, cells, tmp_cells, obstacles);
     av_vels[tt] = av_velocity(params, cells, obstacles);
-#ifdef DEBUG
+  #ifdef DEBUG
     printf("==timestep: %d==\n", tt);
     printf("av velocity: %.12E\n", av_vels[tt]);
     printf("tot density: %.12E\n", total_density(params, cells));
-#endif
+  #endif
   }
 
+  if(rank == MASTER){
   gettimeofday(&timstr, NULL);
   toc = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
   getrusage(RUSAGE_SELF, &ru);
@@ -206,13 +208,13 @@ int main(int argc, char* argv[])
   usrtim = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
   timstr = ru.ru_stime;
   systim = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
-
+  printf("Elapsed user CPU time:\t\t%.6lf (s)\n", usrtim);
+  printf("Elapsed system CPU time:\t%.6lf (s)\n", systim);
+ }
   /* write final values and free memory */
   printf("==done==\n");
   printf("Reynolds number:\t\t%.12E\n", calc_reynolds(params, cells, obstacles));
   printf("Elapsed time:\t\t\t%.6lf (s)\n", toc - tic);
-  printf("Elapsed user CPU time:\t\t%.6lf (s)\n", usrtim);
-  printf("Elapsed system CPU time:\t%.6lf (s)\n", systim);
   func_write_values(params, cells, obstacles, av_vels);
   finalise(&params, &cells, &tmp_cells, &obstacles, &av_vels);
 
@@ -266,7 +268,7 @@ int func_accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
   float w2 = params.density * params.accel / 36.f;
 
   /* modify the 2nd row of the grid */
-  int jj = params.ny - 2;
+  int jj = myEndInd - 2;
 
   for (int ii = 0; ii < params.nx; ii++)
   {
@@ -289,12 +291,23 @@ int func_accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
   return EXIT_SUCCESS;
 }
 
+
+int getHaloCells(int attempt, int rank){
+    if(attempt > myEndInd){
+      return haloTop;
+    }
+    if(attempt < myStartInd){
+      return haloBottom;
+    }
+}
+
 int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
 {
 
+  // This is the function that requries making sure that the loops look at Halo'd cells.
 
   /* loop over _all_ cells */
-  for (int jj = 0; jj < params.ny; jj++)
+  for (int jj = startInd; jj < endInd; jj++)
   {
     for (int ii = 0; ii < params.nx; ii++)
     {
@@ -562,32 +575,30 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
     bigX = params->nx;
     bigY = params->ny;
     if(rank !=MASTER){
-
-     
-
-      // Ranks should go 1,2,3,4 ... (size-1)
-      // startInd and endInd are global start and ends.
-      // params->ny is the end of the local rows.
       int offset = floor(bigY/size);
       if(rank < (size-1)){
-
         if(rank == 1){
-          params->startInd = 0;
-          params->endInd = offset * rank- 1;
+          myStartInd = 0;
+          myEndInd = offset*rank;
+          haloBottom = bigY-1;
+          haloTop = myEndInd +1;
         }
         else{
-          params->startInd = offset *(rank-1);
-          params->endInd = (offset *(rank) )-1;
+          myStartInd = offset *(rank-1);
+          myEndInd = (offset *(rank) );
+          haloBottom = myStartInd - 1;
+          haloTop = myEndInd + 1;
         }
       }
-      if(rank == (size-1)){
-        // int offset = floor(bigY/size);
-        params->startInd = offset*(rank-1);
-        params->endInd = bigY-1;
+      if(rank == (size-1)){ // last worker
+        myStartInd = offset*(rank-1);
+        myEndInd = bigY-1;
+        haloTop = 0;
+        haloBottom = myStartInd -1;
       }
       local_cols = params->nx;
       local_rows = params->ny;
-      printf("ny for worker %d is : %d \n",rank,params->endInd);
+      printf("rank : %d, myStartInd : %d, myEndInd :%d, haloBottom :%d, haloTop :%d \n",rank,myStartInd,myEndInd,haloBottom,haloTop);
     }
 
 
