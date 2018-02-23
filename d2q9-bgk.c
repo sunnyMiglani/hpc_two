@@ -82,7 +82,7 @@ int myEndInd;
 int topRank;
 int botRank;
 
-MPI_Type cells_struct;
+MPI_Datatype cells_struct;
 
 
 
@@ -175,12 +175,8 @@ int main(int argc, char* argv[])
 
  int items = 1;
  int block_lengths = {NSPEEDS};
- MPI_Datatype this_type = {MPI_FLOAT};
 
- MPI_Aint offset = {offsetof(t_speed,speeds)};
 
- MPI_Type_create_struct(items,block_lengths,offset,this_type,&cells_struct);
- MPI_Type_commit(&cells_struct);
 
   /* parse the command line */
   if (argc != 3)
@@ -198,6 +194,10 @@ int main(int argc, char* argv[])
   MPI_Comm_size(MPI_COMM_WORLD, &size);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
+  MPI_Datatype this_type = {MPI_FLOAT};
+  const MPI_Aint offset = {offsetof(t_speed,speeds)};
+  MPI_Type_create_struct(items,&block_lengths,&offset,&this_type,&cells_struct);
+  MPI_Type_commit(&cells_struct);
 
 
   /* initialise our data structures and load values from file */
@@ -278,6 +278,8 @@ int func_timestepWorkers(const t_param params, t_speed* cells, t_speed* tmp_cell
   func_rebound(params, cells, tmp_cells, obstacles);
   func_collision(params, cells, tmp_cells, obstacles);
   func_haloExchange(params,cells,tmp_cells,obstacles);
+  
+  return EXIT_SUCCESS;
 }
 
 int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
