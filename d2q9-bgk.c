@@ -267,7 +267,7 @@ void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells,
 
   // Sending and recieving from bottom
   int val = MPI_Sendrecv(&cells[0 + myStartInd*params.nx], params.nx, cells_struct,botRank,0,&cells[0 + haloBottom*params.nx],params.nx,cells_struct,botRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-  printf("Worker %d sent and receieved! \n");
+  printf("Worker %d sent and receieved! \n",rank);
 
 }
 
