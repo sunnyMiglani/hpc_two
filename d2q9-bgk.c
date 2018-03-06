@@ -84,7 +84,7 @@ int botRank;
 
 MPI_Datatype cells_struct;
 
-
+int numberOfIterationsDone;
 
 /* struct to hold the parameter values */
 typedef struct
@@ -147,6 +147,8 @@ void usage(const char* exe);
 bool inLocalRows(int myStartInd, int myEndInd, int globalPos);
 int getLocalRows(int myStartInd, int myEndInd, int globalPos);
 int getHaloCellsForY(int attempt);
+void func_talkToOthers();
+
 /*
 ** main program:
 ** initialise, timestep loop, finalise
@@ -209,10 +211,13 @@ int main(int argc, char* argv[])
    gettimeofday(&timstr, NULL);
    tic = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
  }
+
+ numberOfIterationsDone = 0;
   for (int tt = 0; tt < params.maxIters; tt++)
   {
     func_timestep(params, cells, tmp_cells, obstacles);
     av_vels[tt] = av_velocity(params, cells, obstacles);
+    ++numberOfIterationsDone;
   #ifdef DEBUG
     printf("==timestep: %d==\n", tt);
     printf("av velocity: %.12E\n", av_vels[tt]);
@@ -266,6 +271,7 @@ int getLocalRows(int myStartInd, int myEndInd, int globalPos){
 void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
 
   // Sending and recieving from bottom
+  printf("Worker %d sent and receieved! \n",rank);
   int val = MPI_Sendrecv(&cells[0 + myStartInd*params.nx], params.nx, cells_struct,botRank,0,&cells[0 + haloBottom*params.nx],params.nx,cells_struct,botRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   printf("Worker %d sent and receieved! \n",rank);
 
@@ -278,8 +284,32 @@ int func_timestepWorkers(const t_param params, t_speed* cells, t_speed* tmp_cell
   func_rebound(params, cells, tmp_cells, obstacles);
   func_collision(params, cells, tmp_cells, obstacles);
   func_haloExchange(params,cells,tmp_cells,obstacles);
-
+  func_talkToOthers();
   return EXIT_SUCCESS;
+}
+
+void func_talkToOthers(){
+  bool seeIfDone = false;
+  if(rank == MASTER){
+    for(int i =1; i<size; i++){
+      short this_isDone = 0;
+      MPI_Recv(this_isDone, 1, MPI_SHORT, i, 0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+      if(this_isDone == 0){
+        seeIfDone = false;
+      }
+      else if(this_isDone == 1){
+        seeIfDone &=seeIfDone;
+      }
+    }
+  }
+  if(rank != MASTER){
+    if(numberOfIterationsDone < maxIters-1){
+      MPI_Send()
+    }
+  }
+
+
+  }
 }
 
 int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
@@ -288,7 +318,7 @@ int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int*
     func_timestepWorkers(params, cells,  tmp_cells, obstacles);
   }
   if(rank == MASTER){
-
+    func_talkToOthers();
   }
   return EXIT_SUCCESS;
 }
