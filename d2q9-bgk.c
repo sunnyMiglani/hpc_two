@@ -304,6 +304,7 @@ void func_talkToOthers(){
   }
   if(rank != MASTER){
     if(numberOfIterationsDone < maxIters-1){
+      printf(" Worker %d speaking! \n", rank);
       MPI_Send()
     }
   }
