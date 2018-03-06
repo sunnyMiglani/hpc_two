@@ -284,42 +284,44 @@ int func_timestepWorkers(const t_param params, t_speed* cells, t_speed* tmp_cell
   func_rebound(params, cells, tmp_cells, obstacles);
   func_collision(params, cells, tmp_cells, obstacles);
   func_haloExchange(params,cells,tmp_cells,obstacles);
-  func_talkToOthers();
+  func_talkToOthers(params);
+  printf("Please from worker %d\n",rank); 
   return EXIT_SUCCESS;
 }
 
-void func_talkToOthers(){
+void func_talkToOthers(const t_param params){
   bool seeIfDone = false;
   if(rank == MASTER){
     for(int i =1; i<size; i++){
-      short this_isDone = 0;
-      MPI_Recv(this_isDone, 1, MPI_SHORT, i, 0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-      if(this_isDone == 0){
+      short* this_isDone = 0;
+    //  MPI_Recv(this_isDone, 1, MPI_SHORT, i, 0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+      if(*this_isDone == 0){
         seeIfDone = false;
       }
-      else if(this_isDone == 1){
+      else if(*this_isDone == 1){
         seeIfDone &=seeIfDone;
       }
     }
   }
   if(rank != MASTER){
-    if(numberOfIterationsDone < maxIters-1){
-      printf(" Worker %d speaking! \n", rank);
-      MPI_Send()
+    printf(" Worker %d speaking! \n", rank);
+    if(numberOfIterationsDone < params.maxIters-1){
+      //MPI_Send()
     }
   }
 
 
   }
-}
+
 
 int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
   if(rank != MASTER){
+    printf("Please from worker %d\n",rank); 
     func_timestepWorkers(params, cells,  tmp_cells, obstacles);
   }
   if(rank == MASTER){
-    func_talkToOthers();
+    func_talkToOthers(params);
   }
   return EXIT_SUCCESS;
 }

@@ -1,16 +1,24 @@
-Running on host compute174.bc4.acrc.priv
-Time is Fri Feb 23 11:47:06 GMT 2018
+Running on host compute171.bc4.acrc.priv
+Time is Tue Mar 6 21:32:57 GMT 2018
 Directory is /mnt/storage/home/sm15504/year3CW/flat_mpi_better/hpc_two
-Slurm job ID is 761312
+Slurm job ID is 771832
 This job runs on the following machines:
-compute[174,182-183,188-189]
+compute[171,176,180,189-190]
 icc
 rank : 4, myStartInd : 75, myEndInd :127, haloBottom :74, haloTop :0 
 rank : 3, myStartInd : 50, myEndInd :75, haloBottom :49, haloTop :76 
-rank : 2, myStartInd : 25, myEndInd :50, haloBottom :24, haloTop :51 
 rank : 1, myStartInd : 0, myEndInd :25, haloBottom :127, haloTop :26 
-Elapsed user CPU time:		0.011100 (s)
-Elapsed system CPU time:	0.012210 (s)
+rank : 2, myStartInd : 25, myEndInd :50, haloBottom :24, haloTop :51 
+Please from worker 2
+Please from worker 4
+Please from worker 3
+Please from worker 1
+Elapsed user CPU time:		0.004923 (s)
+Elapsed system CPU time:	0.017723 (s)
+Worker 2 sent and receieved! 
 ==done==
 Reynolds number:		-NAN
-Elapsed time:			0.000177 (s)
+Elapsed time:			0.000184 (s)
+Worker 3 sent and receieved! 
+Worker 1 sent and receieved! 
+Worker 4 sent and receieved! 
