@@ -1,0 +1,30 @@
+Running on host compute242.bc4.acrc.priv
+Time is Tue Mar 6 23:37:32 GMT 2018
+Directory is /mnt/storage/home/sm15504/year3CW/flat_mpi_better/hpc_two
+Slurm job ID is 771957
+This job runs on the following machines:
+compute[242,249-250,254,263]
+icc
+rank : 3, myStartInd : 50, myEndInd :75, haloBottom :49, haloTop :76 
+rank : 4, myStartInd : 75, myEndInd :127, haloBottom :74, haloTop :0 
+rank : 2, myStartInd : 25, myEndInd :50, haloBottom :24, haloTop :51 
+rank : 1, myStartInd : 0, myEndInd :25, haloBottom :127, haloTop :26 
+####Right before recieving 
+Please from worker 3
+Please from worker 2
+Please from worker 4
+Please from worker 1
+Worker 3 sent and receieved! 
+Worker 2 sent and receieved! 
+Worker 1 sent and receieved! 
+Worker 4 sent and receieved! 
+slurmstepd: error: *** STEP 771955.0 ON compute242 CANCELLED AT 2018-03-06T23:50:56 DUE TO TIME LIMIT ***
+slurmstepd: error: *** JOB 771955 ON compute242 CANCELLED AT 2018-03-06T23:50:56 DUE TO TIME LIMIT ***
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: got SIGCONT
+srun: forcing job termination
+slurmstepd: error: *** STEP 771957.0 ON compute242 CANCELLED AT 2018-03-06T23:52:56 DUE TO TIME LIMIT ***
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** JOB 771957 ON compute242 CANCELLED AT 2018-03-06T23:52:56 DUE TO TIME LIMIT ***
+srun: got SIGCONT
+srun: forcing job termination

@@ -1,0 +1,15 @@
+Running on host compute353.bc4.acrc.priv
+Time is Tue Mar 6 23:45:42 UTC 2018
+Directory is /mnt/storage/home/sm15504/year3CW/flat_mpi_better/hpc_two
+Slurm job ID is 771966
+This job runs on the following machines:
+compute[353,355-359,370-371,378,394]
+icc
+srun: error: Task launch for 771966.0 failed on node compute356: User not found on host
+srun: error: Application launch failed: User not found on host
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** STEP 771966.0 ON compute353 CANCELLED AT 2018-03-06T23:45:48 ***
+[mpiexec@compute353.bc4.acrc.priv] control_cb (../../pm/pmiserv/pmiserv_cb.c:781): connection to proxy 7 at host compute371 failed
+[mpiexec@compute353.bc4.acrc.priv] HYDT_dmxu_poll_wait_for_event (../../tools/demux/demux_poll.c:76): callback returned error status
+[mpiexec@compute353.bc4.acrc.priv] HYD_pmci_wait_for_completion (../../pm/pmiserv/pmiserv_pmci.c:501): error waiting for event
+[mpiexec@compute353.bc4.acrc.priv] main (../../ui/mpich/mpiexec.c:1147): process manager error waiting for completion
