@@ -292,26 +292,26 @@ void func_talkToOthers(const t_param params){
   bool seeIfDone = false;
   if(rank == MASTER){
     for(int i =1; i<size; i++){
-      bool* this_isDone = false;
-     MPI_Recv(this_isDone, 1, MPI_BOOL, i, 0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-      if(*this_isDone == false){
+      short* this_isDone = 0;
+     MPI_Recv(this_isDone, 1, MPI_SHORT, i, 0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+      if(*this_isDone == 0){
         seeIfDone = false;
       }
-      else if(*this_isDone == 1){
-        seeIfDone &=seeIfDone; // if one is false, all are false. if all are true, all are true.
+      else if(*this_isDone == 1){ // so worker has done
+        seeIfDone &= true; // if one is false, all are false. if all are true, all are true.
       }
     }
   }
   if(rank != MASTER){
     printf(" Worker %d speaking! \n", rank);
-    bool* amIDone = false;
+    short* amIDone = 0;
     if(numberOfIterationsDone  >= params.maxIters-1){
-      *amIDone = true;
+      *amIDone = 1;
     }
     else{
-      *amIDone = false;
+      *amIDone = 0;
     }
-    MPI_Send(amIDone, 1, MPI_BOOL, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    MPI_Send(amIDone, 1, MPI_SHORT, 0 , 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
   }
 }
 
