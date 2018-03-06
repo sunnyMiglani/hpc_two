@@ -293,7 +293,9 @@ void func_talkToOthers(const t_param params){
   if(rank == MASTER){
     for(int i =1; i<size; i++){
       short* this_isDone = 0;
-     MPI_Recv(this_isDone, 1, MPI_SHORT, i, 0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+      printf("####Right before recieving \n");
+      MPI_Recv(&this_isDone, 1, MPI_SHORT, i, 0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+      printf("####Right after receiving \n");
       if(*this_isDone == 0){
         seeIfDone = false;
       }
@@ -311,7 +313,7 @@ void func_talkToOthers(const t_param params){
     else{
       *amIDone = 0;
     }
-    MPI_Send(amIDone, 1, MPI_SHORT, 0 , 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    MPI_Send(&amIDone, 1, MPI_SHORT, 0 , 0, MPI_COMM_WORLD);
   }
 }
 
