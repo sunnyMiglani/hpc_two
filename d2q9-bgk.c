@@ -292,25 +292,28 @@ void func_talkToOthers(const t_param params){
   bool seeIfDone = false;
   if(rank == MASTER){
     for(int i =1; i<size; i++){
-      short* this_isDone = 0;
-    //  MPI_Recv(this_isDone, 1, MPI_SHORT, i, 0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-      if(*this_isDone == 0){
+      bool* this_isDone = false;
+     MPI_Recv(this_isDone, 1, MPI_BOOL, i, 0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+      if(*this_isDone == false){
         seeIfDone = false;
       }
       else if(*this_isDone == 1){
-        seeIfDone &=seeIfDone;
+        seeIfDone &=seeIfDone; // if one is false, all are false. if all are true, all are true.
       }
     }
   }
   if(rank != MASTER){
     printf(" Worker %d speaking! \n", rank);
-    if(numberOfIterationsDone < params.maxIters-1){
-      //MPI_Send()
+    bool* amIDone = false;
+    if(numberOfIterationsDone  >= params.maxIters-1){
+      *amIDone = true;
     }
+    else{
+      *amIDone = false;
+    }
+    MPI_Send(amIDone, 1, MPI_BOOL, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
   }
-
-
-  }
+}
 
 
 int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
