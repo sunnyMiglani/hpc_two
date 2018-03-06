@@ -169,11 +169,7 @@ int main(int argc, char* argv[])
   double systim;                /* floating point number to record elapsed system CPU time */
 
 
-  // int MPI_Type_create_struct(int count,
-  //                        const int array_of_blocklengths[],
-  //                        const MPI_Aint array_of_displacements[],
-  //                        const MPI_Datatype array_of_types[],
-  //                        MPI_Datatype *newtype)
+
 
  int items = 1;
  int block_lengths = {NSPEEDS};
@@ -212,7 +208,7 @@ int main(int argc, char* argv[])
    tic = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
  }
 
- numberOfIterationsDone = 0;
+  numberOfIterationsDone = 0;
   for (int tt = 0; tt < params.maxIters; tt++)
   {
     func_timestep(params, cells, tmp_cells, obstacles);
@@ -224,6 +220,9 @@ int main(int argc, char* argv[])
     printf("tot density: %.12E\n", total_density(params, cells));
   #endif
   }
+
+  if(rank == MASTER){ printf("MASTER HAS FINISHED TIMESTEPS \n");}
+  else{ printf("WORKER %d HAS FINISHED TIMERSTEPS!\n",rank);}
 
   if(rank == MASTER){
   gettimeofday(&timstr, NULL);
@@ -247,11 +246,11 @@ int main(int argc, char* argv[])
 }
 
 bool inLocalRows(int myStartInd, int myEndInd, int globalPos){
-  if(rank == MASTER){ return true;}
+  if(rank == MASTER){ return true; }
   if(globalPos >= myStartInd){
   if( globalPos <= myEndInd){
-          return true;
- }
+      return true;
+    }
  }
  return false;
 }
@@ -285,7 +284,7 @@ int func_timestepWorkers(const t_param params, t_speed* cells, t_speed* tmp_cell
   func_collision(params, cells, tmp_cells, obstacles);
   func_haloExchange(params,cells,tmp_cells,obstacles);
   func_talkToOthers(params);
-  printf("Please from worker %d\n",rank); 
+  printf("Please from worker %d\n",rank);
   return EXIT_SUCCESS;
 }
 
@@ -317,7 +316,7 @@ void func_talkToOthers(const t_param params){
 int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
   if(rank != MASTER){
-    printf("Please from worker %d\n",rank); 
+    printf("Please from worker %d\n",rank);
     func_timestepWorkers(params, cells,  tmp_cells, obstacles);
   }
   if(rank == MASTER){
