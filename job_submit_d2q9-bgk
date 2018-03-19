@@ -2,10 +2,11 @@
 
 #SBATCH --job-name d2q9-bgk
 #SBATCH --nodes 1
-#SBATCH --ntasks-per-node 10
+#SBATCH --ntasks-per-node 1
+#SBATCH -c 5
 #SBATCH --time 00:15:00
 #SBATCH --partition cpu
-#SBATCH --output my_outputPrint.out
+#SBATCH --output my_outputTrist.out
 
 echo Running on host `hostname`
 echo Time is `date`
@@ -14,7 +15,9 @@ echo Slurm job ID is $SLURM_JOB_ID
 echo This job runs on the following machines:
 echo `echo $SLURM_JOB_NODELIST | uniq`
 echo icc
+echo NUMBER OF NODES : $SLURM_NNODES
+echo CPUS per node : $SLURM_JOB_CPUS_PER_NODE
 
 
 #! Run the executable
-mpirun -n 1 -ppn 10 ./d2q9-bgk input_128x128.params obstacles_128x128.dat
+mpirun -np $SLURM_JOB_CPUS_PER_NODE ./d2q9-bgk input_128x128.params obstacles_128x128.dat
