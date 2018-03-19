@@ -197,6 +197,7 @@ int main(int argc, char* argv[])
   MPI_Type_create_struct(items,&block_lengths,&offset,&this_type,&cells_struct);
   MPI_Type_commit(&cells_struct);
 
+  printf("My Rank : %d, my Size : %d\n", rank, size);
 
   /* initialise our data structures and load values from file */
   func_initialise(paramfile, obstaclefile, &params, &cells, &tmp_cells, &obstacles, &av_vels);
@@ -294,7 +295,7 @@ void func_talkToOthers(const t_param params){
   if(rank == MASTER){ // Master loops through all the cores recieving whether they're done
     printf("Master in talking to others size : %d\n", size );
     for(int i = 1; i < size; i++) {
-      printf("Master in recieiving for loop! \n");  
+      printf("Master in recieiving for loop! \n");
       short* this_isDone = 0;
       printf("####Right before recieving \n");
       MPI_Recv(&this_isDone, 1, MPI_SHORT, i, 0, MPI_COMM_WORLD , MPI_STATUS_IGNORE);
@@ -659,6 +660,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
     bigX = params->nx;
     bigY = params->ny;
     if(rank !=MASTER){
+        printf("I'm not a master \n" );
       int offset = floor(bigY/size);
       if(rank < (size-1)){
         if(rank == 1){ // First worker
