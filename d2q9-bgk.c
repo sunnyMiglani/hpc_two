@@ -270,7 +270,7 @@ int getLocalRows(int myStartInd, int myEndInd, int globalPos){
 void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
 
   printf("Worker %d sent and receieved! \n",rank);
-  int val = MPI_Sendrecv(&cells[0 + myStartInd*params.nx], params.nx, cells_struct,botRank,0,&cells[0 + haloBottom*params.nx],params.nx,cells_struct,botRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+  int val = MPI_Ssendrecv(&cells[0 + myStartInd*params.nx], params.nx, cells_struct,botRank,0,&cells[0 + haloBottom*params.nx],params.nx,cells_struct,botRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   printf("Worker %d sent and receieved! \n",rank);
 
 }
@@ -278,13 +278,13 @@ void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells,
 
 int func_timestepWorkers(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
 
+  printf("Please from worker %d\n",rank);
   func_accelerate_flow(params, cells, obstacles);
   func_propagate(params, cells, tmp_cells);
   func_rebound(params, cells, tmp_cells, obstacles);
   func_collision(params, cells, tmp_cells, obstacles);
   func_haloExchange(params,cells,tmp_cells,obstacles);
   func_talkToOthers(params);
-  printf("Please from worker %d\n",rank);
   return EXIT_SUCCESS;
 
 }
