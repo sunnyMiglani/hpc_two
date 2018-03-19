@@ -211,6 +211,7 @@ int main(int argc, char* argv[])
   /* iterate for maxIters timesteps */
   for (int tt = 0; tt < params.maxIters; tt++)
   {
+    printf("Please from worker %d\n",rank);
     func_timestep(params, cells, tmp_cells, obstacles);
     av_vels[tt] = av_velocity(params, cells, obstacles);
     ++numberOfIterationsDone;
@@ -270,7 +271,7 @@ int getLocalRows(int myStartInd, int myEndInd, int globalPos){
 void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
 
   printf("Worker %d sent and receieved! \n",rank);
-  int val = MPI_Ssendrecv(&cells[0 + myStartInd*params.nx], params.nx, cells_struct,botRank,0,&cells[0 + haloBottom*params.nx],params.nx,cells_struct,botRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+  int val = MPI_Sendrecv(&cells[0 + myStartInd*params.nx], params.nx, cells_struct,botRank,0,&cells[0 + haloBottom*params.nx],params.nx,cells_struct,botRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   printf("Worker %d sent and receieved! \n",rank);
 
 }
@@ -314,7 +315,7 @@ void func_talkToOthers(const t_param params){
     else{
       *amIDone = 0;
     }
-    MPI_Send(&amIDone, 1, MPI_SHORT, 0 , 0, MPI_COMM_WORLD);
+    MPI_Ssend(&amIDone, 1, MPI_SHORT, 0 , 0, MPI_COMM_WORLD);
     printf("Worker %d is done speaking! \n",rank);
     }
 }
