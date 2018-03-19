@@ -211,7 +211,6 @@ int main(int argc, char* argv[])
   /* iterate for maxIters timesteps */
   for (int tt = 0; tt < params.maxIters; tt++)
   {
-    printf("Please from worker %d\n",rank);
     func_timestep(params, cells, tmp_cells, obstacles);
     av_vels[tt] = av_velocity(params, cells, obstacles);
     ++numberOfIterationsDone;
@@ -293,6 +292,7 @@ int func_timestepWorkers(const t_param params, t_speed* cells, t_speed* tmp_cell
 void func_talkToOthers(const t_param params){
   bool seeIfDone = false; // Variable to see whether the last thread has finished running
   if(rank == MASTER){ // Master loops through all the cores recieving whether they're done
+    printf("Master in talking to others\n" );
     for(int i = 1; i < size; i++) {
       short* this_isDone = 0;
       printf("####Right before recieving \n");
@@ -305,6 +305,7 @@ void func_talkToOthers(const t_param params){
         seeIfDone &= true; // if one is false, all are false. if all are true, all are true.
       }
     }
+    printf("Master finihsed talking to others \n");
   }
   if(rank != MASTER){ // workers will print out they're trying, and then send in whether they've finished.
     printf(" Worker %d speaking! \n", rank);
@@ -328,6 +329,7 @@ int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int*
     func_timestepWorkers(params, cells,  tmp_cells, obstacles);
   }
   if(rank == MASTER){
+    printf("Master is waiting to talk to people \n");
     func_talkToOthers(params);
   }
   return EXIT_SUCCESS;
