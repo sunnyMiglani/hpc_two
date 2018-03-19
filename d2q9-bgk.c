@@ -292,8 +292,9 @@ int func_timestepWorkers(const t_param params, t_speed* cells, t_speed* tmp_cell
 void func_talkToOthers(const t_param params){
   bool seeIfDone = false; // Variable to see whether the last thread has finished running
   if(rank == MASTER){ // Master loops through all the cores recieving whether they're done
-    printf("Master in talking to others\n" );
+    printf("Master in talking to others size : %d\n", size );
     for(int i = 1; i < size; i++) {
+      printf("Master in recieiving for loop! \n");  
       short* this_isDone = 0;
       printf("####Right before recieving \n");
       MPI_Recv(&this_isDone, 1, MPI_SHORT, i, 0, MPI_COMM_WORLD , MPI_STATUS_IGNORE);
@@ -305,7 +306,7 @@ void func_talkToOthers(const t_param params){
         seeIfDone &= true; // if one is false, all are false. if all are true, all are true.
       }
     }
-    printf("Master finihsed talking to others \n");
+    printf("Master finished talking to others \n");
   }
   if(rank != MASTER){ // workers will print out they're trying, and then send in whether they've finished.
     printf(" Worker %d speaking! \n", rank);

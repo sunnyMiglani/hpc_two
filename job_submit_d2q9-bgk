@@ -5,7 +5,7 @@
 #SBATCH --ntasks-per-node 10
 #SBATCH --time 00:15:00
 #SBATCH --partition cpu
-#SBATCH --output my_output1.out
+#SBATCH --output my_outputPrint.out
 
 echo Running on host `hostname`
 echo Time is `date`
