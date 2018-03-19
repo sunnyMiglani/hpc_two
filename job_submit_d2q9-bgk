@@ -1,11 +1,11 @@
 #!/bin/bash
 
 #SBATCH --job-name d2q9-bgk
-#SBATCH --nodes 10
-#SBATCH --ntasks-per-node 1
+#SBATCH --nodes 1
+#SBATCH --ntasks-per-node 10
 #SBATCH --time 00:15:00
 #SBATCH --partition cpu
-#SBATCH --output my_outputFileWithoutSync10Nodes.out
+#SBATCH --output my_output1.out
 
 echo Running on host `hostname`
 echo Time is `date`
@@ -17,4 +17,4 @@ echo icc
 
 
 #! Run the executable
-mpirun -n 10 -ppn 1 ./d2q9-bgk input_128x128.params obstacles_128x128.dat
+mpirun -n 1 -ppn 10 ./d2q9-bgk input_128x128.params obstacles_128x128.dat
