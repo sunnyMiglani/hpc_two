@@ -658,6 +658,8 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
 
     bigX = params->nx;
     bigY = params->ny;
+    int offset = floor(bigY/size);
+
 
     if(rank == 0){ // First worker --> MASTER
 
@@ -673,7 +675,6 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
 
     if(rank != MASTER){
         printf("I'm not a master \n" );
-      int offset = floor(bigY/size);
       if(rank < (size-1)){
         if(rank == (size-1)){ // last worker
             myStartInd = offset*(rank-1); // offset is the size of the computation blocks
@@ -698,7 +699,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
 
       local_cols = params->nx;
       local_rows = params->ny;
-      printf("Rank %d : startInd = %d, endInd : %d, haloTop : %d, haloBottom: %d, topRank :%d, botrank :%d \n",rank,startInd,endInd,haloTop,haloBottom,topRank,botRank);
+      printf("Rank %d : startInd = %d, endInd : %d, haloTop : %d, haloBottom: %d, topRank :%d, botrank :%d \n",rank,myStartInd,myEndInd,haloTop,haloBottom,topRank,botRank);
     }
 
 

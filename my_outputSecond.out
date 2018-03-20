@@ -22,3 +22,8 @@ I'm not a master
 rank : 4, myStartInd : 75, myEndInd :127, haloBottom :74, haloTop :0 
 Master in talking to others size : 5
 ####Right before recieving 
+slurmstepd: error: *** STEP 943471.0 ON compute203 CANCELLED AT 2018-03-20T11:52:01 DUE TO TIME LIMIT ***
+slurmstepd: error: *** JOB 943471 ON compute203 CANCELLED AT 2018-03-20T11:52:01 DUE TO TIME LIMIT ***
+srun: got SIGCONT
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
