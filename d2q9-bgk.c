@@ -292,6 +292,26 @@ void func_talkToOthers(const t_param params){
 }
 
 
+void getLimitsFromRank(int rank, int* upperLim, int* lowerLim){
+    int offsetSize = floor(bigY/size);
+    if(rank == 0){
+        *lowerLim = 0;
+        *upperLim = offset;
+        return;
+    }
+    if(rank == size-1){
+        *upperLim = bigY;
+        *lowerLim = offset * rank;
+        return;
+    }
+    else{
+        *lowerLim = (rank * offset) +1;
+        *upperLim = *lowerLim + offset;
+        return;
+    }
+}
+
+
 /*
     IDEA (1):
     Master does a select case type thing to take in inputs from workers
@@ -312,6 +332,25 @@ void func_talkToOthers(const t_param params){
 */
 // Currently implementing Idea 1 due to ease.
 void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
+    if(rank == MASTER){
+        printf("Master Starting to Gather \n");
+        for(int i = 1; i < size; i ++){
+            int* this_lowerLim = -1;
+            int* this_upperLim = -1;
+
+            getLimitsFromRank(i,this_upperLim, this_lowerLim); // places values into the variables via pointer
+
+            if(this_lowerLim == -1 || this_upperLim == -1){
+                printf("ERROR : FUNCTION TO FIND LIMITS BROKEN \n");
+            }
+
+            // TODO: make this work
+
+        }
+    }
+    else{
+        printf("Worker %d trying to send \n",rank);
+    }
 
 }
 
@@ -322,7 +361,7 @@ int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int*
     func_rebound(params, cells, tmp_cells, obstacles);
     func_collision(params, cells, tmp_cells, obstacles);
     func_haloExchange(params,cells,tmp_cells,obstacles);
-    func_gatherData(params,cells,tmp_cells,obstacles);
+    // func_gatherData(params,cells,tmp_cells,obstacles);
     return EXIT_SUCCESS;
 }
 
