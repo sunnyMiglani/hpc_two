@@ -212,6 +212,7 @@ int main(int argc, char* argv[])
   /* iterate for maxIters timesteps */
   for (int tt = 0; tt < params.maxIters; tt++)
   {
+    printf("Worker %d is doing iteration %d \n",rank, tt);
     func_timestep(params, cells, tmp_cells, obstacles);
     av_vels[tt] = av_velocity(params, cells, obstacles);
     ++numberOfIterationsDone;
@@ -283,7 +284,6 @@ int func_timestepWorkers(const t_param params, t_speed* cells, t_speed* tmp_cell
   func_rebound(params, cells, tmp_cells, obstacles);
   func_collision(params, cells, tmp_cells, obstacles);
   func_haloExchange(params,cells,tmp_cells,obstacles);
-  func_talkToOthers(params);
   return EXIT_SUCCESS;
 
 }
@@ -326,18 +326,14 @@ void func_talkToOthers(const t_param params){
 int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
   if(rank != MASTER){
-
     func_timestepWorkers(params, cells,  tmp_cells, obstacles);
   }
   if(rank == MASTER){
-
       func_accelerate_flow(params, cells, obstacles);
       func_propagate(params, cells, tmp_cells);
       func_rebound(params, cells, tmp_cells, obstacles);
       func_collision(params, cells, tmp_cells, obstacles);
       func_haloExchange(params,cells,tmp_cells,obstacles);
-      func_talkToOthers(params);
-
   }
   return EXIT_SUCCESS;
 }
