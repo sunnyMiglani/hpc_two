@@ -271,22 +271,12 @@ int getLocalRows(int myStartInd, int myEndInd, int globalPos){
 
 void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
 
+  printf("Worker %d is starting halo Exchange! \n");
   int val = MPI_Sendrecv(&cells[0 + myStartInd*params.nx], params.nx, cells_struct,botRank,0,&cells[0 + haloBottom*params.nx],params.nx,cells_struct,botRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   printf("Worker %d Finished Halo Exchange \n",rank);
 
 }
 
-
-int func_timestepWorkers(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
-
-  func_accelerate_flow(params, cells, obstacles);
-  func_propagate(params, cells, tmp_cells);
-  func_rebound(params, cells, tmp_cells, obstacles);
-  func_collision(params, cells, tmp_cells, obstacles);
-  func_haloExchange(params,cells,tmp_cells,obstacles);
-  return EXIT_SUCCESS;
-
-}
 
 void func_talkToOthers(const t_param params){
   bool seeIfDone = false; // Variable to see whether the last thread has finished running
@@ -325,17 +315,12 @@ void func_talkToOthers(const t_param params){
 
 int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
-  if(rank != MASTER){
-    func_timestepWorkers(params, cells,  tmp_cells, obstacles);
-  }
-  if(rank == MASTER){
-      func_accelerate_flow(params, cells, obstacles);
-      func_propagate(params, cells, tmp_cells);
-      func_rebound(params, cells, tmp_cells, obstacles);
-      func_collision(params, cells, tmp_cells, obstacles);
-      func_haloExchange(params,cells,tmp_cells,obstacles);
-  }
-  return EXIT_SUCCESS;
+    func_accelerate_flow(params, cells, obstacles);
+    func_propagate(params, cells, tmp_cells);
+    func_rebound(params, cells, tmp_cells, obstacles);
+    func_collision(params, cells, tmp_cells, obstacles);
+    func_haloExchange(params,cells,tmp_cells,obstacles);
+    return EXIT_SUCCESS;
 }
 
 int func_accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
