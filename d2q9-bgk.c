@@ -703,7 +703,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
       local_rows = params->ny;
 
 
-    printf("Rank %d : startInd = %d, endInd : %d, haloTop : %d, haloBottom: %d, topRank :%d, botrank :%d \n",rank,startInd,endInd,haloTop,haloBottom,topRank,botRank);
+    printf("Rank %d : startInd = %d, endInd : %d, haloTop : %d, haloBottom: %d, topRank :%d, botrank :%d \n",rank,myStartInd,myEndInd,haloTop,haloBottom,topRank,botRank);
 
     /* main grid */
     *cells_ptr = (t_speed*)malloc(sizeof(t_speed) * (bigY * params->nx));
