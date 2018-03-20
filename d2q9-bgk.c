@@ -700,7 +700,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
         }
     }
       local_cols = params->nx;
-      local_rows = params->ny;
+      local_rows = params->      printf("Rank %d : startInd = %d, endInd : %d, haloTop : %d, haloBottom: %d, topRank :%d, botrank :%d \n",rank,myStartInd,myEndInd,haloTop,haloBottom,topRank,botRank);
     }
 
     printf("Rank %d : startInd = %d, endInd : %d, haloTop : %d, haloBottom: %d, topRank :%d, botrank :%d \n",rank,startInd,endInd,haloTop,haloBottom,topRank,botRank);
