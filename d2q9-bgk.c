@@ -272,7 +272,7 @@ int getLocalRows(int myStartInd, int myEndInd, int globalPos){
 void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
 
   printf("Worker %d is starting halo Exchange! \n", rank);
-  int val = MPI_Sendrecv(&cells[0 + myStartInd*params.nx], params.nx, cells_struct,botRank,0,&cells[0 + haloBottom*params.nx],params.nx,cells_struct,topRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+  int val = MPI_Sendrecv(&cells[0 + myStartInd*params.nx], params.nx, cells_struct,topRank,0,&cells[0 + haloBottom*params.nx],params.nx,cells_struct,botRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   printf("Worker %d Finished Halo Exchange \n",rank);
 
 }
@@ -684,7 +684,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
       local_rows = params->ny;
 
 
-    printf("Rank %d : startInd = %d, endInd : %d, haloTop : %d, haloBottom: %d, topRank :%d, botrank :%d \n",rank,myStartInd,myEndInd,haloTop,haloBottom,topRank,botRank);
+    printf("Rank: %d, startInd = %d, endInd : %d, haloTop : %d, haloBottom: %d, topRank :%d, botrank :%d \n",rank,myStartInd,myEndInd,haloTop,haloBottom,topRank,botRank);
 
     /* main grid */
     *cells_ptr = (t_speed*)malloc(sizeof(t_speed) * (bigY * params->nx));
