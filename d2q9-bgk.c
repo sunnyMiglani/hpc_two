@@ -247,27 +247,6 @@ int main(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-bool inLocalRows(int myStartInd, int myEndInd, int globalPos){
-  if(rank == MASTER){ return true; }
-  if(globalPos >= myStartInd){
-  if( globalPos <= myEndInd){
-      return true;
-    }
- }
- return false;
-}
-
-int getLocalRows(int myStartInd, int myEndInd, int globalPos){
-  if(rank == MASTER){return globalPos;};
-  if(inLocalRows(myStartInd,myEndInd,globalPos)){
-    printf("Returning %d in range (%d,%d) \n",globalPos, myStartInd,myEndInd);
-    return ((globalPos - myStartInd -1) + bigY)%bigY;
-  }
-  else{
-      printf("Error, Process %d tried to access out of bounds value! %d in (%d,%d) \n",rank,globalPos, myStartInd,myEndInd );
-      return -1;
-  }
-}
 
 void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
 
@@ -313,6 +292,29 @@ void func_talkToOthers(const t_param params){
 }
 
 
+/*
+    IDEA (1):
+    Master does a select case type thing to take in inputs from workers
+    After collecting inputs from everyone.
+    Only master does avg_velocity.
+
+    Pros : Syncing point, less prone to race conditions
+    Cons : More time, More memory.
+
+    IDEA (2):
+    Each person consolidates data after halo exchange.
+    Applies the avg_velocity function to each of their own workspaces.
+    After confirming this, passes the results to MASTER
+
+    Pros : Much faster and easier to send a single Variable
+    Cons : Very complicated for avg_velocity method.
+
+*/
+// Currently implementing Idea 1 due to ease.
+void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
+
+}
+
 int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
     func_accelerate_flow(params, cells, obstacles);
@@ -320,6 +322,7 @@ int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int*
     func_rebound(params, cells, tmp_cells, obstacles);
     func_collision(params, cells, tmp_cells, obstacles);
     func_haloExchange(params,cells,tmp_cells,obstacles);
+    func_gatherData(params,cells,tmp_cells,obstacles);
     return EXIT_SUCCESS;
 }
 
@@ -741,8 +744,6 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
   /* read-in the blocked cells list */
   while ((retval = fscanf(fp, "%d %d %d\n", &xx, &yy, &blocked)) != EOF)
   {
-    // if(inLocalRows(params->startInd, params->endInd, yy) == false){ continue;}
-    // yy = getLocalRows(params->startInd, params->endInd, yy); // convert to local representation
     if( yy < 0 || yy > bigY -1){
       printf("Obstacle y coord out of range! %d for worker %d with (%d,%d) \n",yy,rank,params->startInd, params->endInd);
     }
