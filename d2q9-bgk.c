@@ -331,7 +331,13 @@ int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int*
   }
   if(rank == MASTER){
 
-    func_talkToOthers(params);
+      func_accelerate_flow(params, cells, obstacles);
+      func_propagate(params, cells, tmp_cells);
+      func_rebound(params, cells, tmp_cells, obstacles);
+      func_collision(params, cells, tmp_cells, obstacles);
+      func_haloExchange(params,cells,tmp_cells,obstacles);
+      func_talkToOthers(params);
+
   }
   return EXIT_SUCCESS;
 }
@@ -658,49 +664,46 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
 
     bigX = params->nx;
     bigY = params->ny;
+    int offset = floor(bigY/size);
 
     if(rank == 0){ // First worker --> MASTER
 
       myStartInd = 0;
       myEndInd = offset;
-      haloBottom = bigY-1;
-      haloTop = myEndInd +1;
+      haloBottom = bigY; // bottom overflows to top.
+      haloTop = myEndInd+1; // one above my upper limit
 
-      topRank = rank+1;
-      botRank = size-1;
-
+      topRank = rank+1; // 1
+      botRank = size-1; // last one.
     }
+
 
     if(rank != MASTER){
-        printf("I'm not a master \n" );
-      int offset = floor(bigY/size);
-      if(rank < (size-1)){
-        if(rank == (size-1)){ // last worker
-            myStartInd = offset*(rank-1); // offset is the size of the computation blocks
-            myEndInd = bigY-1;
+        if(rank == size-1){
+            myStartInd = offset * rank;
+            myEndInd = bigY;
             haloTop = 0;
-            haloBottom = myStartInd -1;
+            haloBottom = myStartInd - 1;
 
+            topRank = 0;
             botRank = rank-1;
-            topRank = 1;
-          }
-        else{ // other workers
-          myStartInd = offset *(rank-1);
-          myEndInd = (offset *(rank) );
-          haloBottom = myStartInd - 1;
-          haloTop = myEndInd + 1;
-
-          topRank = rank+1;
-          botRank = rank-1;
-
         }
-      }
+        else{
+            myStartInd = (rank * offset) + 1;
+            myEndInd = myStartInd + offset;
 
+            haloTop = myStartInd - 1;
+            haloBottom = myEndInd + 1;
+
+            topRank = rank+1;
+            botRank = rank-1;
+        }
+    }
       local_cols = params->nx;
       local_rows = params->ny;
-      printf("Rank %d : startInd = %d, endInd : %d, haloTop : %d, haloBottom: %d, topRank :%d, botrank :%d \n",rank,startInd,endInd,haloTop,haloBottom,topRank,botRank);
     }
 
+    printf("Rank %d : startInd = %d, endInd : %d, haloTop : %d, haloBottom: %d, topRank :%d, botrank :%d \n",rank,startInd,endInd,haloTop,haloBottom,topRank,botRank);
 
     /* main grid */
     *cells_ptr = (t_speed*)malloc(sizeof(t_speed) * (bigY * params->nx));
