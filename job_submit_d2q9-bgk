@@ -6,7 +6,7 @@
 #SBATCH -c 5
 #SBATCH --time 00:15:00
 #SBATCH --partition cpu
-#SBATCH --output my_outputTrist.out
+#SBATCH --output my_outputThird.out
 
 echo Running on host `hostname`
 echo Time is `date`

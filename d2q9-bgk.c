@@ -270,16 +270,14 @@ int getLocalRows(int myStartInd, int myEndInd, int globalPos){
 
 void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
 
-  printf("Worker %d sent and receieved! \n",rank);
   int val = MPI_Sendrecv(&cells[0 + myStartInd*params.nx], params.nx, cells_struct,botRank,0,&cells[0 + haloBottom*params.nx],params.nx,cells_struct,botRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-  printf("Worker %d sent and receieved! \n",rank);
+  printf("Worker %d Finished Halo Exchange \n",rank);
 
 }
 
 
 int func_timestepWorkers(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
 
-  printf("Please from worker %d\n",rank);
   func_accelerate_flow(params, cells, obstacles);
   func_propagate(params, cells, tmp_cells);
   func_rebound(params, cells, tmp_cells, obstacles);
@@ -294,11 +292,13 @@ void func_talkToOthers(const t_param params){
   bool seeIfDone = false; // Variable to see whether the last thread has finished running
   if(rank == MASTER){ // Master loops through all the cores recieving whether they're done
     printf("Master in talking to others size : %d\n", size );
-    for(int i = 1; i < size; i++) {
-      printf("Master in recieiving for loop! \n");
+    for(int i = 1; i < size-1; i++) {
+
       short* this_isDone = 0;
       printf("####Right before recieving \n");
+     
       MPI_Recv(&this_isDone, 1, MPI_SHORT, i, 0, MPI_COMM_WORLD , MPI_STATUS_IGNORE);
+	
       printf("####Right after receiving \n");
       if(*this_isDone == 0){
         seeIfDone = false;
@@ -310,7 +310,6 @@ void func_talkToOthers(const t_param params){
     printf("Master finished talking to others \n");
   }
   if(rank != MASTER){ // workers will print out they're trying, and then send in whether they've finished.
-    printf(" Worker %d speaking! \n", rank);
     short* amIDone = 0;
     if(numberOfIterationsDone  >= params.maxIters-1){
       *amIDone = 1;
@@ -319,7 +318,7 @@ void func_talkToOthers(const t_param params){
       *amIDone = 0;
     }
     MPI_Ssend(&amIDone, 1, MPI_SHORT, 0 , 0, MPI_COMM_WORLD);
-    printf("Worker %d is done speaking! \n",rank);
+    printf("Worker %d is done speaking to master! \n",rank);
     }
 }
 
@@ -327,11 +326,11 @@ void func_talkToOthers(const t_param params){
 int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
   if(rank != MASTER){
-    printf("Please from worker %d\n",rank);
+   
     func_timestepWorkers(params, cells,  tmp_cells, obstacles);
   }
   if(rank == MASTER){
-    printf("Master is waiting to talk to people \n");
+   
     func_talkToOthers(params);
   }
   return EXIT_SUCCESS;
