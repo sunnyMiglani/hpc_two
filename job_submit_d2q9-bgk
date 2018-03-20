@@ -1,12 +1,12 @@
 #!/bin/bash
 
-#SBATCH --job-name d2q9-bgk
+#SBATCH --job-name d2q9-bgkWorkers
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node 1
 #SBATCH -c 5
-#SBATCH --time 00:15:00
+#SBATCH --time 00:05:00
 #SBATCH --partition cpu
-#SBATCH --output my_outputPartTwo.out
+#SBATCH --output my_outputTestingHaloCORRECT.out
 
 echo Running on host `hostname`
 echo Time is `date`

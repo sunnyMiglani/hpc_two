@@ -17,3 +17,8 @@ Rank 1 : startInd = 26, endInd : 51, haloTop : 25, haloBottom: 52, topRank :2, b
 Rank 3 : startInd = 76, endInd : 101, haloTop : 75, haloBottom: 102, topRank :4, botrank :2 
 Rank 2 : startInd = 51, endInd : 76, haloTop : 50, haloBottom: 77, topRank :3, botrank :1 
 Rank 0 : startInd = 0, endInd : 25, haloTop : 26, haloBottom: 128, topRank :1, botrank :4 
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: got SIGCONT
+slurmstepd: error: *** STEP 952245.0 ON compute203 CANCELLED AT 2018-03-20T18:46:24 ***
+slurmstepd: error: *** JOB 952245 ON compute203 CANCELLED AT 2018-03-20T18:46:24 ***
+srun: forcing job termination
