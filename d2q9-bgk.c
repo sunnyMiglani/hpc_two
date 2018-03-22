@@ -252,6 +252,7 @@ void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells,
 
   printf("Worker %d is starting halo Exchange! \n", rank);
   int val = MPI_Sendrecv(&cells[0 + myStartInd*params.nx], params.nx, cells_struct,topRank,0,&cells[0 + haloBottom*params.nx],params.nx,cells_struct,botRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+  int val = MPI_Sendrecv(&cells[0 + myEndInd*params.nx], params.nx, cells_struct,botRank,0,&cells[0 + haloTop*params.nx],params.nx,cells_struct,topRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   printf("Worker %d Finished Halo Exchange \n",rank);
 
 }
@@ -328,6 +329,12 @@ void getLimitsFromRank(int rank, int* upperLim, int* lowerLim){
 
     Pros : Much faster and easier to send a single Variable
     Cons : Very complicated for avg_velocity method.
+
+    ----------------------------------------------------------------------
+
+
+    ----------------------------------------------------------------------
+
 
 */
 // Currently implementing Idea 1 due to ease.
