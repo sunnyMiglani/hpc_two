@@ -211,7 +211,7 @@ int main(int argc, char* argv[])
 
   numberOfIterationsDone = 0;
   /* iterate for maxIters timesteps */
-  params.maxIters = 100;
+//  params.maxIters = 100;
   for (int tt = 0; tt < params.maxIters; tt++)
   {
     printf("Worker %d is doing iteration %d \n",rank, tt);
@@ -392,7 +392,7 @@ void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, i
     else{
         printf("Worker %d trying to send \n",rank);
     }
-    printf("Leaving the gatherData Function! \n", );
+    printf("Leaving the gatherData Function! \n");
 }
 
 int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
