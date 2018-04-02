@@ -747,6 +747,7 @@ float av_velocity(const t_param params, t_speed* cells, int* obstacles)
     }
   }
 
+  printf("Leaving from your friendly neighbourhood avg_velocity\n");
   return tot_u / (float)tot_cells;
 }
 
