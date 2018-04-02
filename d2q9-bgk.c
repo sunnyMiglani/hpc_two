@@ -266,7 +266,7 @@ void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells,
 
 float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles){
 
-    printf("In the gatherVelocity function \n");
+    printf("Worker %d In the gatherVelocity function \n",rank);
     /*
     int MPI_Reduce(const void *sendbuf, void *recvbuf, int count, MPI_Datatype datatype,
                    MPI_Op op, int root, MPI_Comm comm)
