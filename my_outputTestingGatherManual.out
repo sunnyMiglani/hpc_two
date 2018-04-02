@@ -1,60 +1,61 @@
-Running on host compute484.bc4.acrc.priv
-Time is Mon Apr 2 19:18:36 BST 2018
+Running on host compute300.bc4.acrc.priv
+Time is Mon Apr 2 19:32:54 BST 2018
 Directory is /mnt/storage/home/sm15504/year3CW/flat_mpi_better/hpc_two
-Slurm job ID is 1093435
+Slurm job ID is 1093451
 This job runs on the following machines:
-compute484
+compute300
 icc
 NUMBER OF NODES : 1
 CPUS per node : 5
-My Rank : 0, my Size : 5
-My Rank : 1, my Size : 5
-My Rank : 3, my Size : 5
 My Rank : 2, my Size : 5
 My Rank : 4, my Size : 5
+My Rank : 1, my Size : 5
+My Rank : 0, my Size : 5
+My Rank : 3, my Size : 5
 Rank: 2, startInd = 51, endInd : 76, haloTop : 50, haloBottom: 77, topRank :3, botrank :1 
-Rank: 3, startInd = 76, endInd : 101, haloTop : 75, haloBottom: 102, topRank :4, botrank :2 
 Rank: 0, startInd = 0, endInd : 25, haloTop : 26, haloBottom: 128, topRank :1, botrank :4 
 Rank: 1, startInd = 26, endInd : 51, haloTop : 25, haloBottom: 52, topRank :2, botrank :0 
+Rank: 3, startInd = 76, endInd : 101, haloTop : 75, haloBottom: 102, topRank :4, botrank :2 
 Rank: 4, startInd = 100, endInd : 128, haloTop : 0, haloBottom: 99, topRank :0, botrank :3 
 Worker 1 is doing iteration 0 
 Worker 3 is doing iteration 0 
-Worker 0 is doing iteration 0 
 Worker 4 is doing iteration 0 
-Worker 3 is starting halo Exchange! 
+Worker 2 is doing iteration 0 
 Worker 1 is starting halo Exchange! 
-Worker 0 is starting halo Exchange! 
+Worker 3 is starting halo Exchange! 
+Worker 2 is starting halo Exchange! 
 Worker 4 is starting halo Exchange! 
+Worker 2 Finished Halo Exchange 
+Worker 2 trying to send 
+Worker 3 Finished Halo Exchange 
+Worker 3 trying to send 
+Leaving the gatherData Function! 
+Worker 3 is doing iteration 1 
+Leaving the gatherData Function! 
+Worker 2 is doing iteration 1 
+Worker 3 is starting halo Exchange! 
+Worker 2 is starting halo Exchange! 
+Worker 0 is doing iteration 0 
+Worker 0 is starting halo Exchange! 
 Worker 0 Finished Halo Exchange 
-Master Starting to Gather 
+Master Starting to Gather ## size : 5 
+LIM AND LOWER POINTER DONE! Worker 1 Finished Halo Exchange 
+Worker 1 trying to send 
+Leaving the gatherData Function! 
+
 Worker 4 Finished Halo Exchange 
 Worker 4 trying to send 
 Leaving the gatherData Function! 
-Worker 4 is doing iteration 1 
-Worker 4 is starting halo Exchange! 
-Worker 2 is doing iteration 0 
-Worker 2 is starting halo Exchange! 
-Worker 1 Finished Halo Exchange 
-Worker 1 trying to send 
-Leaving the gatherData Function! 
-Worker 2 Finished Halo Exchange 
-Worker 2 trying to send 
-Leaving the gatherData Function! 
-Worker 3 Finished Halo Exchange 
-Worker 3 trying to send 
-Leaving the gatherData Function! 
 Worker 1 is doing iteration 1 
-Worker 2 is doing iteration 1 
-Worker 3 is doing iteration 1 
+Worker 4 is doing iteration 1 
 Worker 1 is starting halo Exchange! 
-Worker 2 is starting halo Exchange! 
 Worker 2 Finished Halo Exchange 
 Worker 2 trying to send 
 Leaving the gatherData Function! 
-Worker 3 is starting halo Exchange! 
 Worker 3 Finished Halo Exchange 
 Worker 3 trying to send 
 Leaving the gatherData Function! 
+Worker 4 is starting halo Exchange! 
 Worker 2 is doing iteration 2 
 Worker 3 is doing iteration 2 
 Worker 2 is starting halo Exchange! 
@@ -62,7 +63,7 @@ Worker 3 is starting halo Exchange!
 
 ===================================================================================
 =   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
-=   PID 6150 RUNNING AT compute484
+=   PID 3494 RUNNING AT compute300
 =   EXIT CODE: 11
 =   CLEANING UP REMAINING PROCESSES
 =   YOU CAN IGNORE THE BELOW CLEANUP MESSAGES
@@ -70,7 +71,7 @@ Worker 3 is starting halo Exchange!
 
 ===================================================================================
 =   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
-=   PID 6150 RUNNING AT compute484
+=   PID 3494 RUNNING AT compute300
 =   EXIT CODE: 11
 =   CLEANING UP REMAINING PROCESSES
 =   YOU CAN IGNORE THE BELOW CLEANUP MESSAGES

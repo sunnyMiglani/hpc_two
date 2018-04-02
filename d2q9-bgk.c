@@ -377,15 +377,18 @@ void getLimitsFromRank(int rank, int* upperLim, int* lowerLim){
 // Currently implementing Idea 1 due to ease.
 void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
     if(rank == MASTER){
-        printf("Master Starting to Gather \n");
+        printf("Master Starting to Gather ## size : %d \n", size);
         for(int i = 1; i < size; i ++){
             int* this_lowerLim;
             int* this_upperLim;
 
+	printf("LIM AND LOWER POINTER DONE! \n");
+
             *this_lowerLim = -1;
             *this_upperLim = -1;
 
-
+	
+  	    printf("GOING INTO GET LIMITS FROM RANK THAKNS OKAY BYE\n");
             getLimitsFromRank(i,this_upperLim, this_lowerLim); // places values into the variables via pointer
 
             if(*this_lowerLim == -1 || *this_upperLim == -1){
@@ -393,6 +396,7 @@ void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, i
             }
             printf("Finished gatherData for rank %d\n",i);
         }
+	printf("MASTER HSA FINISHED GATHERING \n");
     }
     else{
         printf("Worker %d trying to send \n",rank);
