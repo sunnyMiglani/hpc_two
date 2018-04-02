@@ -273,6 +273,7 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
     */
     if(rank != MASTER){
         float *ans;
+        printf("Workers are entering avg_velocity\n", );
         *ans = av_velocity(params, cells, obstacles);
         printf("Worker %d is SENDING the average velocity value : %f \n",rank, *ans );
         MPI_Ssend(ans, 1, MPI_FLOAT, 0, 0, MPI_COMM_WORLD);
@@ -282,6 +283,7 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
         float* total = 0;
         float* temp;
 	    float *my_ans;
+        printf("Master is entering avg_velocity\n", );
         *my_ans = av_velocity(params,cells,obstacles);
         printf("Master is back from the great avg_velocity\n");
         *total += *my_ans;
