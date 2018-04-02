@@ -254,7 +254,7 @@ void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells,
 
   printf("Worker %d is starting halo Exchange! \n", rank);
   int val = MPI_Sendrecv(&cells[0 + myStartInd*params.nx], params.nx, cells_struct,topRank,0,&cells[0 + haloBottom*params.nx],params.nx,cells_struct,botRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-  val = MPI_Sendrecv(&cells[0 + myEndInd*params.nx], params.nx, cells_struct,botRank,0,&cells[0 + haloTop*params.nx],params.nx,cells_struct,topRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+  int valTwo = MPI_Sendrecv(&cells[0 + myEndInd*params.nx], params.nx, cells_struct,botRank,0,&cells[0 + haloTop*params.nx],params.nx,cells_struct,topRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   printf("Worker %d Finished Halo Exchange \n",rank);
 
 }
@@ -392,6 +392,7 @@ void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, i
     else{
         printf("Worker %d trying to send \n",rank);
     }
+    printf("Leaving the gatherData Function! \n", );
 }
 
 int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
