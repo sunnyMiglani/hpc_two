@@ -277,7 +277,8 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
     else{
         float* total = 0;
         float* temp;
-        float *my_ans = av_velocity(params,cells,obstacles);
+	float *my_ans;
+        *my_ans = av_velocity(params,cells,obstacles);
         for(int inp = 1; inp < size; inp++){
             MPI_Recv(temp, 1, MPI_SHORT, inp, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             *total += *temp;
