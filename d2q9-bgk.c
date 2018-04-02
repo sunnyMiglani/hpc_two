@@ -254,7 +254,7 @@ void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells,
 
   printf("Worker %d is starting halo Exchange! \n", rank);
   int val = MPI_Sendrecv(&cells[0 + myStartInd*params.nx], params.nx, cells_struct,topRank,0,&cells[0 + haloBottom*params.nx],params.nx,cells_struct,botRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-  int val = MPI_Sendrecv(&cells[0 + myEndInd*params.nx], params.nx, cells_struct,botRank,0,&cells[0 + haloTop*params.nx],params.nx,cells_struct,topRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+  val = MPI_Sendrecv(&cells[0 + myEndInd*params.nx], params.nx, cells_struct,botRank,0,&cells[0 + haloTop*params.nx],params.nx,cells_struct,topRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   printf("Worker %d Finished Halo Exchange \n",rank);
 
 }
@@ -268,23 +268,22 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
                    MPI_Op op, int root, MPI_Comm comm)
     */
 
-
     if(rank != MASTER){
-        float * ans;
-        ans = av_velocity(params, cells, obstacles);
+        float *ans;
+        *ans = av_velocity(params, cells, obstacles);
         MPI_Ssend(ans, 1, MPI_FLOAT, 0, 0, MPI_COMM_WORLD);
-        return ans;
+        return *ans;
     }
     else{
         float* total = 0;
         float* temp;
-        float my_ans = av_velocity(params,cells,obstacles);
+        float *my_ans = av_velocity(params,cells,obstacles);
         for(int inp = 1; inp < size; inp++){
             MPI_Recv(temp, 1, MPI_SHORT, inp, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             *total += *temp;
         }
 
-        float average = total / size;
+        float average = *total / size;
         return average;
     }
 }
@@ -325,7 +324,7 @@ void func_talkToOthers(const t_param params){
 
 
 void getLimitsFromRank(int rank, int* upperLim, int* lowerLim){
-    int offsetSize = floor(bigY/size);
+    int offset = floor(bigY/size);
     if(rank == 0){
         *lowerLim = 0;
         *upperLim = offset;
