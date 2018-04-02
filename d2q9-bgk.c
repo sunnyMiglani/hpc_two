@@ -126,6 +126,7 @@ int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells);
 int func_rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
 int func_collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
 int func_write_values(const t_param params, t_speed* cells, int* obstacles, float* av_vels);
+float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles);
 
 
 /* finalise, including freeing up allocated memory */
