@@ -324,30 +324,53 @@ void func_talkToOthers(const t_param params){
 }
 
 
-void getLimitsFromRank(int rank, int* upperLim, int* lowerLim){
+int getLimitsFromRankLower(int rank){
     int offset = floor(bigY/size);
+    int lowerLim;
     printf("inFunctionGetLimitsFromRank\n");
     if(rank == 0){
-        *lowerLim = 0;
-        *upperLim = offset;
+        lowerLim = 0;
         printf("Returned values for rank %d from getLimitsFromRank \n",rank);
-        return;
+        return lowerLim;
     }
     if(rank == size-1){
-        *upperLim = bigY;
-        *lowerLim = offset * rank;
+        lowerLim = offset * rank;
         printf("Returned values for rank %d from getLimitsFromRank \n",rank);
-        return;
+        return lowerLim;
     }
     else{
-        *lowerLim = (rank * offset) +1;
-        *upperLim = *lowerLim + offset;
+        lowerLim = (rank * offset) +1;
         printf("Returned values for rank %d from getLimitsFromRank \n",rank);
-        return;
+        return lowerLim;
     }
 
 
 }
+
+int getLimitsFromRankUpper(int rank){
+    int offset = floor(bigY/size);
+    int upperLim;
+    printf("inFunctionGetLimitsFromRank\n");
+    if(rank == 0){
+        upperLim = offset;
+        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
+        return upperLim;
+    }
+    if(rank == size-1){
+        upperLim = bigY;
+        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
+        return upperLim;
+    }
+    else{
+        //lowerLim = (rank * offset) +1; which is why the bottom is this
+        upperLim = (rank * offset) + 1 + offset;
+        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
+        return upperLim;
+    }
+
+
+}
+
 
 
 /*
@@ -379,21 +402,10 @@ void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, i
     if(rank == MASTER){
         printf("Master Starting to Gather ## size : %d \n", size);
         for(int i = 1; i < size; i ++){
-            int* this_lowerLim;
-            int* this_upperLim;
 
-	printf("LIM AND LOWER POINTER DONE! \n");
+            int this_lowerLim = getLimitsFromRankLower(i);
+            int this_upperLim = getLimitsFromRankUpper(i);
 
-            *this_lowerLim = -1;
-            *this_upperLim = -1;
-
-	
-  	    printf("GOING INTO GET LIMITS FROM RANK THAKNS OKAY BYE\n");
-            getLimitsFromRank(i,this_upperLim, this_lowerLim); // places values into the variables via pointer
-
-            if(*this_lowerLim == -1 || *this_upperLim == -1){
-                printf("ERROR : FUNCTION TO FIND LIMITS BROKEN \n");
-            }
             printf("Finished gatherData for rank %d\n",i);
         }
 	printf("MASTER HSA FINISHED GATHERING \n");
