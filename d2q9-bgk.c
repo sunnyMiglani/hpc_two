@@ -705,6 +705,8 @@ float av_velocity(const t_param params, t_speed* cells, int* obstacles)
   /* initialise */
   tot_u = 0.f;
 
+  printf("Am inside av velocity yo boi thanks boi \n");
+
   /* loop over all non-blocked cells */
   for (int jj = myStartInd; jj < myEndInd; jj++)
   {
