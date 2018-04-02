@@ -388,6 +388,7 @@ void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, i
 
 
         }
+        printf("Finished gatherData for rank %d\n",i);
     }
     else{
         printf("Worker %d trying to send \n",rank);
