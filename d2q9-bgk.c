@@ -326,21 +326,27 @@ void func_talkToOthers(const t_param params){
 
 void getLimitsFromRank(int rank, int* upperLim, int* lowerLim){
     int offset = floor(bigY/size);
+    printf("inFunctionGetLimitsFromRank\n");
     if(rank == 0){
         *lowerLim = 0;
         *upperLim = offset;
+        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return;
     }
     if(rank == size-1){
         *upperLim = bigY;
         *lowerLim = offset * rank;
+        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return;
     }
     else{
         *lowerLim = (rank * offset) +1;
         *upperLim = *lowerLim + offset;
+        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return;
     }
+
+
 }
 
 
@@ -385,9 +391,7 @@ void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, i
             if(*this_lowerLim == -1 || *this_upperLim == -1){
                 printf("ERROR : FUNCTION TO FIND LIMITS BROKEN \n");
             }
-
-	        printf("Finished gatherData for rank %d\n",i);
-
+            printf("Finished gatherData for rank %d\n",i);
         }
     }
     else{
