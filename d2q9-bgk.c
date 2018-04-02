@@ -283,6 +283,7 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
         float* temp;
 	    float *my_ans;
         *my_ans = av_velocity(params,cells,obstacles);
+        printf("Master is back from the great avg_velocity\n");
         *total += *my_ans;
         printf("MASTER IS ABOUT TO START RECEIVING FROM PEOPLE \n");
         for(int inp = 1; inp < size; inp++){
@@ -705,7 +706,6 @@ float av_velocity(const t_param params, t_speed* cells, int* obstacles)
   /* initialise */
   tot_u = 0.f;
 
-  printf("Am inside av velocity yo boi thanks boi \n");
 
   /* loop over all non-blocked cells */
   for (int jj = myStartInd; jj < myEndInd; jj++)
@@ -747,7 +747,6 @@ float av_velocity(const t_param params, t_speed* cells, int* obstacles)
     }
   }
 
-  printf("Leaving from your friendly neighbourhood avg_velocity\n");
   return tot_u / (float)tot_cells;
 }
 
