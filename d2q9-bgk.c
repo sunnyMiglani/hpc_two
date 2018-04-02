@@ -127,6 +127,7 @@ int func_rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* 
 int func_collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
 int func_write_values(const t_param params, t_speed* cells, int* obstacles, float* av_vels);
 
+
 /* finalise, including freeing up allocated memory */
 int finalise(const t_param* params, t_speed** cells_ptr, t_speed** tmp_cells_ptr,
              int** obstacles_ptr, float** av_vels_ptr);
@@ -148,7 +149,6 @@ void usage(const char* exe);
 bool inLocalRows(int myStartInd, int myEndInd, int globalPos);
 int getLocalRows(int myStartInd, int myEndInd, int globalPos);
 int getHaloCellsForY(int attempt);
-void func_talkToOthers();
 
 /*
 ** main program:
@@ -216,13 +216,16 @@ int main(int argc, char* argv[])
   {
     printf("Worker %d is doing iteration %d \n",rank, tt);
     func_timestep(params, cells, tmp_cells, obstacles);
-    av_vels[tt] = av_velocity(params, cells, obstacles);
+    float this_avgV = func_gatherVelocity(params,cells,tmp_cells,obstacles);
     ++numberOfIterationsDone;
-  #ifdef DEBUG
-    printf("==timestep: %d==\n", tt);
-    printf("av velocity: %.12E\n", av_vels[tt]);
-    printf("tot density: %.12E\n", total_density(params, cells));
-  #endif
+    if(rank == MASTER){
+        av_vels[tt] = this_avgV;
+        #ifdef DEBUG
+          printf("==timestep: %d==\n", tt);
+          printf("av velocity: %.12E\n", av_vels[tt]);
+          printf("tot density: %.12E\n", total_density(params, cells));
+          #endif
+    }
   }
 
   if(rank == MASTER){ printf("MASTER HAS FINISHED TIMESTEPS \n");}
@@ -262,66 +265,38 @@ void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells,
 
 float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles){
 
-
     /*
     int MPI_Reduce(const void *sendbuf, void *recvbuf, int count, MPI_Datatype datatype,
                    MPI_Op op, int root, MPI_Comm comm)
     */
-
     if(rank != MASTER){
         float *ans;
         *ans = av_velocity(params, cells, obstacles);
+        printf("Worker %d is SENDING the average velocity value : %d \n",rank, *ans );
         MPI_Ssend(ans, 1, MPI_FLOAT, 0, 0, MPI_COMM_WORLD);
         return *ans;
     }
     else{
         float* total = 0;
         float* temp;
-	float *my_ans;
+	    float *my_ans;
         *my_ans = av_velocity(params,cells,obstacles);
+        printf("MASTER IS ABOUT TO START RECEIVING FROM PEOPLE \n");
         for(int inp = 1; inp < size; inp++){
             MPI_Recv(temp, 1, MPI_SHORT, inp, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             *total += *temp;
+            printf("MASTER RECEIVING FROM WORKER %d VALUE %d \n",inp,*temp);
         }
 
         float average = *total / size;
         return average;
     }
+    printf("WORKER %d FINISHED DEALING WITH GATHER VELOCITY \n", rank);
 }
 
 
-void func_talkToOthers(const t_param params){
-  bool seeIfDone = false; // Variable to see whether the last thread has finished running
-  if(rank == MASTER){ // Master loops through all the cores recieving whether they're done
-    printf("Master in talking to others size : %d\n", size );
-    for(int i = 1; i < size-1; i++) {
 
-      short* this_isDone = 0;
 
-      MPI_Recv(&this_isDone, 1, MPI_SHORT, i, 0, MPI_COMM_WORLD , MPI_STATUS_IGNORE);
-
-      if(*this_isDone == 0){
-        seeIfDone = false;
-      }
-      else if(*this_isDone == 1){ // so worker has done
-        seeIfDone &= true; // if one is false, all are false. if all are true, all are true.
-      }
-      printf("Master received info from %d\n",rank);
-    }
-    printf("Master finished talking to others \n");
-  }
-  if(rank != MASTER){ // workers will print out they're trying, and then send in whether they've finished.
-    short* amIDone = 0;
-    if(numberOfIterationsDone  >= params.maxIters-1){
-      *amIDone = 1;
-    }
-    else{
-      *amIDone = 0;
-    }
-    MPI_Ssend(&amIDone, 1, MPI_SHORT, 0 , 0, MPI_COMM_WORLD);
-    printf("Worker %d is done speaking to master! \n",rank);
-    }
-}
 
 
 int getLimitsFromRankLower(int rank){
@@ -373,6 +348,8 @@ int getLimitsFromRankUpper(int rank){
 
 
 
+
+
 /*
     IDEA (1):
     Master does a select case type thing to take in inputs from workers
@@ -403,10 +380,36 @@ void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, i
         printf("Master Starting to Gather ## size : %d \n", size);
         for(int i = 1; i < size; i ++){
 
-            int this_lowerLim = getLimitsFromRankLower(i);
-            int this_upperLim = getLimitsFromRankUpper(i);
+            int this_lowerLim = getLimitsFromRankLower(i); // Basically the y limit lower
+            int this_upperLim = getLimitsFromRankUpper(i); // Basically the y limit higher
 
-            printf("Finished gatherData for rank %d\n",i);
+
+
+
+            /**
+
+            MPI_Gather(
+            void* send_data,
+            int send_count,
+            MPI_Datatype send_datatype,
+            void* recv_data,
+            int recv_count,
+            MPI_Datatype recv_datatype,
+            int root,
+            MPI_Comm communicator)
+
+            MPI_Gather(someInputSpace, NumberOfCells, TypeOfCells, )
+
+
+            int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+             MPI_Comm comm, MPI_Status *status)
+
+
+
+            **/
+
+
+        printf("Finished gatherData for rank %d\n",i);
         }
 	printf("MASTER HSA FINISHED GATHERING \n");
     }
@@ -423,7 +426,7 @@ int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int*
     func_rebound(params, cells, tmp_cells, obstacles);
     func_collision(params, cells, tmp_cells, obstacles);
     func_haloExchange(params,cells,tmp_cells,obstacles);
-    func_gatherData(params,cells,tmp_cells,obstacles);
+    // func_gatherData(params,cells,tmp_cells,obstacles); // not needed right now
     return EXIT_SUCCESS;
 }
 
