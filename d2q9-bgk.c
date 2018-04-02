@@ -401,7 +401,7 @@ int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int*
     func_rebound(params, cells, tmp_cells, obstacles);
     func_collision(params, cells, tmp_cells, obstacles);
     func_haloExchange(params,cells,tmp_cells,obstacles);
-    // func_gatherData(params,cells,tmp_cells,obstacles);
+    func_gatherData(params,cells,tmp_cells,obstacles);
     return EXIT_SUCCESS;
 }
 
