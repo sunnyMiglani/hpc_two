@@ -260,7 +260,7 @@ void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells,
 }
 
 
-float func_gatherVelocy(const t_param params,  t_speed *cells, int* obstacles){
+float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles){
 
 
     /*
@@ -373,12 +373,16 @@ void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, i
     if(rank == MASTER){
         printf("Master Starting to Gather \n");
         for(int i = 1; i < size; i ++){
-            int* this_lowerLim = -1;
-            int* this_upperLim = -1;
+            int* this_lowerLim;
+            int* this_upperLim;
+
+            *this_lowerLim = -1;
+            *this_upperLim = -1;
+
 
             getLimitsFromRank(i,this_upperLim, this_lowerLim); // places values into the variables via pointer
 
-            if(this_lowerLim == -1 || this_upperLim == -1){
+            if(*this_lowerLim == -1 || *this_upperLim == -1){
                 printf("ERROR : FUNCTION TO FIND LIMITS BROKEN \n");
             }
 
