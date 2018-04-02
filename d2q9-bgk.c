@@ -749,6 +749,7 @@ float av_velocity(const t_param params, t_speed* cells, int* obstacles)
     }
   }
 
+  printf("Worker %d left from the place \n",rank );
   return tot_u / (float)tot_cells;
 }
 
