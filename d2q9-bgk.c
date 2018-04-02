@@ -137,6 +137,7 @@ float total_density(const t_param params, t_speed* cells);
 
 /* compute average velocity */
 float av_velocity(const t_param params, t_speed* cells, int* obstacles);
+float av_velocity_withoutDiv(const t_param params, t_speed* cells, int* obstacles);
 
 /* calculate Reynolds number */
 float calc_reynolds(const t_param params, t_speed* cells, int* obstacles);
@@ -210,6 +211,7 @@ int main(int argc, char* argv[])
 
   numberOfIterationsDone = 0;
   /* iterate for maxIters timesteps */
+  params.maxIters = 100;
   for (int tt = 0; tt < params.maxIters; tt++)
   {
     printf("Worker %d is doing iteration %d \n",rank, tt);
@@ -258,6 +260,36 @@ void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells,
 }
 
 
+float func_gatherVelocy(const t_param params,  t_speed *cells, int* obstacles){
+
+
+    /*
+    int MPI_Reduce(const void *sendbuf, void *recvbuf, int count, MPI_Datatype datatype,
+                   MPI_Op op, int root, MPI_Comm comm)
+    */
+
+
+    if(rank != MASTER){
+        float * ans;
+        ans = av_velocity(params, cells, obstacles);
+        MPI_Ssend(ans, 1, MPI_FLOAT, 0, 0, MPI_COMM_WORLD);
+        return ans;
+    }
+    else{
+        float* total = 0;
+        float* temp;
+        float my_ans = av_velocity(params,cells,obstacles);
+        for(int inp = 1; inp < size; inp++){
+            MPI_Recv(temp, 1, MPI_SHORT, inp, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            *total += *temp;
+        }
+
+        float average = total / size;
+        return average;
+    }
+}
+
+
 void func_talkToOthers(const t_param params){
   bool seeIfDone = false; // Variable to see whether the last thread has finished running
   if(rank == MASTER){ // Master loops through all the cores recieving whether they're done
@@ -265,17 +297,16 @@ void func_talkToOthers(const t_param params){
     for(int i = 1; i < size-1; i++) {
 
       short* this_isDone = 0;
-      printf("####Right before recieving \n");
 
       MPI_Recv(&this_isDone, 1, MPI_SHORT, i, 0, MPI_COMM_WORLD , MPI_STATUS_IGNORE);
 
-      printf("####Right after receiving \n");
       if(*this_isDone == 0){
         seeIfDone = false;
       }
       else if(*this_isDone == 1){ // so worker has done
         seeIfDone &= true; // if one is false, all are false. if all are true, all are true.
       }
+      printf("Master received info from %d\n",rank);
     }
     printf("Master finished talking to others \n");
   }
@@ -351,14 +382,12 @@ void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, i
                 printf("ERROR : FUNCTION TO FIND LIMITS BROKEN \n");
             }
 
-            // TODO: make this work
 
         }
     }
     else{
         printf("Worker %d trying to send \n",rank);
     }
-
 }
 
 int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
@@ -583,6 +612,57 @@ int func_collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int
   }
 
   return EXIT_SUCCESS;
+}
+
+float av_velocity_withoutDiv(const t_param params, t_speed* cells, int* obstacles)
+{
+  int    tot_cells = 0;  /* no. of cells used in calculation */
+  float tot_u;          /* accumulated magnitudes of velocity for each cell */
+
+  /* initialise */
+  tot_u = 0.f;
+
+  /* loop over all non-blocked cells */
+  for (int jj = myStartInd; jj < myEndInd; jj++)
+  {
+    for (int ii = 0; ii < params.nx; ii++)
+    {
+      /* ignore occupied cells */
+      if (!obstacles[ii + jj*params.nx])
+      {
+        /* local density total */
+        float local_density = 0.f;
+
+        for (int kk = 0; kk < NSPEEDS; kk++)
+        {
+          local_density += cells[ii + jj*params.nx].speeds[kk];
+        }
+
+        /* x-component of velocity */
+        float u_x = (cells[ii + jj*params.nx].speeds[1]
+                      + cells[ii + jj*params.nx].speeds[5]
+                      + cells[ii + jj*params.nx].speeds[8]
+                      - (cells[ii + jj*params.nx].speeds[3]
+                         + cells[ii + jj*params.nx].speeds[6]
+                         + cells[ii + jj*params.nx].speeds[7]))
+                     / local_density;
+        /* compute y velocity component */
+        float u_y = (cells[ii + jj*params.nx].speeds[2]
+                      + cells[ii + jj*params.nx].speeds[5]
+                      + cells[ii + jj*params.nx].speeds[6]
+                      - (cells[ii + jj*params.nx].speeds[4]
+                         + cells[ii + jj*params.nx].speeds[7]
+                         + cells[ii + jj*params.nx].speeds[8]))
+                     / local_density;
+        /* accumulate the norm of x- and y- velocity components */
+        tot_u += sqrtf((u_x * u_x) + (u_y * u_y));
+        /* increase counter of inspected cells */
+        ++tot_cells;
+      }
+    }
+  }
+
+  return tot_u;
 }
 
 float av_velocity(const t_param params, t_speed* cells, int* obstacles)
