@@ -216,7 +216,7 @@ int main(int argc, char* argv[])
   {
     printf("Worker %d is doing iteration %d \n",rank, tt);
     func_timestep(params, cells, tmp_cells, obstacles);
-    float this_avgV = func_gatherVelocity(params,cells,tmp_cells,obstacles);
+    float this_avgV = func_gatherVelocity(params,cells,obstacles);
     ++numberOfIterationsDone;
     if(rank == MASTER){
         av_vels[tt] = this_avgV;
@@ -272,7 +272,7 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
     if(rank != MASTER){
         float *ans;
         *ans = av_velocity(params, cells, obstacles);
-        printf("Worker %d is SENDING the average velocity value : %d \n",rank, *ans );
+        printf("Worker %d is SENDING the average velocity value : %f \n",rank, *ans );
         MPI_Ssend(ans, 1, MPI_FLOAT, 0, 0, MPI_COMM_WORLD);
         return *ans;
     }
@@ -286,7 +286,7 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
         for(int inp = 1; inp < size; inp++){
             MPI_Recv(temp, 1, MPI_SHORT, inp, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             *total += *temp;
-            printf("MASTER RECEIVING FROM WORKER %d VALUE %d \n",inp,*temp);
+            printf("MASTER RECEIVING FROM WORKER %d VALUE %f \n",inp,*temp);
         }
 
         float average = *total / size;
