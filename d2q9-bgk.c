@@ -279,6 +279,7 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
         float tempAns = av_velocity(params, cells, obstacles);
         printf("Worker %d has left the avg_velocity\n",rank);
         *ans = tempAns;
+	printf("Moved the values? rank : %d\n",rank);
         printf("Worker %d is SENDING the average velocity value : %f \n",rank, *ans );
         MPI_Ssend(ans, 1, MPI_FLOAT, 0, 0, MPI_COMM_WORLD);
         return *ans;
