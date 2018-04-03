@@ -274,15 +274,15 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
                    MPI_Op op, int root, MPI_Comm comm)
     */
     if(rank != MASTER){
-        float *ans;
+        float ans;
         printf("Worker %d is entering avg_velocity\n", rank);
         float tempAns = av_velocity(params, cells, obstacles);
-        printf("Worker %d has left the avg_velocity %d \n",rank, tempAns);
-        *ans = tempAns;
-	    printf("SPAMMING THIS ENTIRE THING PLEASE OKAY THANKS Moved the values? rank : %d\n",rank);
-        printf("Worker %d is SENDING the average velocity value : %f \n",rank, *ans );
-        MPI_Ssend(ans, 1, MPI_FLOAT, 0, 0, MPI_COMM_WORLD);
-        return *ans;
+        printf("Worker %d has left the avg_velocity %f \n",rank, tempAns);
+        ans = tempAns;
+	 printf("SPAMMING THIS ENTIRE THING PLEASE OKAY THANKS Moved the values? rank : %d\n",rank);
+        printf("Worker %d is SENDING the average velocity value : %f \n",rank, ans );
+        MPI_Ssend(&ans, 1, MPI_FLOAT, 0, 0, MPI_COMM_WORLD);
+        return ans;
     }
     else{
         float* total = 0;
