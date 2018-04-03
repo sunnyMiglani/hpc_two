@@ -294,7 +294,7 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
         total += my_ans;
         printf("MASTER IS ABOUT TO START RECEIVING FROM PEOPLE \n");
         for(int inp = 1; inp < size; inp++){
-            MPI_Recv(&temp, 1, MPI_SHORT, inp, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv(&temp, 1, MPI_FLOAT, inp, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             total += temp;
             printf("MASTER RECEIVING FROM WORKER %d VALUE %f \n",inp,temp);
         }
