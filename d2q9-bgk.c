@@ -219,6 +219,7 @@ int main(int argc, char* argv[])
     func_timestep(params, cells, tmp_cells, obstacles);
     printf("Worker %d is gather velocity\n",rank);
     float this_avgV = func_gatherVelocity(params,cells,obstacles);
+    printf("Worker %d finished gather velocity\n",rank);
     ++numberOfIterationsDone;
     if(rank == MASTER){
         av_vels[tt] = this_avgV;
