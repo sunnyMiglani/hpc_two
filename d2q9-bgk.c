@@ -279,28 +279,27 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
         float tempAns = av_velocity(params, cells, obstacles);
         printf("Worker %d has left the avg_velocity %f \n",rank, tempAns);
         ans = tempAns;
-	 printf("SPAMMING THIS ENTIRE THING PLEASE OKAY THANKS Moved the values? rank : %d\n",rank);
         printf("Worker %d is SENDING the average velocity value : %f \n",rank, ans );
         MPI_Ssend(&ans, 1, MPI_FLOAT, 0, 0, MPI_COMM_WORLD);
         return ans;
     }
     else{
-        float* total = 0;
-        float* temp;
-	    float *my_ans;
+        float total = 0;
+        float temp;
+	    float my_ans;
         printf("Master is entering avg_velocity\n");
         float this_temp;
 	    this_temp = av_velocity(params,cells,obstacles);
-        *my_ans = this_temp;
-        *total += *my_ans;
+        my_ans = this_temp;
+        total += my_ans;
         printf("MASTER IS ABOUT TO START RECEIVING FROM PEOPLE \n");
         for(int inp = 1; inp < size; inp++){
-            MPI_Recv(temp, 1, MPI_SHORT, inp, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            *total += *temp;
-            printf("MASTER RECEIVING FROM WORKER %d VALUE %f \n",inp,*temp);
+            MPI_Recv(&temp, 1, MPI_SHORT, inp, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            total += temp;
+            printf("MASTER RECEIVING FROM WORKER %d VALUE %f \n",inp,temp);
         }
 
-        float average = *total / size;
+        float average = total / size;
         return average;
     }
     printf("WORKER %d FINISHED DEALING WITH GATHER VELOCITY \n", rank);
