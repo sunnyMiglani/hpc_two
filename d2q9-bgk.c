@@ -285,10 +285,12 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
     else{
         float* total = 0;
         float* temp;
-	    float *my_ans;
+	float *my_ans;
         printf("Master is entering avg_velocity\n");
-        *my_ans = av_velocity(params,cells,obstacles);
-        printf("Master is back from the great avg_velocity\n");
+        float this_temp;
+	this_temp = av_velocity(params,cells,obstacles);
+        *my_ans = this_temp;
+	printf("Master is back from the great avg_velocity\n");
         *total += *my_ans;
         printf("MASTER IS ABOUT TO START RECEIVING FROM PEOPLE \n");
         for(int inp = 1; inp < size; inp++){

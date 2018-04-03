@@ -21,3 +21,5 @@ echo CPUS per node : $SLURM_JOB_CPUS_PER_NODE
 
 #! Run the executable
 mpirun -np $SLURM_JOB_CPUS_PER_NODE ./d2q9-bgk input_128x128.params obstacles_128x128.dat
+
+echo done!
