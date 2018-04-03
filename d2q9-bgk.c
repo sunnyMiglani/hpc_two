@@ -217,6 +217,7 @@ int main(int argc, char* argv[])
   {
     printf("Worker %d is doing iteration %d \n",rank, tt);
     func_timestep(params, cells, tmp_cells, obstacles);
+    printf("Worker %d is gather velocity\n",rank);
     float this_avgV = func_gatherVelocity(params,cells,obstacles);
     ++numberOfIterationsDone;
     if(rank == MASTER){
@@ -427,12 +428,20 @@ void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, i
 
 int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
+    printf("Worker %d starts timestep\n", rank);
+    printf("Worker %d starts func_accelerate_flow\n", rank);
     func_accelerate_flow(params, cells, obstacles);
+
+    printf("Worker %d starts Propogate\n", rank);
     func_propagate(params, cells, tmp_cells);
+    printf("Worker %d starts func_rebound\n", rank);
     func_rebound(params, cells, tmp_cells, obstacles);
+    printf("Worker %d starts func_colli\n", rank);
     func_collision(params, cells, tmp_cells, obstacles);
+    printf("Worker %d starts halo\n", rank);
     func_haloExchange(params,cells,tmp_cells,obstacles);
     // func_gatherData(params,cells,tmp_cells,obstacles); // not needed right now
+    printf("Worker %d finishes timestep\n", rank);
     return EXIT_SUCCESS;
 }
 
