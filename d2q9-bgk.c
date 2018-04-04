@@ -212,7 +212,7 @@ int main(int argc, char* argv[])
 
   numberOfIterationsDone = 0;
   /* iterate for maxIters timesteps */
-//  params.maxIters = 100;
+  params.maxIters = 100;
   for (int tt = 0; tt < params.maxIters; tt++)
   {
     printf("Worker %d is doing iteration %d \n",rank, tt);
@@ -371,12 +371,9 @@ int getLimitsFromRankUpper(int rank){
 
     Pros : Much faster and easier to send a single Variable
     Cons : Very complicated for avg_velocity method.
-
     ----------------------------------------------------------------------
 
-
     ----------------------------------------------------------------------
-
 
 */
 // Currently implementing Idea 1 due to ease.
