@@ -1,31 +1,31 @@
-Running on host compute336.bc4.acrc.priv
-Time is Wed Apr 4 19:30:30 BST 2018
+Running on host compute238.bc4.acrc.priv
+Time is Wed Apr 4 18:49:20 UTC 2018
 Directory is /mnt/storage/home/sm15504/year3CW/flat_mpi_better/hpc_two
-Slurm job ID is 1096867
+Slurm job ID is 1096876
 This job runs on the following machines:
-compute336
+compute238
 icc
 NUMBER OF NODES : 1
 CPUS per node : 5
+My Rank : 0, my Size : 5
+My Rank : 1, my Size : 5
 My Rank : 2, my Size : 5
 My Rank : 3, my Size : 5
 My Rank : 4, my Size : 5
-My Rank : 0, my Size : 5
-My Rank : 1, my Size : 5
-Rank: 2, startInd = 51, endInd : 76, haloTop : 50, haloBottom: 77, topRank :3, botrank :1 
-Rank: 3, startInd = 76, endInd : 101, haloTop : 75, haloBottom: 102, topRank :4, botrank :2 
 Rank: 0, startInd = 0, endInd : 25, haloTop : 26, haloBottom: 128, topRank :1, botrank :4 
 Rank: 1, startInd = 26, endInd : 51, haloTop : 25, haloBottom: 52, topRank :2, botrank :0 
+Rank: 2, startInd = 51, endInd : 76, haloTop : 50, haloBottom: 77, topRank :3, botrank :1 
+Rank: 3, startInd = 76, endInd : 101, haloTop : 75, haloBottom: 102, topRank :4, botrank :2 
 Rank: 4, startInd = 100, endInd : 128, haloTop : 0, haloBottom: 99, topRank :0, botrank :3 
 Worker 2 is doing iteration 0 
-Worker 3 is doing iteration 0 
+Worker 1 is doing iteration 0 
 Worker 4 is doing iteration 0 
 Worker 0 is doing iteration 0 
-Worker 1 is doing iteration 0 
+Worker 3 is doing iteration 0 
 Worker 1 is doing iteration 1 
-Worker 0 is doing iteration 1 
 Worker 2 is doing iteration 1 
 Worker 3 is doing iteration 1 
+Worker 0 is doing iteration 1 
 Worker 4 is doing iteration 1 
 Worker 1 is doing iteration 2 
 Worker 2 is doing iteration 2 
@@ -129,23 +129,23 @@ Worker 0 is doing iteration 21
 Worker 4 is doing iteration 21 
 Worker 1 is doing iteration 22 
 Worker 2 is doing iteration 22 
-Worker 3 is doing iteration 22 
 Worker 0 is doing iteration 22 
+Worker 3 is doing iteration 22 
 Worker 4 is doing iteration 22 
 Worker 1 is doing iteration 23 
+Worker 2 is doing iteration 23 
 Worker 3 is doing iteration 23 
 Worker 0 is doing iteration 23 
 Worker 4 is doing iteration 23 
-Worker 2 is doing iteration 23 
 Worker 1 is doing iteration 24 
 Worker 2 is doing iteration 24 
-Worker 3 is doing iteration 24 
 Worker 0 is doing iteration 24 
+Worker 3 is doing iteration 24 
 Worker 4 is doing iteration 24 
 Worker 1 is doing iteration 25 
 Worker 2 is doing iteration 25 
-Worker 3 is doing iteration 25 
 Worker 0 is doing iteration 25 
+Worker 3 is doing iteration 25 
 Worker 4 is doing iteration 25 
 Worker 1 is doing iteration 26 
 Worker 2 is doing iteration 26 
@@ -204,8 +204,8 @@ Worker 0 is doing iteration 36
 Worker 4 is doing iteration 36 
 Worker 1 is doing iteration 37 
 Worker 2 is doing iteration 37 
-Worker 3 is doing iteration 37 
 Worker 0 is doing iteration 37 
+Worker 3 is doing iteration 37 
 Worker 4 is doing iteration 37 
 Worker 1 is doing iteration 38 
 Worker 2 is doing iteration 38 
@@ -287,10 +287,10 @@ Worker 2 is doing iteration 53
 Worker 3 is doing iteration 53 
 Worker 0 is doing iteration 53 
 Worker 4 is doing iteration 53 
-Worker 0 is doing iteration 54 
 Worker 1 is doing iteration 54 
 Worker 2 is doing iteration 54 
 Worker 3 is doing iteration 54 
+Worker 0 is doing iteration 54 
 Worker 4 is doing iteration 54 
 Worker 1 is doing iteration 55 
 Worker 2 is doing iteration 55 
@@ -489,8 +489,8 @@ Worker 0 is doing iteration 93
 Worker 4 is doing iteration 93 
 Worker 1 is doing iteration 94 
 Worker 2 is doing iteration 94 
-Worker 3 is doing iteration 94 
 Worker 0 is doing iteration 94 
+Worker 3 is doing iteration 94 
 Worker 4 is doing iteration 94 
 Worker 1 is doing iteration 95 
 Worker 2 is doing iteration 95 
@@ -509,8 +509,8 @@ Worker 0 is doing iteration 97
 Worker 4 is doing iteration 97 
 Worker 1 is doing iteration 98 
 Worker 2 is doing iteration 98 
-Worker 3 is doing iteration 98 
 Worker 0 is doing iteration 98 
+Worker 3 is doing iteration 98 
 Worker 4 is doing iteration 98 
 Worker 1 is doing iteration 99 
 Worker 2 is doing iteration 99 
@@ -522,104 +522,4 @@ WORKER 2 HAS FINISHED TIMERSTEPS!
 WORKER 3 HAS FINISHED TIMERSTEPS!
 MASTER HAS FINISHED TIMESTEPS 
 WORKER 4 HAS FINISHED TIMERSTEPS!
-Elapsed user CPU time:		0.049637 (s)
-Elapsed system CPU time:	0.020682 (s)
-==done== worker 0 
-Reynolds number:		3.679981946945E+00
-Elapsed time:			0.056323 (s)
-Elapsed user CPU time:		0.031666 (s)
-Elapsed system CPU time:	0.013279 (s)
-==done== worker 2 
-Reynolds number:		3.561301946640E+00
-Elapsed time:			1522866633.472740 (s)
-Elapsed user CPU time:		0.055517 (s)
-Elapsed system CPU time:	0.012888 (s)
-==done== worker 3 
-Reynolds number:		3.561301946640E+00
-Elapsed time:			1522866633.472738 (s)
-Elapsed user CPU time:		0.060049 (s)
-Elapsed system CPU time:	0.009481 (s)
-==done== worker 4 
-Reynolds number:		NAN
-Elapsed time:			1522866633.472739 (s)
-Elapsed user CPU time:		0.049017 (s)
-Elapsed system CPU time:	0.016665 (s)
-==done== worker 1 
-Reynolds number:		3.561301946640E+00
-Elapsed time:			1522866633.473129 (s)
-*** Error in `./d2q9-bgk': double free or corruption (out): 0x00002aee95a18010 ***
-======= Backtrace: =========
-/usr/lib64/libc.so.6(+0x7c503)[0x2aee92833503]
-./d2q9-bgk[0x40281c]
-/usr/lib64/libc.so.6(__libc_start_main+0xf5)[0x2aee927d8b35]
-./d2q9-bgk[0x401279]
-======= Memory map: ========
-00400000-00409000 r-xp 00000000 00:2b 143987369                          /mnt/storage/home/sm15504/year3CW/flat_mpi_better/hpc_two/d2q9-bgk
-00609000-0060a000 rw-p 00009000 00:2b 143987369                          /mnt/storage/home/sm15504/year3CW/flat_mpi_better/hpc_two/d2q9-bgk
-02207000-0224c000 rw-p 00000000 00:00 0                                  [heap]
-2aee90bab000-2aee90bcb000 r-xp 00000000 00:23 40107                      /usr/lib64/ld-2.17.so
-2aee90bcb000-2aee90bcd000 rw-p 00000000 00:00 0 
-2aee90bd5000-2aee90bd8000 rw-p 00000000 00:00 0 
-2aee90bd8000-2aee90bee000 r-xp 00000000 00:2b 308426                     /mnt/storage/easybuild/software/GCCcore/5.4.0/lib64/libgcc_s.so.1
-2aee90bee000-2aee90bef000 rw-p 00015000 00:2b 308426                     /mnt/storage/easybuild/software/GCCcore/5.4.0/lib64/libgcc_s.so.1
-2aee90bef000-2aee90c13000 rw-p 00000000 00:00 0 
-2aee90da2000-2aee90dca000 rw-p 00000000 00:00 0 
-2aee90dca000-2aee90dcb000 r--p 0001f000 00:23 40107                      /usr/lib64/ld-2.17.so
-2aee90dcb000-2aee90dcc000 rw-p 00020000 00:23 40107                      /usr/lib64/ld-2.17.so
-2aee90dcc000-2aee90dcd000 rw-p 00000000 00:00 0 
-2aee90dcd000-2aee90ecd000 r-xp 00000000 00:23 40165                      /usr/lib64/libm-2.17.so
-2aee90ecd000-2aee910cd000 ---p 00100000 00:23 40165                      /usr/lib64/libm-2.17.so
-2aee910cd000-2aee910ce000 r--p 00100000 00:23 40165                      /usr/lib64/libm-2.17.so
-2aee910ce000-2aee910cf000 rw-p 00101000 00:23 40165                      /usr/lib64/libm-2.17.so
-2aee910cf000-2aee9124d000 r-xp 00000000 00:2b 467493                     /mnt/storage/apps/intel/impi/2017.1.132/lib64/libmpifort.so.12
-2aee9124d000-2aee9144d000 ---p 0017e000 00:2b 467493                     /mnt/storage/apps/intel/impi/2017.1.132/lib64/libmpifort.so.12
-2aee9144d000-2aee91454000 rw-p 0017e000 00:2b 467493                     /mnt/storage/apps/intel/impi/2017.1.132/lib64/libmpifort.so.12
-2aee91454000-2aee91478000 rw-p 00000000 00:00 0 
-2aee91478000-2aee91bbd000 r-xp 00000000 00:2b 467456                     /mnt/storage/apps/intel/impi/2017.1.132/lib64/libmpi.so.12
-2aee91bbd000-2aee91dbc000 ---p 00745000 00:2b 467456                     /mnt/storage/apps/intel/impi/2017.1.132/lib64/libmpi.so.12
-2aee91dbc000-2aee91df8000 rw-p 00744000 00:2b 467456                     /mnt/storage/apps/intel/impi/2017.1.132/lib64/libmpi.so.12
-2aee91df8000-2aee9218f000 rw-p 00000000 00:00 0 
-2aee9218f000-2aee92191000 r-xp 00000000 00:23 40161                      /usr/lib64/libdl-2.17.so
-2aee92191000-2aee92391000 ---p 00002000 00:23 40161                      /usr/lib64/libdl-2.17.so
-2aee92391000-2aee92392000 r--p 00002000 00:23 40161                      /usr/lib64/libdl-2.17.so
-2aee92392000-2aee92393000 rw-p 00003000 00:23 40161                      /usr/lib64/libdl-2.17.so
-2aee92393000-2aee9239a000 r-xp 00000000 00:23 40804                      /usr/lib64/librt-2.17.so
-2aee9239a000-2aee92599000 ---p 00007000 00:23 40804                      /usr/lib64/librt-2.17.so
-2aee92599000-2aee9259a000 r--p 00006000 00:23 40804                      /usr/lib64/librt-2.17.so
-2aee9259a000-2aee9259b000 rw-p 00007000 00:23 40804                      /usr/lib64/librt-2.17.so
-2aee9259b000-2aee925b2000 r-xp 00000000 00:23 40696                      /usr/lib64/libpthread-2.17.so
-2aee925b2000-2aee927b1000 ---p 00017000 00:23 40696                      /usr/lib64/libpthread-2.17.so
-2aee927b1000-2aee927b2000 r--p 00016000 00:23 40696                      /usr/lib64/libpthread-2.17.so
-2aee927b2000-2aee927b3000 rw-p 00017000 00:23 40696                      /usr/lib64/libpthread-2.17.so
-2aee927b3000-2aee927b7000 rw-p 00000000 00:00 0 
-2aee927b7000-2aee9296d000 r-xp 00000000 00:23 40142                      /usr/lib64/libc-2.17.so
-2aee9296d000-2aee92b6d000 ---p 001b6000 00:23 40142                      /usr/lib64/libc-2.17.so
-2aee92b6d000-2aee92b71000 r--p 001b6000 00:23 40142                      /usr/lib64/libc-2.17.so
-2aee92b71000-2aee92b73000 rw-p 001ba000 00:23 40142                      /usr/lib64/libc-2.17.so
-2aee92b73000-2aee92b78000 rw-p 00000000 00:00 0 
-2aee95a18000-2aee95aa9000 rw-p 00000000 00:00 0 
-2aee98000000-2aee98021000 rw-p 00000000 00:00 0 
-2aee98021000-2aee9c000000 ---p 00000000 00:00 0 
-7fff4ba77000-7fff4ba9b000 rw-p 00000000 00:00 0                          [stack]
-7fff4bab2000-7fff4bab4000 r-xp 00000000 00:00 0                          [vdso]
-ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
-
-===================================================================================
-=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
-=   PID 826 RUNNING AT compute336
-=   EXIT CODE: 6
-=   CLEANING UP REMAINING PROCESSES
-=   YOU CAN IGNORE THE BELOW CLEANUP MESSAGES
-===================================================================================
-
-===================================================================================
-=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
-=   PID 826 RUNNING AT compute336
-=   EXIT CODE: 6
-=   CLEANING UP REMAINING PROCESSES
-=   YOU CAN IGNORE THE BELOW CLEANUP MESSAGES
-===================================================================================
-   Intel(R) MPI Library troubleshooting guide:
-      https://software.intel.com/node/561764
-===================================================================================
 done!

@@ -236,7 +236,7 @@ int main(int argc, char* argv[])
   else{ printf("WORKER %d HAS FINISHED TIMERSTEPS!\n",rank);}
 
   if(rank != MASTER){
-   finalise(&params, &cells, &tmp_cells, &obstacles, &av_vels);g
+   finalise(&params, &cells, &tmp_cells, &obstacles, &av_vels);
    return EXIT_SUCCESS;
   }
 
