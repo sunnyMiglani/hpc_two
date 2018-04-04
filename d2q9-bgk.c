@@ -236,7 +236,7 @@ int main(int argc, char* argv[])
   else{ printf("WORKER %d HAS FINISHED TIMERSTEPS!\n",rank);}
 
   if(rank != MASTER){
-   finalise(&params, &cells, &tmp_cells, &obstacles, &av_vels);
+//   finalise(&params, &cells, &tmp_cells, &obstacles, &av_vels);
 
   }
   MPI_Finalize();
@@ -253,7 +253,7 @@ int main(int argc, char* argv[])
   printf("Elapsed system CPU time:\t%.6lf (s)\n", systim);
  // }
   /* write final values and free memory */
-  printf("==done==\n");
+  printf("==done== worker %d \n",rank);
   printf("Reynolds number:\t\t%.12E\n", calc_reynolds(params, cells, obstacles));
   printf("Elapsed time:\t\t\t%.6lf (s)\n", toc - tic);
   func_write_values(params, cells, obstacles, av_vels);
