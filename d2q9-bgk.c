@@ -217,9 +217,9 @@ int main(int argc, char* argv[])
   {
     printf("Worker %d is doing iteration %d \n",rank, tt);
     func_timestep(params, cells, tmp_cells, obstacles);
-    printf("Worker %d is gather velocity\n",rank);
+    // printf("Worker %d is gather velocity\n",rank);
     float this_avgV = func_gatherVelocity(params,cells,obstacles);
-    printf("Worker %d finished gather velocity\n",rank);
+    // printf("Worker %d finished gather velocity\n",rank);
     ++numberOfIterationsDone;
     if(rank == MASTER){
         av_vels[tt] = this_avgV;
@@ -275,11 +275,11 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
     */
     if(rank != MASTER){
         float ans;
-        printf("Worker %d is entering avg_velocity\n", rank);
+        // printf("Worker %d is entering avg_velocity\n", rank);
         float tempAns = av_velocity(params, cells, obstacles);
-        printf("Worker %d has left the avg_velocity %f \n",rank, tempAns);
+        // printf("Worker %d has left the avg_velocity %f \n",rank, tempAns);
         ans = tempAns;
-        printf("Worker %d is SENDING the average velocity value : %f \n",rank, ans );
+        // printf("Worker %d is SENDING the average velocity value : %f \n",rank, ans );
         MPI_Ssend(&ans, 1, MPI_FLOAT, 0, 0, MPI_COMM_WORLD);
         return ans;
     }
@@ -287,16 +287,16 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
         float total = 0;
         float temp;
 	    float my_ans;
-        printf("Master is entering avg_velocity\n");
+        // printf("Master is entering avg_velocity\n");
         float this_temp;
 	    this_temp = av_velocity(params,cells,obstacles);
         my_ans = this_temp;
         total += my_ans;
-        printf("MASTER IS ABOUT TO START RECEIVING FROM PEOPLE \n");
+        // printf("MASTER IS ABOUT TO START RECEIVING FROM PEOPLE \n");
         for(int inp = 1; inp < size; inp++){
             MPI_Recv(&temp, 1, MPI_FLOAT, inp, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             total += temp;
-            printf("MASTER RECEIVING FROM WORKER %d VALUE %f \n",inp,temp);
+            // printf("MASTER RECEIVING FROM WORKER %d VALUE %f \n",inp,temp);
         }
 
         float average = total / size;
@@ -307,57 +307,51 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
 
 
 
-
-
-
 int getLimitsFromRankLower(int rank){
     int offset = floor(bigY/size);
     int lowerLim;
-    printf("inFunctionGetLimitsFromRank\n");
+    // printf("inFunctionGetLimitsFromRank\n");
     if(rank == 0){
         lowerLim = 0;
-        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
+        // printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return lowerLim;
     }
     if(rank == size-1){
         lowerLim = offset * rank;
-        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
+        // printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return lowerLim;
     }
     else{
         lowerLim = (rank * offset) +1;
-        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
+        // printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return lowerLim;
     }
-
 
 }
 
 int getLimitsFromRankUpper(int rank){
     int offset = floor(bigY/size);
     int upperLim;
-    printf("inFunctionGetLimitsFromRank\n");
+    // printf("inFunctionGetLimitsFromRank\n");
     if(rank == 0){
         upperLim = offset;
-        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
+        // printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return upperLim;
     }
     if(rank == size-1){
         upperLim = bigY;
-        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
+        // printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return upperLim;
     }
     else{
         //lowerLim = (rank * offset) +1; which is why the bottom is this
         upperLim = (rank * offset) + 1 + offset;
-        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
+        // printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return upperLim;
     }
 
 
 }
-
-
 
 
 
@@ -395,30 +389,14 @@ void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, i
             int this_upperLim = getLimitsFromRankUpper(i); // Basically the y limit higher
 
 
+            printf("Master is creating the pointer for the data for worker %d \n",i);
 
+            void* recvPointer = &cells[0 + this_lowerLim*params.nx];
+            int recieveSize = params.nx * abs(this_lowerLim - this_upperLim);
 
-            /**
+            printf("Master is trying to get work from %d \n",i);
 
-            MPI_Gather(
-            void* send_data,
-            int send_count,
-            MPI_Datatype send_datatype,
-            void* recv_data,
-            int recv_count,
-            MPI_Datatype recv_datatype,
-            int root,
-            MPI_Comm communicator)
-
-            MPI_Gather(someInputSpace, NumberOfCells, TypeOfCells, )
-
-
-            int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
-             MPI_Comm comm, MPI_Status *status)
-
-
-
-            **/
-
+            MPI_Recv(recvPointer, recieveSize, cells_struct, i, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
         printf("Finished gatherData for rank %d\n",i);
         }
@@ -426,6 +404,11 @@ void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, i
     }
     else{
         printf("Worker %d trying to send \n",rank);
+        void* sendbuffer = &cells[0 + myStartInd*params.nx];
+        int sendSize = params.nx * abs(myStartInd - myEndInd);
+        printf("Worker %d has init his sending params\n",rank);
+        MPI_Send(sendbuffer, sendSize, cells_struct, 0, 1, MPI_COMM_WORLD);
+        printf("Worker %d has SENT THE DATA! \n",rank);
     }
     printf("Leaving the gatherData Function! \n");
 }
@@ -433,19 +416,20 @@ void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, i
 int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
     printf("Worker %d starts timestep\n", rank);
-    printf("Worker %d starts func_accelerate_flow\n", rank);
+    // printf("Worker %d starts func_accelerate_flow\n", rank);
     func_accelerate_flow(params, cells, obstacles);
 
-    printf("Worker %d starts Propogate\n", rank);
+    // printf("Worker %d starts Propogate\n", rank);
     func_propagate(params, cells, tmp_cells);
-    printf("Worker %d starts func_rebound\n", rank);
+    // printf("Worker %d starts func_rebound\n", rank);
     func_rebound(params, cells, tmp_cells, obstacles);
-    printf("Worker %d starts func_colli\n", rank);
+    // printf("Worker %d starts func_colli\n", rank);
     func_collision(params, cells, tmp_cells, obstacles);
-    printf("Worker %d starts halo\n", rank);
+    // printf("Worker %d starts halo\n", rank);
     func_haloExchange(params,cells,tmp_cells,obstacles);
-    // func_gatherData(params,cells,tmp_cells,obstacles); // not needed right now
-    printf("Worker %d finishes timestep\n", rank);
+    // printf("Worker %d starts gathering data\n ",rank);
+    func_gatherData(params,cells,tmp_cells,obstacles); // not needed right now
+    // printf("Worker %d finishes timestep\n", rank);
     return EXIT_SUCCESS;
 }
 
