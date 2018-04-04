@@ -259,6 +259,7 @@ int main(int argc, char* argv[])
   printf("Reynolds number:\t\t%.12E\n", calc_reynolds(params, cells, obstacles));
   printf("Elapsed time:\t\t\t%.6lf (s)\n", toc - tic);
   func_write_values(params, cells, obstacles, av_vels);
+
   finalise(&params, &cells, &tmp_cells, &obstacles, &av_vels);
 
   return EXIT_SUCCESS;
@@ -413,7 +414,7 @@ void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, i
         void* sendbuffer = &cells[0 + myStartInd*params.nx];
         int sendSize = params.nx * abs(myStartInd - myEndInd);
         // printf("Worker %d has init his sending params\n",rank);
-        MPI_Send(sendbuffer, sendSize, cells_struct, 0, 1, MPI_COMM_WORLD);
+        MPI_Ssend(sendbuffer, sendSize, cells_struct, 0, 1, MPI_COMM_WORLD);
         // printf("Worker %d has SENT THE DATA! \n",rank);
     }
     // printf("Leaving the gatherData Function! \n");
