@@ -231,10 +231,17 @@ int main(int argc, char* argv[])
     }
   }
 
+
   if(rank == MASTER){ printf("MASTER HAS FINISHED TIMESTEPS \n");}
   else{ printf("WORKER %d HAS FINISHED TIMERSTEPS!\n",rank);}
 
-  if(rank == MASTER){
+  if(rank != MASTER){
+   finalise(&params, &cells, &tmp_cells, &obstacles, &av_vels);
+
+  }
+  MPI_Finalize();
+
+  // if(rank == MASTER){
   gettimeofday(&timstr, NULL);
   toc = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
   getrusage(RUSAGE_SELF, &ru);
@@ -244,7 +251,7 @@ int main(int argc, char* argv[])
   systim = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
   printf("Elapsed user CPU time:\t\t%.6lf (s)\n", usrtim);
   printf("Elapsed system CPU time:\t%.6lf (s)\n", systim);
- }
+ // }
   /* write final values and free memory */
   printf("==done==\n");
   printf("Reynolds number:\t\t%.12E\n", calc_reynolds(params, cells, obstacles));
