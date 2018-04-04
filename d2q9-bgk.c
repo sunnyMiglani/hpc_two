@@ -258,17 +258,17 @@ int main(int argc, char* argv[])
 
 void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
 
-  printf("Worker %d is starting halo Exchange! \n", rank);
+  // printf("Worker %d is starting halo Exchange! \n", rank);
   int val = MPI_Sendrecv(&cells[0 + myStartInd*params.nx], params.nx, cells_struct,topRank,0,&cells[0 + haloBottom*params.nx],params.nx,cells_struct,botRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   int valTwo = MPI_Sendrecv(&cells[0 + myEndInd*params.nx], params.nx, cells_struct,botRank,0,&cells[0 + haloTop*params.nx],params.nx,cells_struct,topRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-  printf("Worker %d Finished Halo Exchange \n",rank);
+  // printf("Worker %d Finished Halo Exchange \n",rank);
 
 }
 
 
 float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles){
 
-    printf("Worker %d In the gatherVelocity function \n",rank);
+    // printf("Worker %d In the gatherVelocity function \n",rank);
     /*
     int MPI_Reduce(const void *sendbuf, void *recvbuf, int count, MPI_Datatype datatype,
                    MPI_Op op, int root, MPI_Comm comm)
@@ -302,7 +302,7 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
         float average = total / size;
         return average;
     }
-    printf("WORKER %d FINISHED DEALING WITH GATHER VELOCITY \n", rank);
+    // printf("WORKER %d FINISHED DEALING WITH GATHER VELOCITY \n", rank);
 }
 
 
@@ -382,40 +382,40 @@ int getLimitsFromRankUpper(int rank){
 // Currently implementing Idea 1 due to ease.
 void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
     if(rank == MASTER){
-        printf("Master Starting to Gather data \n");
+        // printf("Master Starting to Gather data \n");
         for(int i = 1; i < size; i ++){
 
             int this_lowerLim = getLimitsFromRankLower(i); // Basically the y limit lower
             int this_upperLim = getLimitsFromRankUpper(i); // Basically the y limit higher
 
 
-            printf("Master is creating the pointer for the data for worker %d \n",i);
+            // printf("Master is creating the pointer for the data for worker %d \n",i);
 
             void* recvPointer = &cells[0 + this_lowerLim*params.nx];
             int recieveSize = params.nx * abs(this_lowerLim - this_upperLim);
 
-            printf("Master is trying to get work from %d \n",i);
+            // printf("Master is trying to get work from %d \n",i);
 
             MPI_Recv(recvPointer, recieveSize, cells_struct, i, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-        printf("Finished gatherData for rank %d\n",i);
+        // printf("Finished gatherData for rank %d\n",i);
         }
-	printf("MASTER HSA FINISHED GATHERING \n");
+	// printf("MASTER HSA FINISHED GATHERING \n");
     }
     else{
-        printf("Worker %d trying to send \n",rank);
+        // printf("Worker %d trying to send \n",rank);
         void* sendbuffer = &cells[0 + myStartInd*params.nx];
         int sendSize = params.nx * abs(myStartInd - myEndInd);
-        printf("Worker %d has init his sending params\n",rank);
+        // printf("Worker %d has init his sending params\n",rank);
         MPI_Send(sendbuffer, sendSize, cells_struct, 0, 1, MPI_COMM_WORLD);
-        printf("Worker %d has SENT THE DATA! \n",rank);
+        // printf("Worker %d has SENT THE DATA! \n",rank);
     }
-    printf("Leaving the gatherData Function! \n");
+    // printf("Leaving the gatherData Function! \n");
 }
 
 int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
-    printf("Worker %d starts timestep\n", rank);
+    // printf("Worker %d starts timestep\n", rank);
     // printf("Worker %d starts func_accelerate_flow\n", rank);
     func_accelerate_flow(params, cells, obstacles);
 
