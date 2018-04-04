@@ -231,6 +231,7 @@ int main(int argc, char* argv[])
     }
   }
 
+  MPI_Finalize();
 
   if(rank == MASTER){ printf("MASTER HAS FINISHED TIMESTEPS \n");}
   else{ printf("WORKER %d HAS FINISHED TIMERSTEPS!\n",rank);}
@@ -240,7 +241,7 @@ int main(int argc, char* argv[])
    return EXIT_SUCCESS;
   }
 
-  MPI_Finalize();
+  printf("Master has survived! \n");
 
   // if(rank == MASTER){
   gettimeofday(&timstr, NULL);
