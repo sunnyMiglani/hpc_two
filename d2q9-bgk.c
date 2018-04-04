@@ -382,7 +382,7 @@ int getLimitsFromRankUpper(int rank){
 // Currently implementing Idea 1 due to ease.
 void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
     if(rank == MASTER){
-        printf("Master Starting to Gather ## size : %d \n", size);
+        printf("Master Starting to Gather data \n");
         for(int i = 1; i < size; i ++){
 
             int this_lowerLim = getLimitsFromRankLower(i); // Basically the y limit lower
