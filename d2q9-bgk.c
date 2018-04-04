@@ -238,7 +238,7 @@ int main(int argc, char* argv[])
 
   if(rank != MASTER){
     printf("---Worker %d is leaving---\n",rank );
-   finalise(&params, &cells, &tmp_cells, &obstacles, &av_vels);
+  // finalise(&params, &cells, &tmp_cells, &obstacles, &av_vels);
    return EXIT_SUCCESS;
   }
 
