@@ -662,6 +662,7 @@ float av_velocity_forAll(const t_param params, t_speed* cells, int* obstacles)
     /* initialise */
     tot_u = 0.f;
 
+    printf("MASTER SAYS :local_rows : %d\n",local_rows );
 
     /* loop over all non-blocked cells */
     for (int jj = 0; jj < local_rows; jj++)
