@@ -241,7 +241,6 @@ int main(int argc, char* argv[])
 
   numberOfIterationsDone = 0;
   /* iterate for maxIters timesteps */
-  params.maxIters = 100;
   for (int tt = 0; tt < params.maxIters; tt++)
   {
     printf("Worker %d is doing iteration %d \n",rank, tt);
