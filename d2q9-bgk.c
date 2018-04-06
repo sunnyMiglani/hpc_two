@@ -261,7 +261,7 @@ int main(int argc, char* argv[])
   printf("Elapsed time:\t\t\t%.6lf (s)\n", toc - tic);
   func_write_values(params, cells, obstacles, av_vels);
 
-  finalise(&params, &cells, &tmp_cells, &obstacles, &av_vels);
+  // finalise(&params, &cells, &tmp_cells, &obstacles, &av_vels);
 
   return EXIT_SUCCESS;
 }
