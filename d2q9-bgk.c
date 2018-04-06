@@ -243,6 +243,7 @@ int main(int argc, char* argv[])
   }
 
   printf("Master has survived! \n");
+  printf("Worker %d check! \n",rank );
 
   // if(rank == MASTER){
   gettimeofday(&timstr, NULL);
@@ -259,6 +260,7 @@ int main(int argc, char* argv[])
   printf("==done==\n");
   printf("Reynolds number:\t\t%.12E\n", calc_reynolds(params, cells, obstacles));
   printf("Elapsed time:\t\t\t%.6lf (s)\n", toc - tic);
+
   func_write_values(params, cells, obstacles, av_vels);
 
   // finalise(&params, &cells, &tmp_cells, &obstacles, &av_vels);
