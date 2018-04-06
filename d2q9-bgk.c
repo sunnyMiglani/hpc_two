@@ -47,6 +47,34 @@
 **
 ** Be sure to adjust the grid dimensions in the parameter file
 ** if you choose a different obstacle file.
+
+
+Flow of the program is as follows :
+
+All programs initialise all data
+they find out their limits through some maths and functions
+
+They then go through the functions with these limits, making sure they only
+do work on the ones that matter (my aim is that cache misses will fix it that
+they have all the data)
+
+Next steps are
+1) HaloExchange where they use SendRecieive up and down to send all the data
+accross
+2) GatherData which is basically how the wokrers send data to their master
+
+Both are called once per iteration.
+
+I know there's a problem with average velocity,
+i.e. the way i'm calculating it,.
+But that's not the reason i'm getting either of the other bugs
+
+1) less than 1 second runtime
+2) Running and giving me NaN numbers.
+
+
+
+
 */
 
 #include <stdio.h>
