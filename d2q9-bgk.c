@@ -244,7 +244,7 @@ int main(int argc, char* argv[])
   printf("Master has survived! \n");
   printf("Worker %d check! \n",rank );
 
-  // if(rank == MASTER){
+  if(rank == MASTER){
   gettimeofday(&timstr, NULL);
   toc = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
   getrusage(RUSAGE_SELF, &ru);
@@ -254,7 +254,7 @@ int main(int argc, char* argv[])
   systim = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
   printf("Elapsed user CPU time:\t\t%.6lf (s)\n", usrtim);
   printf("Elapsed system CPU time:\t%.6lf (s)\n", systim);
- // }
+ }
   /* write final values and free memory */
   printf("==done==\n");
   printf("Reynolds number:\t\t%.12E\n", calc_reynolds(params, cells, obstacles));
@@ -944,7 +944,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
   }
 
   /* first set all cells in obstacle array to zero */
-  for (int jj = 0; jj < local_rows; jj++)
+  for (int jj = 0; jj < bigY; jj++)
   {
     for (int ii = 0; ii < params->nx; ii++)
     {
