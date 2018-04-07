@@ -243,7 +243,7 @@ int main(int argc, char* argv[])
   /* iterate for maxIters timesteps */
   for (int tt = 0; tt < params.maxIters; tt++)
   {
-   // printf("Worker %d is doing iteration %d \n",rank, tt);
+    //printf("Worker %d is doing iteration %d \n",rank, tt);
     func_timestep(params, cells, tmp_cells, obstacles);
     float this_avgV = func_gatherVelocity(params,cells,obstacles);
     ++numberOfIterationsDone;
@@ -318,14 +318,18 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
 
 
     float av = av_velocity_withoutDiv(params, cells, obstacles);
+    printf("Workers %d  have average velocity %f \n",rank,av); 
     if (rank == MASTER)
     {
-        MPI_Reduce(MPI_IN_PLACE, av, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
+        MPI_Reduce(MPI_IN_PLACE, &av, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
+        printf("Master has av as : %f\n ",av);
     } else {
-        MPI_Reduce(av, av, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
+        MPI_Reduce(&av, &av, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
     }
 
+	
     av = av/size;
+	
     return av;
 
     // if(rank != MASTER){
