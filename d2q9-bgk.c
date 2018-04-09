@@ -128,6 +128,7 @@ int func_rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* 
 int func_collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
 int func_write_values(const t_param params, t_speed* cells, int* obstacles, float* av_vels);
 float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles);
+void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
 
 
 /* finalise, including freeing up allocated memory */
@@ -446,7 +447,7 @@ int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
   // This is the function that requries making sure that the loops look at Halo'd cells.
 
   /* loop over _all_ cells */
-  for (int jj = myStartInd; jj <= myEndInd; jj++)
+  for (int jj = myStartInd; jj < myEndInd; jj++)
   {
     for (int ii = 0; ii < params.nx; ii++)
     {
@@ -477,7 +478,7 @@ int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
 int func_rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
   /* loop over the cells in the grid */
-  for (int jj = myStartInd; jj <= myEndInd; jj++)
+  for (int jj = myStartInd; jj < myEndInd; jj++)
   {
     for (int ii = 0; ii < params.nx; ii++)
     {
@@ -512,7 +513,7 @@ int func_collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int
   ** NB the collision step is called after
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
-  for (int jj = myStartInd; jj <= myEndInd; jj++)
+  for (int jj = myStartInd; jj < myEndInd; jj++)
   {
     for (int ii = 0; ii < params.nx; ii++)
     {
@@ -666,7 +667,7 @@ float av_velocity_withoutDiv(const t_param params, t_speed* cells, int* obstacle
   tot_u = 0.f;
 
   /* loop over all non-blocked cells */
-  for (int jj = myStartInd; jj <= myEndInd; jj++)
+  for (int jj = myStartInd; jj < myEndInd; jj++)
   {
     for (int ii = 0; ii < params.nx; ii++)
     {
@@ -718,7 +719,7 @@ float av_velocity(const t_param params, t_speed* cells, int* obstacles)
 
 
   /* loop over all non-blocked cells */
-  for (int jj = myStartInd; jj <= myEndInd; jj++)
+  for (int jj = myStartInd; jj < myEndInd; jj++)
   {
     for (int ii = 0; ii < params.nx; ii++)
     {
@@ -835,7 +836,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
 
     if(rank != MASTER){
         if(rank == size-1){
-            myStartInd = (offset * rank) + 1;
+            myStartInd = (offset * rank);
             myEndInd = bigY;
             haloTop = 0;
             haloBottom = myStartInd - 1;
@@ -844,7 +845,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
             botRank = rank-1;
         }
         else{
-            myStartInd = (rank * offset) + 1;
+            myStartInd = (rank * offset);
             myEndInd = myStartInd + offset - 1;
 
             haloTop = myStartInd - 1;
