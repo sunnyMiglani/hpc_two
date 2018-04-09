@@ -80,6 +80,8 @@ int haloBottom;
 int myStartInd;
 int myEndInd;
 
+int numOfObstacles;
+
 int topRank;
 int botRank;
 
@@ -286,16 +288,17 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
 
     float av = av_velocity_withoutDiv(params, cells, obstacles);
     float collect;
-    printf("Workers %d  have average velocity %f \n",rank,av);
+    printf("Workers %d  have average velocity %f and number of obstacles %d\n",rank,av,numOfObstacles);
     MPI_Reduce(&av, &collect, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
+
 
     if(rank == MASTER){
         printf("Master has av as : %f\n ",collect);
-        collect = collect/size;
+        collect = collect/numOfObstacles;
         return collect;
     }
 
-    return av;
+    return av/numOfObstacles;
 }
 
 
@@ -709,6 +712,7 @@ float av_velocity_withoutDiv(const t_param params, t_speed* cells, int* obstacle
     }
   }
 
+  numOfObstacles = tot_cells;
   return tot_u;
 }
 
