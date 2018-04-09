@@ -318,7 +318,7 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
 
 
     float av = av_velocity_withoutDiv(params, cells, obstacles);
-    printf("Workers %d  have average velocity %f \n",rank,av); 
+    printf("Workers %d  have average velocity %f \n",rank,av);
     if (rank == MASTER)
     {
         MPI_Reduce(MPI_IN_PLACE, &av, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
@@ -327,9 +327,9 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
         MPI_Reduce(&av, &av, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
     }
 
-	
+
     av = av/size;
-	
+
     return av;
 
     // if(rank != MASTER){
@@ -404,7 +404,7 @@ int getLimitsFromRankUpper(int rank){
     }
     else{
         //lowerLim = (rank * offset) +1; which is why the bottom is this
-        upperLim = (rank * offset) + 1 + offset;
+        upperLim = (rank * offset) + 1 + offset - 1;
         // printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return upperLim;
     }
@@ -941,7 +941,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
         }
         else{
             myStartInd = (rank * offset) + 1;
-            myEndInd = myStartInd + offset;
+            myEndInd = myStartInd + offset - 1;
 
             haloTop = myStartInd - 1;
             haloBottom = myEndInd + 1;
