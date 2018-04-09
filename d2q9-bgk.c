@@ -370,28 +370,6 @@ int getLimitsFromRankUpper(int rank){
 }
 
 
-
-/*
-    IDEA (1):
-    Master does a select case type thing to take in inputs from workers
-    After collecting inputs from everyone.
-    Only master does avg_velocity.
-
-    Pros : Syncing point, less prone to race conditions
-    Cons : More time, More memory.
-
-    IDEA (2):
-    Each person consolidates data after halo exchange.
-    Applies the avg_velocity function to each of their own workspaces.
-    After confirming this, passes the results to MASTER
-
-    Pros : Much faster and easier to send a single Variable
-    Cons : Very complicated for avg_velocity method.
-    ----------------------------------------------------------------------
-
-    ----------------------------------------------------------------------
-
-*/
 // Currently implementing Idea 1 due to ease.
 void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
     if(rank == MASTER){
@@ -448,13 +426,6 @@ int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int*
 int func_accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
 {
 
-  /*
-    Optimisation Notes:
-    No double for loops to vectorize
-    Possible to vectorize this loop if we remove the conditional, but wouldn't really change much time.
-
-  */
-
   /* compute weighting factors */
   float w1 = params.density * params.accel / 9.f;
   float w2 = params.density * params.accel / 36.f;
@@ -496,7 +467,6 @@ int getHaloCellsForY(int attempt){
 
 int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
 {
-  // printf("Made it into Propogate worker %d \n", rank);
   // This is the function that requries making sure that the loops look at Halo'd cells.
 
   /* loop over _all_ cells */
@@ -878,6 +848,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
 
       myStartInd = 0;
       myEndInd = offset;
+
       haloBottom = bigY; // bottom overflows to top.
       haloTop = myEndInd+1; // one above my upper limit
 
@@ -888,7 +859,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
 
     if(rank != MASTER){
         if(rank == size-1){
-            myStartInd = offset * rank;
+            myStartInd = (offset * rank) + 1;
             myEndInd = bigY;
             haloTop = 0;
             haloBottom = myStartInd - 1;
