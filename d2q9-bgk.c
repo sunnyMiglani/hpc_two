@@ -257,6 +257,8 @@ int main(int argc, char* argv[])
     }
   }
 
+  func_gatherData(params,cells,tmp_cells,obstacles);
+
   MPI_Finalize();
 
   if(rank == MASTER){ printf("MASTER HAS FINISHED TIMESTEPS \n");}
@@ -418,7 +420,7 @@ int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int*
     // printf("Worker %d starts halo\n", rank);
     func_haloExchange(params,cells,tmp_cells,obstacles);
     // printf("Worker %d starts gathering data\n ",rank);
-    func_gatherData(params,cells,tmp_cells,obstacles); // not needed right now
+    // func_gatherData(params,cells,tmp_cells,obstacles);
     // printf("Worker %d finishes timestep\n", rank);
     return EXIT_SUCCESS;
 }
