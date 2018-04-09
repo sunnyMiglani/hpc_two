@@ -307,61 +307,18 @@ void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells,
 
 float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles){
 
-    // printf("Worker %d In the gatherVelocity function \n",rank);
-    /*
-    int MPI_Reduce(const void *sendbuf, void *recvbuf, int count, MPI_Datatype datatype,
-                   MPI_Op op, int root, MPI_Comm comm)
-
-    >>> MPI_Reduce(localsum,globalsum,2,MPI_INT,MPI_SUM,0,MPI_COMM_WORLD); <<<
-
-    */
-
-
     float av = av_velocity_withoutDiv(params, cells, obstacles);
+    float collect;
     printf("Workers %d  have average velocity %f \n",rank,av);
-    if (rank == MASTER)
-    {
-        MPI_Reduce(MPI_IN_PLACE, &av, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
-        printf("Master has av as : %f\n ",av);
-    } else {
-        MPI_Reduce(&av, &av, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&av, &collect, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
+
+    if(rank == MASTER){
+        printf("Master has av as : %f\n ",collect);
+        collect = collect/size;
+        return collect;
     }
 
-
-    av = av/size;
-
     return av;
-
-    // if(rank != MASTER){
-    //     float ans;
-    //     // printf("Worker %d is entering avg_velocity\n", rank);
-    //     float tempAns = av_velocity(params, cells, obstacles);
-    //     // printf("Worker %d has left the avg_velocity %f \n",rank, tempAns);
-    //     ans = tempAns;
-    //     // printf("Worker %d is SENDING the average velocity value : %f \n",rank, ans );
-    //     MPI_Ssend(&ans, 1, MPI_FLOAT, 0, 0, MPI_COMM_WORLD);
-    //     return ans;
-    // }
-    // else{
-    //     float total = 0;
-    //     float temp;
-	//     float my_ans;
-    //     // printf("Master is entering avg_velocity\n");
-    //     float this_temp;
-	//     this_temp = av_velocity(params,cells,obstacles);
-    //     my_ans = this_temp;
-    //     total += my_ans;
-    //     // printf("MASTER IS ABOUT TO START RECEIVING FROM PEOPLE \n");
-    //     for(int inp = 1; inp < size; inp++){
-    //         MPI_Recv(&temp, 1, MPI_FLOAT, inp, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-    //         total += temp;
-    //         // printf("MASTER RECEIVING FROM WORKER %d VALUE %f \n",inp,temp);
-    //     }
-    //
-    //     float average = total / size;
-    //     return average;
-    // }
-    // printf("WORKER %d FINISHED DEALING WITH GATHER VELOCITY \n", rank);
 }
 
 
