@@ -385,7 +385,9 @@ int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int*
 {
     // printf("Worker %d starts timestep\n", rank);
     // printf("Worker %d starts func_accelerate_flow\n", rank);
-    func_accelerate_flow(params, cells, obstacles);
+    if(rank == size-1){
+        func_accelerate_flow(params, cells, obstacles);
+    }
     // printf("Worker %d starts Propogate\n", rank);
     func_propagate(params, cells, tmp_cells);
     // printf("Worker %d starts func_rebound\n", rank);
@@ -421,6 +423,7 @@ int func_accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
       cells[ii + jj*params.nx].speeds[1] += w1;
       cells[ii + jj*params.nx].speeds[5] += w2;
       cells[ii + jj*params.nx].speeds[8] += w2;
+
       /* decrease 'west-side' densities */
       cells[ii + jj*params.nx].speeds[3] -= w1;
       cells[ii + jj*params.nx].speeds[6] -= w2;
