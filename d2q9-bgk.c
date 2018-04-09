@@ -294,11 +294,11 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
 
     if(rank == MASTER){
         printf("Master has av as : %f\n ",collect);
-        collect = collect/numOfObstacles;
+        collect = (collect/numOfObstacles);
         return collect;
     }
 
-    return av/numOfObstacles;
+    return (av/numOfObstacles);
 }
 
 
@@ -671,7 +671,7 @@ float av_velocity_withoutDiv(const t_param params, t_speed* cells, int* obstacle
 
   /* initialise */
   tot_u = 0.f;
-
+  int tot_obs = 0;
   /* loop over all non-blocked cells */
   for (int jj = myStartInd; jj < myEndInd; jj++)
   {
@@ -709,10 +709,13 @@ float av_velocity_withoutDiv(const t_param params, t_speed* cells, int* obstacle
         /* increase counter of inspected cells */
         ++tot_cells;
       }
+      else if(obstacles[ii + jj*params.nx]){
+          ++tot_obs;
+      }
     }
   }
 
-  numOfObstacles = tot_cells;
+  numOfObstacles = tot_obs;
   return tot_u;
 }
 
