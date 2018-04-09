@@ -1,7 +1,7 @@
 Running on host compute336.bc4.acrc.priv
-Time is Mon Apr 9 09:07:59 BST 2018
+Time is Mon Apr 9 09:13:36 BST 2018
 Directory is /mnt/storage/home/sm15504/year3CW/flat_mpi_better/hpc_two
-Slurm job ID is 1100965
+Slurm job ID is 1100968
 This job runs on the following machines:
 compute336
 icc
@@ -12,60 +12,60 @@ My Rank : 1, my Size : 5
 My Rank : 2, my Size : 5
 My Rank : 3, my Size : 5
 My Rank : 4, my Size : 5
+Rank: 4, startInd = 100, endInd : 128, haloTop : 0, haloBottom: 99, topRank :0, botrank :3 
 Rank: 0, startInd = 0, endInd : 25, haloTop : 26, haloBottom: 128, topRank :1, botrank :4 
 Rank: 1, startInd = 26, endInd : 50, haloTop : 25, haloBottom: 51, topRank :2, botrank :0 
 Rank: 2, startInd = 51, endInd : 75, haloTop : 50, haloBottom: 76, topRank :3, botrank :1 
 Rank: 3, startInd = 76, endInd : 100, haloTop : 75, haloBottom: 101, topRank :4, botrank :2 
-Rank: 4, startInd = 100, endInd : 128, haloTop : 0, haloBottom: 99, topRank :0, botrank :3 
 Workers 1  have average velocity 0.208489 
 Workers 2  have average velocity 0.208489 
-Workers 3  have average velocity 0.208489 
 Workers 0  have average velocity 0.208489 
+Workers 3  have average velocity 0.208489 
+Workers 4  have average velocity 0.208492 
 Master has av as : 1.042448
- Workers 4  have average velocity 0.208492 
-Workers 1  have average velocity 0.452555 
+ Workers 1  have average velocity 0.452555 
 Workers 2  have average velocity 0.452555 
-Workers 3  have average velocity 0.452555 
 Workers 0  have average velocity 0.452555 
 Master has av as : 2.262780
- Workers 4  have average velocity 0.452559 
+ Workers 3  have average velocity 0.452555 
+Workers 4  have average velocity 0.452559 
 Workers 1  have average velocity 0.740476 
 Workers 2  have average velocity 0.740476 
 Workers 3  have average velocity 0.740476 
 Workers 0  have average velocity 0.740476 
+Workers 4  have average velocity 25.569580 
 Master has av as : 28.531487
- Workers 4  have average velocity 25.569580 
-Workers 1  have average velocity 1.000532 
+ Workers 1  have average velocity 1.000532 
 Workers 2  have average velocity 1.000532 
 Workers 3  have average velocity 1.000532 
 Workers 0  have average velocity 1.000532 
+Workers 4  have average velocity 58.366669 
 Master has av as : 62.368793
- Workers 4  have average velocity 58.366669 
-Workers 1  have average velocity 1.155376 
+ Workers 1  have average velocity 1.155376 
 Workers 2  have average velocity 1.155376 
 Workers 3  have average velocity 1.155376 
 Workers 0  have average velocity 1.155376 
+Workers 4  have average velocity 90.273018 
 Master has av as : 94.894516
- Workers 4  have average velocity 90.273018 
-Workers 1  have average velocity 1.307092 
+ Workers 1  have average velocity 1.307092 
 Workers 2  have average velocity 1.307092 
 Workers 3  have average velocity 1.307092 
 Workers 0  have average velocity 1.307092 
+Workers 4  have average velocity 125.620331 
 Master has av as : 130.848694
- Workers 4  have average velocity 125.620331 
-Workers 1  have average velocity 1.620208 
+ Workers 1  have average velocity 1.620208 
 Workers 2  have average velocity 1.620208 
 Workers 3  have average velocity 1.620208 
 Workers 0  have average velocity 1.620208 
+Workers 4  have average velocity 167.158035 
 Master has av as : 173.638870
- Workers 4  have average velocity 167.158035 
-Workers 1  have average velocity 1.892977 
+ Workers 1  have average velocity 1.892977 
 Workers 2  have average velocity 1.892977 
 Workers 3  have average velocity 1.892977 
 Workers 0  have average velocity 1.892977 
+Workers 4  have average velocity 244.105896 
 Master has av as : 251.677795
- Workers 4  have average velocity 244.105896 
-Workers 1  have average velocity 2.066745 
+ Workers 1  have average velocity 2.066745 
 Workers 2  have average velocity 2.066745 
 Workers 3  have average velocity 2.066745 
 Workers 0  have average velocity 2.066745 
@@ -73,8 +73,8 @@ Master has av as : 4629.783203
  Workers 4  have average velocity 4621.516113 
 Workers 1  have average velocity 2.240184 
 Workers 2  have average velocity 2.240184 
-Workers 3  have average velocity 2.240184 
 Workers 0  have average velocity 2.240184 
+Workers 3  have average velocity 2.240184 
 Master has av as : 313.190186
  Workers 4  have average velocity 304.229462 
 Workers 1  have average velocity 2.432752 
@@ -87,39 +87,39 @@ Workers 1  have average velocity 2.702026
 Workers 2  have average velocity 2.702026 
 Workers 3  have average velocity 2.702026 
 Workers 0  have average velocity 2.702026 
+Workers 4  have average velocity 568.741272 
 Master has av as : 579.549377
- Workers 4  have average velocity 568.741272 
-Workers 1  have average velocity 2.893925 
+ Workers 1  have average velocity 2.893925 
 Workers 2  have average velocity 2.893925 
-Workers 3  have average velocity 2.893925 
 Workers 0  have average velocity 2.893925 
+Workers 3  have average velocity 2.893925 
+Workers 4  have average velocity 704.163513 
 Master has av as : 715.739197
- Workers 4  have average velocity 704.163513 
-Workers 1  have average velocity 3.099956 
+ Workers 1  have average velocity 3.099956 
 Workers 2  have average velocity 3.099956 
 Workers 3  have average velocity 3.099956 
 Workers 0  have average velocity 3.099956 
+Workers 4  have average velocity 794.959351 
 Master has av as : 807.359192
- Workers 4  have average velocity 794.959351 
-Workers 1  have average velocity 3.333979 
+ Workers 1  have average velocity 3.333979 
 Workers 2  have average velocity 3.333979 
 Workers 3  have average velocity 3.333979 
 Workers 0  have average velocity 3.333979 
+Workers 4  have average velocity 921.853821 
 Master has av as : 935.189758
- Workers 4  have average velocity 921.853821 
-Workers 1  have average velocity 3.488841 
-Workers 0  have average velocity 3.488841 
+ Workers 1  have average velocity 3.488841 
 Workers 2  have average velocity 3.488841 
+Workers 0  have average velocity 3.488841 
 Workers 3  have average velocity 3.488841 
+Workers 4  have average velocity 1119.437378 
 Master has av as : 1133.392822
- Workers 4  have average velocity 1119.437378 
-Workers 1  have average velocity 3.670294 
+ Workers 1  have average velocity 3.670294 
 Workers 2  have average velocity 3.670294 
-Workers 3  have average velocity 3.670294 
 Workers 0  have average velocity 3.670294 
-Workers 4  have average velocity 1235.560669 
 Master has av as : 1250.241821
- Workers 1  have average velocity 3.907774 
+ Workers 3  have average velocity 3.670294 
+Workers 4  have average velocity 1235.560669 
+Workers 1  have average velocity 3.907774 
 Workers 2  have average velocity 3.907774 
 Workers 3  have average velocity 3.907774 
 Workers 0  have average velocity 3.907774 
@@ -129,39 +129,39 @@ Master has av as : 1337.123779
 Workers 2  have average velocity 4.141010 
 Workers 3  have average velocity 4.141010 
 Workers 0  have average velocity 4.141010 
+Workers 4  have average velocity 1416.455200 
 Master has av as : 1433.019165
- Workers 4  have average velocity 1416.455200 
-Workers 1  have average velocity 4.343146 
+ Workers 1  have average velocity 4.343146 
 Workers 2  have average velocity 4.343146 
-Workers 3  have average velocity 4.343146 
 Workers 0  have average velocity 4.343146 
+Workers 3  have average velocity 4.343146 
+Workers 4  have average velocity 3910.127930 
 Master has av as : 3927.500732
- Workers 4  have average velocity 3910.127930 
-Workers 1  have average velocity 4.484228 
+ Workers 1  have average velocity 4.484228 
 Workers 2  have average velocity 4.484228 
 Workers 3  have average velocity 4.484228 
 Workers 0  have average velocity 4.484228 
+Workers 4  have average velocity 1820.317383 
 Master has av as : 1838.254272
- Workers 4  have average velocity 1820.317383 
-Workers 1  have average velocity 4.664144 
+ Workers 1  have average velocity 4.664144 
 Workers 2  have average velocity 4.664144 
-Workers 3  have average velocity 4.664144 
 Workers 0  have average velocity 4.664144 
+Workers 3  have average velocity 4.664144 
+Workers 4  have average velocity 4017.486572 
 Master has av as : 4036.143066
- Workers 4  have average velocity 4017.486572 
-Workers 1  have average velocity 4.895878 
+ Workers 1  have average velocity 4.895878 
 Workers 2  have average velocity 4.895878 
 Workers 3  have average velocity 4.895878 
 Workers 0  have average velocity 4.895878 
+Workers 4  have average velocity 1981.190430 
 Master has av as : 2000.773926
- Workers 4  have average velocity 1981.190430 
-Workers 1  have average velocity 5.109256 
+ Workers 1  have average velocity 5.109256 
 Workers 2  have average velocity 5.109256 
 Workers 3  have average velocity 5.109256 
 Workers 0  have average velocity 5.109256 
+Workers 4  have average velocity 2328.459961 
 Master has av as : 2348.897217
- Workers 4  have average velocity 2328.459961 
-Workers 1  have average velocity 5.309095 
+ Workers 1  have average velocity 5.309095 
 Workers 2  have average velocity 5.309095 
 Workers 3  have average velocity 5.309095 
 Workers 0  have average velocity 5.309095 
@@ -171,45 +171,45 @@ Master has av as : 2809.225586
 Workers 2  have average velocity 5.490182 
 Workers 3  have average velocity 5.490182 
 Workers 0  have average velocity 5.490182 
+Workers 4  have average velocity 3259.785400 
 Master has av as : 3281.746094
- Workers 4  have average velocity 3259.785400 
-Workers 1  have average velocity 5.634708 
+ Workers 1  have average velocity 5.634708 
 Workers 2  have average velocity 5.634708 
 Workers 3  have average velocity 5.634708 
 Workers 0  have average velocity 5.634708 
+Workers 4  have average velocity 2814.744141 
 Master has av as : 2837.282959
- Workers 4  have average velocity 2814.744141 
-Workers 1  have average velocity 5.831466 
+ Workers 1  have average velocity 5.831466 
 Workers 2  have average velocity 5.831466 
 Workers 3  have average velocity 5.831466 
 Workers 0  have average velocity 5.831466 
+Workers 4  have average velocity 2830.599121 
 Master has av as : 2853.925049
- Workers 4  have average velocity 2830.599121 
-Workers 1  have average velocity 6.052403 
+ Workers 1  have average velocity 6.052403 
 Workers 2  have average velocity 6.052403 
 Workers 3  have average velocity 6.052403 
 Workers 0  have average velocity 6.052403 
+Workers 4  have average velocity 5806.426270 
 Master has av as : 5830.635742
- Workers 4  have average velocity 5806.426270 
-Workers 1  have average velocity 6.272541 
+ Workers 1  have average velocity 6.272541 
 Workers 2  have average velocity 6.272541 
 Workers 3  have average velocity 6.272541 
 Workers 0  have average velocity 6.272541 
+Workers 4  have average velocity 3784.487061 
 Master has av as : 3809.577148
- Workers 4  have average velocity 3784.487061 
-Workers 1  have average velocity 6.451208 
+ Workers 1  have average velocity 6.451208 
 Workers 2  have average velocity 6.451208 
 Workers 3  have average velocity 6.451208 
 Workers 0  have average velocity 6.451208 
+Workers 4  have average velocity 3354.507812 
 Master has av as : 3380.312500
- Workers 4  have average velocity 3354.507812 
-Workers 1  have average velocity 6.599690 
+ Workers 1  have average velocity 6.599690 
 Workers 2  have average velocity 6.599690 
 Workers 3  have average velocity 6.599690 
 Workers 0  have average velocity 6.599690 
+Workers 4  have average velocity 3622.930908 
 Master has av as : 3649.329590
- Workers 4  have average velocity 3622.930908 
-Workers 1  have average velocity 6.761708 
+ Workers 1  have average velocity 6.761708 
 Workers 2  have average velocity 6.761708 
 Workers 3  have average velocity 6.761708 
 Workers 0  have average velocity 6.761708 
@@ -219,42 +219,42 @@ Workers 1  have average velocity 6.980327
 Workers 2  have average velocity 6.980327 
 Workers 3  have average velocity 6.980327 
 Workers 0  have average velocity 6.980327 
+Workers 4  have average velocity 5090.498047 
 Master has av as : 5118.419434
- Workers 4  have average velocity 5090.498047 
-Workers 1  have average velocity 7.194459 
+ Workers 1  have average velocity 7.194459 
 Workers 2  have average velocity 7.194459 
 Workers 3  have average velocity 7.194459 
 Workers 0  have average velocity 7.194459 
+Workers 4  have average velocity 4882.600098 
 Master has av as : 4911.377930
- Workers 4  have average velocity 4882.600098 
-Workers 1  have average velocity 7.377057 
+ Workers 1  have average velocity 7.377057 
 Workers 2  have average velocity 7.377057 
 Workers 3  have average velocity 7.377057 
 Workers 0  have average velocity 7.377057 
+Workers 4  have average velocity 4158.098633 
 Master has av as : 4187.606934
- Workers 4  have average velocity 4158.098633 
-Workers 1  have average velocity 7.544783 
+ Workers 1  have average velocity 7.544783 
 Workers 2  have average velocity 7.544783 
-Workers 0  have average velocity 7.544783 
 Workers 3  have average velocity 7.544783 
-Workers 4  have average velocity 4273.016602 
+Workers 0  have average velocity 7.544783 
 Master has av as : 4303.195801
- Workers 1  have average velocity 7.675891 
+ Workers 4  have average velocity 4273.016602 
+Workers 1  have average velocity 7.675891 
 Workers 2  have average velocity 7.675891 
 Workers 3  have average velocity 7.675891 
 Workers 0  have average velocity 7.675891 
+Workers 4  have average velocity 5051.033203 
 Master has av as : 5081.736816
- Workers 4  have average velocity 5051.033203 
-Workers 1  have average velocity 7.871522 
+ Workers 1  have average velocity 7.871522 
 Workers 2  have average velocity 7.871522 
 Workers 3  have average velocity 7.871522 
 Workers 0  have average velocity 7.871522 
-Workers 4  have average velocity 4975.765137 
 Master has av as : 5007.251465
- Workers 1  have average velocity 8.074372 
+ Workers 4  have average velocity 4975.765137 
+Workers 1  have average velocity 8.074372 
 Workers 2  have average velocity 8.074372 
-Workers 3  have average velocity 8.074372 
 Workers 0  have average velocity 8.074372 
+Workers 3  have average velocity 8.074372 
 Master has av as : 4640.761719
  Workers 4  have average velocity 4608.464355 
 Workers 1  have average velocity 8.266341 
@@ -271,17 +271,17 @@ Master has av as : 4829.360352
  Workers 4  have average velocity 4795.619629 
 Workers 1  have average velocity 8.567945 
 Workers 2  have average velocity 8.567945 
-Workers 3  have average velocity 8.567945 
 Workers 0  have average velocity 8.567945 
-Workers 4  have average velocity 4455.045410 
+Workers 3  have average velocity 8.567945 
 Master has av as : 4489.316895
- Workers 1  have average velocity 8.717962 
+ Workers 4  have average velocity 4455.045410 
+Workers 1  have average velocity 8.717962 
 Workers 2  have average velocity 8.717962 
 Workers 3  have average velocity 8.717962 
 Workers 0  have average velocity 8.717962 
+Workers 4  have average velocity 5232.235352 
 Master has av as : 5267.106934
- Workers 4  have average velocity 5232.235352 
-Workers 1  have average velocity 8.909263 
+ Workers 1  have average velocity 8.909263 
 Workers 2  have average velocity 8.909263 
 Workers 3  have average velocity 8.909263 
 Workers 0  have average velocity 8.909263 
@@ -289,22 +289,22 @@ Master has av as : 8823.345703
  Workers 4  have average velocity 8787.708984 
 Workers 1  have average velocity 9.095228 
 Workers 2  have average velocity 9.095228 
-Workers 3  have average velocity 9.095228 
 Workers 0  have average velocity 9.095228 
 Master has av as : 6729.438965
- Workers 4  have average velocity 6693.058105 
+ Workers 3  have average velocity 9.095228 
+Workers 4  have average velocity 6693.058105 
 Workers 1  have average velocity 9.264510 
 Workers 2  have average velocity 9.264510 
 Workers 3  have average velocity 9.264510 
 Workers 0  have average velocity 9.264510 
-Workers 4  have average velocity 5392.429199 
 Master has av as : 5429.487305
- Workers 1  have average velocity 9.405956 
+ Workers 4  have average velocity 5392.429199 
+Workers 1  have average velocity 9.405956 
 Workers 2  have average velocity 9.405956 
-Workers 3  have average velocity 9.405956 
 Workers 0  have average velocity 9.405956 
 Master has av as : 6136.169434
- Workers 4  have average velocity 6098.545898 
+ Workers 3  have average velocity 9.405956 
+Workers 4  have average velocity 6098.545898 
 Workers 1  have average velocity 9.531152 
 Workers 2  have average velocity 9.531152 
 Workers 3  have average velocity 9.531152 
@@ -313,41 +313,41 @@ Master has av as : 5402.801758
  Workers 4  have average velocity 5364.677246 
 Workers 1  have average velocity 9.698838 
 Workers 2  have average velocity 9.698838 
-Workers 3  have average velocity 9.698838 
 Workers 0  have average velocity 9.698838 
 Master has av as : 11057.912109
- Workers 4  have average velocity 11019.116211 
+ Workers 3  have average velocity 9.698838 
+Workers 4  have average velocity 11019.116211 
 Workers 1  have average velocity 9.872563 
 Workers 2  have average velocity 9.872563 
 Workers 3  have average velocity 9.872563 
 Workers 0  have average velocity 9.872563 
+Workers 4  have average velocity 6765.507324 
 Master has av as : 6804.997559
- Workers 4  have average velocity 6765.507324 
-Workers 1  have average velocity 10.039107 
+ Workers 1  have average velocity 10.039107 
 Workers 2  have average velocity 10.039107 
 Workers 3  have average velocity 10.039107 
 Workers 0  have average velocity 10.039107 
 Workers 4  have average velocity 9084.846680 
 Master has av as : 9125.002930
  Workers 1  have average velocity 10.185663 
-Workers 0  have average velocity 10.185663 
 Workers 2  have average velocity 10.185663 
 Workers 3  have average velocity 10.185663 
+Workers 0  have average velocity 10.185663 
 Master has av as : 6108.080566
  Workers 4  have average velocity 6067.337891 
 Workers 1  have average velocity 10.310340 
 Workers 2  have average velocity 10.310340 
-Workers 3  have average velocity 10.310340 
 Workers 0  have average velocity 10.310340 
 Master has av as : 5811.515137
- Workers 4  have average velocity 5770.273438 
+ Workers 3  have average velocity 10.310340 
+Workers 4  have average velocity 5770.273438 
 Workers 1  have average velocity 10.440970 
 Workers 2  have average velocity 10.440970 
 Workers 3  have average velocity 10.440970 
 Workers 0  have average velocity 10.440970 
+Workers 4  have average velocity 14333.991211 
 Master has av as : 14375.755859
- Workers 4  have average velocity 14333.991211 
-Workers 1  have average velocity 10.603592 
+ Workers 1  have average velocity 10.603592 
 Workers 2  have average velocity 10.603592 
 Workers 3  have average velocity 10.603592 
 Workers 0  have average velocity 10.603592 
@@ -363,34 +363,34 @@ Master has av as : 7528.857422
 Workers 2  have average velocity 10.908333 
 Workers 3  have average velocity 10.908333 
 Workers 0  have average velocity 10.908333 
+Workers 4  have average velocity 6841.666504 
 Master has av as : 6885.299805
- Workers 4  have average velocity 6841.666504 
-Workers 1  have average velocity 11.036903 
+ Workers 1  have average velocity 11.036903 
 Workers 2  have average velocity 11.036903 
 Workers 3  have average velocity 11.036903 
 Workers 0  have average velocity 11.036903 
+Workers 4  have average velocity 7084.226562 
 Master has av as : 7128.374512
- Workers 4  have average velocity 7084.226562 
-Workers 1  have average velocity 11.154437 
+ Workers 1  have average velocity 11.154437 
 Workers 2  have average velocity 11.154437 
 Workers 3  have average velocity 11.154437 
 Workers 0  have average velocity 11.154437 
+Workers 4  have average velocity 79119.476562 
 Master has av as : 79164.093750
- Workers 4  have average velocity 79119.476562 
+ WORKER 4 HAS FINISHED TIMERSTEPS!
+---Worker 4 is leaving---
+WORKER 1 HAS FINISHED TIMERSTEPS!
+---Worker 1 is leaving---
 MASTER HAS FINISHED TIMESTEPS 
 Master has survived! 
 Worker 0 check! 
-Elapsed user CPU time:		0.010663 (s)
-Elapsed system CPU time:	0.015995 (s)
+Elapsed user CPU time:		0.012408 (s)
+Elapsed system CPU time:	0.013442 (s)
 ==done==
-Reynolds number:		2.729592561722E+00
-Elapsed time:			0.017927 (s)
-WORKER 1 HAS FINISHED TIMERSTEPS!
----Worker 1 is leaving---
 WORKER 2 HAS FINISHED TIMERSTEPS!
 ---Worker 2 is leaving---
-WORKER 4 HAS FINISHED TIMERSTEPS!
----Worker 4 is leaving---
+Reynolds number:		2.729592561722E+00
+Elapsed time:			0.017461 (s)
 WORKER 3 HAS FINISHED TIMERSTEPS!
 ---Worker 3 is leaving---
 done!
