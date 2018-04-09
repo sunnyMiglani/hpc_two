@@ -274,10 +274,10 @@ int main(int argc, char* argv[])
 
 void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
 
-  // printf("Worker %d is starting halo Exchange! \n", rank);
+  //printf("Worker %d is starting halo Exchange! \n", rank);
   int val = MPI_Sendrecv(&cells[0 + myStartInd*params.nx], params.nx, cells_struct,topRank,0,&cells[0 + haloBottom*params.nx],params.nx,cells_struct,botRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   int valTwo = MPI_Sendrecv(&cells[0 + myEndInd*params.nx], params.nx, cells_struct,botRank,0,&cells[0 + haloTop*params.nx],params.nx,cells_struct,topRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-  // printf("Worker %d Finished Halo Exchange \n",rank);
+  //printf("Worker %d Finished Halo Exchange \n",rank);
 
 }
 
@@ -384,8 +384,8 @@ void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, i
 int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
     // printf("Worker %d starts timestep\n", rank);
-    // printf("Worker %d starts func_accelerate_flow\n", rank);
     if(rank == size-1){
+	//printf("Worker %d starts func_accelerate_flow\n", rank);
         func_accelerate_flow(params, cells, obstacles);
     }
     // printf("Worker %d starts Propogate\n", rank);
