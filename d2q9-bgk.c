@@ -239,7 +239,6 @@ int main(int argc, char* argv[])
    tic = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
  }
 
-  params.maxIters = 60;
   numberOfIterationsDone = 0;
   /* iterate for maxIters timesteps */
   for (int tt = 0; tt < params.maxIters; tt++)
