@@ -877,7 +877,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
             botRank = rank-1;
         }
         else{
-            myStartInd = (rank * offset);
+            myStartInd = (rank * offset) -1;
             myEndInd = myStartInd + offset - 1;
 
             haloTop = myEndInd + 1;
