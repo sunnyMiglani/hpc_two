@@ -221,6 +221,10 @@ int main(int argc, char* argv[])
   /* iterate for maxIters timesteps */
   for (int tt = 0; tt < params.maxIters; tt++)
   {
+    if(rank == size-1){
+	//printf("Worker %d starts func_accelerate_flow\n", rank);
+    func_accelerate_flow(params, cells, obstacles);
+    }
     //printf("Worker %d is doing iteration %d \n",rank, tt);
     func_timestep(params, cells, tmp_cells, obstacles);
     float this_avgV = func_gatherVelocity(params,cells,obstacles);
@@ -390,10 +394,7 @@ void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, i
 int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
     // printf("Worker %d starts timestep\n", rank);
-    if(rank == size-1){
-	//printf("Worker %d starts func_accelerate_flow\n", rank);
-        func_accelerate_flow(params, cells, obstacles);
-    }
+
     // printf("Worker %d starts Propogate\n", rank);
     func_propagate(params, cells, tmp_cells);
     // printf("Worker %d starts func_rebound\n", rank);
