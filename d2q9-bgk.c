@@ -281,10 +281,10 @@ int main(int argc, char* argv[])
 
 void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
 
-  //printf("Worker %d is starting halo Exchange! \n", rank);
+  // printf("Worker %d is starting halo Exchange! \n", rank);
   int val = MPI_Sendrecv(&cells[0 + myStartInd*params.nx], params.nx, cells_struct,topRank,0,&cells[0 + haloBottom*params.nx],params.nx,cells_struct,botRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   int valTwo = MPI_Sendrecv(&cells[0 + myEndInd*params.nx], params.nx, cells_struct,botRank,0,&cells[0 + haloTop*params.nx],params.nx,cells_struct,topRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-  //printf("Worker %d Finished Halo Exchange \n",rank);
+  // printf("Worker %d Finished Halo Exchange \n",rank);
 
 }
 
@@ -294,13 +294,17 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
     float collect_cells;
     float av = av_velocity_withoutDiv(params, cells, obstacles);
     float collect;
-    printf("Workers %d  have average velocity %f and number of obstacles %d\n",rank,av,numOfObstacles);
+    printf("Workers %d  have average velocity %f and number of obstacles %d, and numOfCells : %d\n",rank,av,numOfObstacles,numOfCells);
+
+
     MPI_Reduce(&av, &collect, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Reduce(&numOfCells, &collect_cells , 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
 
 
+
     if(rank == MASTER){
-        printf("Master has av as : %f\n ",collect);
+        collect_cells += numOfCells;
+        printf("Master has av as : %f\n",collect);
         collect = (collect/collect_cells);
         return collect;
     }
@@ -465,7 +469,7 @@ int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
       ** respecting periodic boundary conditions (wrap around) */
       int y_n = getHaloCellsForY(jj + 1);
       int x_e = (ii + 1) % params.nx;
-      int y_s = getHaloCellsForY(jj);//(jj == 0) ? (jj + params.ny - 1) : (jj - 1);
+      int y_s = getHaloCellsForY(jj); //(jj == 0) ? (jj + params.ny - 1) : (jj - 1);
       int x_w = (ii == 0) ? (ii + params.nx - 1) : (ii - 1);
       /* propagate densities from neighbouring cells, following
       ** appropriate directions of travel and writing into
@@ -721,6 +725,9 @@ float av_velocity_withoutDiv(const t_param params, t_speed* cells, int* obstacle
 
   numOfCells = tot_cells;
   numOfObstacles = tot_obs;
+
+  printf("Average velocity for %d is %f\n", rank tot_u);
+
   return tot_u;
 }
 
