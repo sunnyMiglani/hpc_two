@@ -300,7 +300,7 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
     float collect_cells;
     float av = av_velocity_withoutDiv(params, cells, obstacles);
     float collect;
-    printf("Workers %d  have average velocity %f and number of obstacles %d, and numOfCells : %d\n",rank,av,numOfObstacles,numOfCells);
+    printf("Workers %d have average velocity %f \n",rank,av);
 
 
     MPI_Reduce(&av, &collect, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
@@ -326,17 +326,17 @@ int getLimitsFromRankLower(int rank){
     // printf("inFunctionGetLimitsFromRank\n");
     if(rank == 0){
         lowerLim = 0;
-        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
+        // printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return lowerLim;
     }
     if(rank == size-1){
         lowerLim = (offset * rank) + 1;
-        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
+        // printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return lowerLim;
     }
     else{
         lowerLim = (rank * offset) + 1;
-        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
+        // printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return lowerLim;
     }
 
@@ -348,18 +348,18 @@ int getLimitsFromRankUpper(int rank){
     // printf("inFunctionGetLimitsFromRank\n");
     if(rank == 0){
         upperLim = offset+1;
-        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
+        // printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return upperLim;
     }
     if(rank == size-1){
         upperLim = bigY;
-        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
+        // printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return upperLim;
     }
     else{
         //lowerLim = (rank * offset) +1; which is why the bottom is this
         upperLim = (rank * offset + 1) + offset - 1;
-        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
+        // printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return upperLim;
     }
 
