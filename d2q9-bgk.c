@@ -277,8 +277,16 @@ int main(int argc, char* argv[])
 void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
 
   // printf("Worker %d is starting halo Exchange! \n", rank);
-  int val = MPI_Sendrecv(&cells[0 + myStartInd*params.nx], params.nx, cells_struct,topRank,0,&cells[0 + haloBottom*params.nx],params.nx,cells_struct,botRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-  int valTwo = MPI_Sendrecv(&cells[0 + myEndInd*params.nx], params.nx, cells_struct,botRank,0,&cells[0 + haloTop*params.nx],params.nx,cells_struct,topRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+  /*
+  MPI_Sendrecv(const void *sendbuf, int sendcount, MPI_Datatype sendtype,
+                int dest, int sendtag,
+                void *recvbuf, int recvcount, MPI_Datatype recvtype,
+                int source, int recvtag,
+                MPI_Comm comm, MPI_Status *status)
+  */
+
+  int val = MPI_Sendrecv(&cells[0 + myStartInd*params.nx], params.nx, cells_struct,botRank,0,&cells[0 + haloBottom*params.nx],params.nx,cells_struct,topRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+  int valTwo = MPI_Sendrecv(&cells[0 + myEndInd*params.nx], params.nx, cells_struct,topRank,0,&cells[0 + haloTop*params.nx],params.nx,cells_struct,botRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   // printf("Worker %d Finished Halo Exchange \n",rank);
 
 }
@@ -444,10 +452,10 @@ int func_accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
 }
 
 int getHaloCellsForY(int attempt){
-    if(attempt >= myEndInd){
+    if(attempt > myEndInd){
       return haloTop;
     }
-    if(attempt <= myStartInd){
+    if(attempt < myStartInd){
       return haloBottom;
     }
   return attempt;
