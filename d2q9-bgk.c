@@ -285,7 +285,9 @@ void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells,
                 MPI_Comm comm, MPI_Status *status)
   */
 
+  printf("Worker %d is sending startInd to %d\n",rank, botRank );
   int val = MPI_Sendrecv(&cells[0 + myStartInd*params.nx], params.nx, cells_struct,botRank,0,&cells[0 + haloBottom*params.nx],params.nx,cells_struct,topRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+  printf("Worker %d is sending endInd to %d\n",rank, topRank );
   int valTwo = MPI_Sendrecv(&cells[0 + myEndInd*params.nx], params.nx, cells_struct,topRank,0,&cells[0 + haloTop*params.nx],params.nx,cells_struct,botRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   // printf("Worker %d Finished Halo Exchange \n",rank);
 
