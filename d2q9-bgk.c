@@ -300,7 +300,7 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
     float collect_cells;
     float av = av_velocity_withoutDiv(params, cells, obstacles);
     float collect;
-    // printf("Workers %d  have average velocity %f and number of obstacles %d, and numOfCells : %d\n",rank,av,numOfObstacles,numOfCells);
+    printf("Workers %d  have average velocity %f and number of obstacles %d, and numOfCells : %d\n",rank,av,numOfObstacles,numOfCells);
 
 
     MPI_Reduce(&av, &collect, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
@@ -736,7 +736,6 @@ float av_velocity_withoutDiv(const t_param params, t_speed* cells, int* obstacle
   numOfCells = tot_cells;
   numOfObstacles = tot_obs;
 
-  printf("Average velocity for %d is %f\n", rank, tot_u);
 
   return tot_u;
 }
