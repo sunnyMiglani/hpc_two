@@ -443,12 +443,11 @@ int func_accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
   return EXIT_SUCCESS;
 }
 
-
 int getHaloCellsForY(int attempt){
-    if(attempt > myEndInd){
+    if(attempt >= myEndInd){
       return haloTop;
     }
-    if(attempt < myStartInd){
+    if(attempt <= myStartInd){
       return haloBottom;
     }
   return attempt;
@@ -469,6 +468,9 @@ int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
       int x_e = (ii + 1) % params.nx;
       int y_s = getHaloCellsForY(jj); //(jj == 0) ? (jj + params.ny - 1) : (jj - 1);
       int x_w = (ii == 0) ? (ii + params.nx - 1) : (ii - 1);
+
+
+
       /* propagate densities from neighbouring cells, following
       ** appropriate directions of travel and writing into
       ** scratch space grid */
@@ -625,7 +627,6 @@ float av_velocity_forAll(const t_param params, t_speed* cells, int* obstacles)
     /* initialise */
     tot_u = 0.f;
 
-    printf("MASTER SAYS :local_rows : %d\n",local_rows );
 
     /* loop over all non-blocked cells */
     for (int jj = 0; jj < local_rows; jj++)
@@ -724,7 +725,7 @@ float av_velocity_withoutDiv(const t_param params, t_speed* cells, int* obstacle
   numOfCells = tot_cells;
   numOfObstacles = tot_obs;
 
-  printf("Average velocity for %d is %f\n", rank tot_u);
+  printf("Average velocity for %d is %f\n", rank, tot_u);
 
   return tot_u;
 }
