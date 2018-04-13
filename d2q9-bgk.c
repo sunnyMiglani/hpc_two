@@ -330,12 +330,12 @@ int getLimitsFromRankLower(int rank){
         return lowerLim;
     }
     if(rank == size-1){
-        lowerLim = offset * rank;
+        lowerLim = (offset * rank) + 1;
         printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return lowerLim;
     }
     else{
-        lowerLim = (rank * offset) - 1;
+        lowerLim = (rank * offset) + 1;
         printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return lowerLim;
     }
@@ -867,7 +867,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
 
     if(rank != MASTER){
         if(rank == size-1){
-            myStartInd = (offset * rank);
+            myStartInd = (offset * rank)+1;
             myEndInd = bigY;
 
             haloTop = 0;
@@ -877,7 +877,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
             botRank = rank-1;
         }
         else{
-            myStartInd = (rank * offset);
+            myStartInd = (rank * offset)+1;
             myEndInd = myStartInd + offset + 1;
 
             haloTop = myEndInd;
