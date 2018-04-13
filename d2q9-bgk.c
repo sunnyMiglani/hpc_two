@@ -469,7 +469,7 @@ int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
   // This is the function that requries making sure that the loops look at Halo'd cells.
 
   /* loop over _all_ cells */
-  for (int jj = myStartInd; jj < myEndInd; jj++)
+  for (int jj = myStartInd; jj <= myEndInd; jj++)
   {
     for (int ii = 0; ii < params.nx; ii++)
     {
@@ -503,7 +503,7 @@ int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
 int func_rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
   /* loop over the cells in the grid */
-  for (int jj = myStartInd; jj < myEndInd; jj++)
+  for (int jj = myStartInd; jj <= myEndInd; jj++)
   {
     for (int ii = 0; ii < params.nx; ii++)
     {
@@ -538,7 +538,7 @@ int func_collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int
   ** NB the collision step is called after
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
-  for (int jj = myStartInd; jj < myEndInd; jj++)
+  for (int jj = myStartInd; jj <= myEndInd; jj++)
   {
     for (int ii = 0; ii < params.nx; ii++)
     {
@@ -691,7 +691,7 @@ float av_velocity_withoutDiv(const t_param params, t_speed* cells, int* obstacle
   tot_u = 0.f;
   int tot_obs = 0;
   /* loop over all non-blocked cells */
-  for (int jj = myStartInd; jj < myEndInd; jj++)
+  for (int jj = myStartInd; jj <= myEndInd; jj++)
   {
     for (int ii = 0; ii < params.nx; ii++)
     {
@@ -751,7 +751,7 @@ float av_velocity(const t_param params, t_speed* cells, int* obstacles)
 
 
   /* loop over all non-blocked cells */
-  for (int jj = myStartInd; jj < myEndInd; jj++)
+  for (int jj = myStartInd; jj <= myEndInd; jj++)
   {
     for (int ii = 0; ii < params.nx; ii++)
     {
