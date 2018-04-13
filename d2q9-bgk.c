@@ -300,17 +300,16 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
     float collect_cells;
     float av = av_velocity_withoutDiv(params, cells, obstacles);
     float collect = 0;
-    printf("Workers %d have average velocity %f \n",rank,av);
 
     /*
     int MPI_Reduce(const void *sendbuf, void *recvbuf, int count, MPI_Datatype datatype,
                MPI_Op op, int root, MPI_Comm comm)
     */
 
-    if(rank == MASTER){printf("Collect has value : %d before reduce\n",collect);}
+    //if(rank == MASTER){printf("Collect has value : %f before reduce\n",collect);}
     MPI_Reduce(&av, &collect, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Reduce(&numOfCells, &collect_cells , 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-    if(rank == MASTER){printf("Collect has value : %d after reduce\n",collect);}
+    //if(rank == MASTER){printf("Collect has value : %f after reduce\n",collect);}
 
 
 
@@ -318,9 +317,11 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
         collect_cells += numOfCells;
         // printf("Master has av as : %f\n",collect);
         collect = (collect/collect_cells);
+        av = collect; 
         return collect;
     }
 
+    printf("Workers %d have average velocity %f \n",rank,av);
     return (av/numOfCells);
 }
 
