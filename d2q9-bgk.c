@@ -326,17 +326,17 @@ int getLimitsFromRankLower(int rank){
     // printf("inFunctionGetLimitsFromRank\n");
     if(rank == 0){
         lowerLim = 0;
-        // printf("Returned values for rank %d from getLimitsFromRank \n",rank);
+        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return lowerLim;
     }
     if(rank == size-1){
         lowerLim = offset * rank;
-        // printf("Returned values for rank %d from getLimitsFromRank \n",rank);
+        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return lowerLim;
     }
     else{
         lowerLim = (rank * offset) - 1;
-        // printf("Returned values for rank %d from getLimitsFromRank \n",rank);
+        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return lowerLim;
     }
 
@@ -348,18 +348,18 @@ int getLimitsFromRankUpper(int rank){
     // printf("inFunctionGetLimitsFromRank\n");
     if(rank == 0){
         upperLim = offset;
-        // printf("Returned values for rank %d from getLimitsFromRank \n",rank);
+        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return upperLim;
     }
     if(rank == size-1){
         upperLim = bigY;
-        // printf("Returned values for rank %d from getLimitsFromRank \n",rank);
+        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return upperLim;
     }
     else{
         //lowerLim = (rank * offset) +1; which is why the bottom is this
         upperLim = (rank * offset) + offset - 1;
-        // printf("Returned values for rank %d from getLimitsFromRank \n",rank);
+        printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return upperLim;
     }
 
