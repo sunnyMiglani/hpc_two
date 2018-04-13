@@ -300,7 +300,7 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
     float collect_cells;
     float av = av_velocity_withoutDiv(params, cells, obstacles);
     float collect;
-    printf("Workers %d  have average velocity %f and number of obstacles %d, and numOfCells : %d\n",rank,av,numOfObstacles,numOfCells);
+    // printf("Workers %d  have average velocity %f and number of obstacles %d, and numOfCells : %d\n",rank,av,numOfObstacles,numOfCells);
 
 
     MPI_Reduce(&av, &collect, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
@@ -310,7 +310,7 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
 
     if(rank == MASTER){
         collect_cells += numOfCells;
-        printf("Master has av as : %f\n",collect);
+        // printf("Master has av as : %f\n",collect);
         collect = (collect/collect_cells);
         return collect;
     }
@@ -335,7 +335,7 @@ int getLimitsFromRankLower(int rank){
         return lowerLim;
     }
     else{
-        lowerLim = (rank * offset) +1;
+        lowerLim = (rank * offset) - 1;
         // printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return lowerLim;
     }
@@ -358,7 +358,7 @@ int getLimitsFromRankUpper(int rank){
     }
     else{
         //lowerLim = (rank * offset) +1; which is why the bottom is this
-        upperLim = (rank * offset) + 1 + offset - 1;
+        upperLim = (rank * offset) + offset - 1;
         // printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return upperLim;
     }
@@ -854,7 +854,6 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
     int offset = floor(bigY/size);
 
     if(rank == 0){ // First worker --> MASTER
-
       myStartInd = 0;
       myEndInd = offset;
 
@@ -870,7 +869,8 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
         if(rank == size-1){
             myStartInd = (offset * rank);
             myEndInd = bigY;
-            haloTop = 0;
+
+            haloTop = myEndInd + 1;
             haloBottom = myStartInd - 1;
 
             topRank = 0;
@@ -880,8 +880,8 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
             myStartInd = (rank * offset);
             myEndInd = myStartInd + offset - 1;
 
-            haloTop = myStartInd - 1;
-            haloBottom = myEndInd + 1;
+            haloTop = myEndInd + 1;
+            haloBottom = myStartInd -1;
 
             topRank = rank+1;
             botRank = rank-1;
