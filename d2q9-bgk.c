@@ -347,7 +347,7 @@ int getLimitsFromRankUpper(int rank){
     int upperLim;
     // printf("inFunctionGetLimitsFromRank\n");
     if(rank == 0){
-        upperLim = offset;
+        upperLim = offset+1;
         printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return upperLim;
     }
@@ -358,7 +358,7 @@ int getLimitsFromRankUpper(int rank){
     }
     else{
         //lowerLim = (rank * offset) +1; which is why the bottom is this
-        upperLim = (rank * offset) + offset - 1;
+        upperLim = (rank * offset + 1) + offset - 1;
         printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return upperLim;
     }
@@ -858,7 +858,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
       myEndInd = offset+1;
 
       haloBottom = bigY; // bottom overflows to top.
-      haloTop = myEndInd+1; // one above my upper limit
+      haloTop = myEndInd; // one above my upper limit
 
       topRank = rank+1; // 1
       botRank = size-1; // last one.
