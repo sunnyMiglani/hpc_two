@@ -870,7 +870,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
             myStartInd = (offset * rank);
             myEndInd = bigY;
 
-            haloTop = myEndInd + 1;
+            haloTop = 0;
             haloBottom = myStartInd -1;;
 
             topRank = 0;
