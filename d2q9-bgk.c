@@ -366,7 +366,7 @@ int getLimitsFromRankUpper(int rank){
     }
     else{
         //lowerLim = (rank * offset) +1; which is why the bottom is this
-        upperLim = (rank * offset + 1) + offset - 1;
+        upperLim = (rank * offset) + 1 + offset - 1;
         // printf("Returned values for rank %d from getLimitsFromRank \n",rank);
         return upperLim;
     }
@@ -394,7 +394,7 @@ void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, i
 
             MPI_Recv(recvPointer, recieveSize, cells_struct, i, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-        printf("Finished gatherData for rank %d\n",i);
+            printf("Finished gatherData for rank %d\n",i);
         }
 	printf("MASTER HAS FINISHED GATHERING \n");
     }
@@ -878,13 +878,13 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
             myEndInd = bigY;
 
             haloTop = 0;
-            haloBottom = myStartInd -1;;
+            haloBottom = myStartInd -1;
 
             topRank = 0;
             botRank = rank-1;
         }
         else{
-            myStartInd = (rank * offset)+1;
+            myStartInd = (offset * rank)+1;
             myEndInd = myStartInd + offset + 1;
 
             haloTop = myEndInd;
