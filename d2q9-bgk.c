@@ -314,13 +314,14 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
 
 
     if(rank == MASTER){
-        collect_cells += numOfCells;
+        // collect_cells += numOfCells;
         // printf("Master has av as : %f\n",collect);
         collect = (collect/collect_cells);
-        av = collect; 
+        av = collect;
         return collect;
     }
 
+    printf("Workers %d have collect stuff %d \n",rank,numOfCells);
     printf("Workers %d have average velocity %f \n",rank,av);
     return (av/numOfCells);
 }
@@ -484,7 +485,7 @@ int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
       ** respecting periodic boundary conditions (wrap around) */
       int y_n = getHaloCellsForY(jj + 1);
       int x_e = (ii + 1) % params.nx;
-      int y_s = getHaloCellsForY(jj); //(jj == 0) ? (jj + params.ny - 1) : (jj - 1);
+      int y_s = (jj == 0) ? (jj + params.ny - 1) : (jj - 1); //getHaloCellsForY(jj); //(jj == 0) ? (jj + params.ny - 1) : (jj - 1);
       int x_w = (ii == 0) ? (ii + params.nx - 1) : (ii - 1);
 
 
