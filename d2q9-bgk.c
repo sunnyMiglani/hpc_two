@@ -289,7 +289,7 @@ void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells,
   printf("Worker %d sent ind %d to worker %d. Worker %d received into ind %d from worker %d\n",rank,myStartInd,botRank,rank,haloTop,topRank);
   int val = MPI_Sendrecv(&cells[0 + myStartInd*params.nx], params.nx, cells_struct,botRank,0,&cells[0 + haloTop*params.nx],params.nx,cells_struct, topRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   printf("Worker %d sent ind %d to worker %d Worker %d received into ind %d from worker %d\n",rank,myEndInd,topRank,rank,haloBottom,botRank);
-  int valTwo = MPI_Sendrecv(&cells[0 + myEndInd -1*params.nx], params.nx, cells_struct,topRank,0,&cells[0 + haloBottom*params.nx],params.nx,cells_struct,botRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+  int valTwo = MPI_Sendrecv(&cells[0 + (myEndInd-1)*params.nx], params.nx, cells_struct,topRank,0,&cells[0 + haloBottom*params.nx],params.nx,cells_struct,botRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   // printf("Worker %d Finished Halo Exchange \n",rank);
 
 }
