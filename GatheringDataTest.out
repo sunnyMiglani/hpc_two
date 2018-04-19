@@ -1,7 +1,7 @@
 Running on host compute492.bc4.acrc.priv
-Time is Thu Apr 19 15:30:20 BST 2018
+Time is Thu Apr 19 16:01:06 BST 2018
 Directory is /mnt/storage/home/sm15504/year3CW/flat_mpi_better/hpc_two
-Slurm job ID is 1116362
+Slurm job ID is 1116427
 This job runs on the following machines:
 compute492
 icc
@@ -9,8 +9,8 @@ NUMBER OF NODES : 1
 CPUS per node : 5
 Rank: 0, startInd = 0, endInd : 26, haloTop : 26, haloBottom: 128, topRank :1, botrank :4 
 Rank: 1, startInd = 26, endInd : 52, haloTop : 52, haloBottom: 25, topRank :2, botrank :0 
-Rank: 2, startInd = 51, endInd : 77, haloTop : 77, haloBottom: 50, topRank :3, botrank :1 
 Rank: 3, startInd = 76, endInd : 102, haloTop : 102, haloBottom: 75, topRank :4, botrank :2 
+Rank: 2, startInd = 51, endInd : 77, haloTop : 77, haloBottom: 50, topRank :3, botrank :1 
 Rank: 4, startInd = 101, endInd : 128, haloTop : 0, haloBottom: 100, topRank :0, botrank :3 
 Master Starting to Gather data 
 Worker 1's limits are lower : 26, upper : 52 
@@ -23,11 +23,11 @@ Worker 3 trying to send
 Worker 3 lower : 76 upper : 102  
 Worker 4 trying to send 
 Worker 4 lower : 101 upper : 128  
-Worker 1 has SENT THE DATA! 
-Leaving the gatherData Function! 
 Finished gatherData for rank 1
 Worker 2's limits are lower : 51, upper : 77 
 Master is trying to get work from 2 
+Worker 1 has SENT THE DATA! 
+Leaving the gatherData Function! 
 Finished gatherData for rank 2
 Worker 3's limits are lower : 76, upper : 102 
 Master is trying to get work from 3 
@@ -36,27 +36,27 @@ Leaving the gatherData Function!
 Finished gatherData for rank 3
 Worker 4's limits are lower : 101, upper : 128 
 Master is trying to get work from 4 
-Worker 3 has SENT THE DATA! 
-Leaving the gatherData Function! 
 Finished gatherData for rank 4
 MASTER HAS FINISHED GATHERING 
+Leaving the gatherData Function! 
+Worker 3 has SENT THE DATA! 
 Leaving the gatherData Function! 
 Worker 4 has SENT THE DATA! 
 Leaving the gatherData Function! 
 WORKER 1 HAS FINISHED TIMERSTEPS!
 ---Worker 1 is leaving---
-WORKER 2 HAS FINISHED TIMERSTEPS!
----Worker 2 is leaving---
+WORKER 3 HAS FINISHED TIMERSTEPS!
+---Worker 3 is leaving---
 MASTER HAS FINISHED TIMESTEPS 
 Master has survived! 
 Worker 0 check! 
-Elapsed user CPU time:		5.647782 (s)
-Elapsed system CPU time:	0.007999 (s)
+Elapsed user CPU time:		5.652511 (s)
+Elapsed system CPU time:	0.005999 (s)
 ==done==
 Reynolds number:		5.949087142944E+00
-Elapsed time:			5.647577 (s)
-WORKER 3 HAS FINISHED TIMERSTEPS!
----Worker 3 is leaving---
+Elapsed time:			5.651188 (s)
 WORKER 4 HAS FINISHED TIMERSTEPS!
 ---Worker 4 is leaving---
+WORKER 2 HAS FINISHED TIMERSTEPS!
+---Worker 2 is leaving---
 done!
