@@ -385,7 +385,8 @@ void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, i
             int this_upperLim = getLimitsFromRankUpper(i); // Basically the y limit higher
 
 
-            printf("Master is creating the pointer for the data for worker %d \n",i);
+            printf("Worker %d's limits are lower : %d, upper : %d \n",i,this_lowerLim,this_upperLim);
+
 
             void* recvPointer = &cells[0 + this_lowerLim*params.nx];
             int recieveSize = params.nx * abs(this_lowerLim - this_upperLim);
@@ -400,10 +401,14 @@ void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, i
     }
     else{
         printf("Worker %d trying to send \n",rank);
+
         void* sendbuffer = &cells[0 + myStartInd*params.nx];
         int sendSize = params.nx * abs(myStartInd - myEndInd);
-        printf("Worker %d has init his sending params\n",rank);
-        MPI_Ssend(sendbuffer, sendSize, cells_struct, 0, 1, MPI_COMM_WORLD);
+
+        printf("Worker %d lower : %d upper : %d  \n",rank, myStartInd, myEndInd);
+
+        MPI_Send(sendbuffer, sendSize, cells_struct, 0, 1, MPI_COMM_WORLD);
+
         printf("Worker %d has SENT THE DATA! \n",rank);
     }
     printf("Leaving the gatherData Function! \n");
