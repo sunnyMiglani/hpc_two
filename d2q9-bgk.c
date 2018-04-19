@@ -297,7 +297,7 @@ void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells,
 
 float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles){
 
-    float collect_cells;
+    int collect_cells;
     float av = av_velocity_withoutDiv(params, cells, obstacles);
     float collect = 0;
 
@@ -316,7 +316,7 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
     if(rank == MASTER){
         // collect_cells += numOfCells;
         // printf("Master has av as : %f\n",collect);
-        collect = (collect/collect_cells);
+        collect = (collect/(float) collect_cells);
         av = collect;
         return collect;
     }
