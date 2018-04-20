@@ -1,11 +1,11 @@
 #!/bin/bash
 
-#SBATCH --job-name d2q9-bgkWorkers
-#SBATCH --nodes 1
-#SBATCH --ntasks-per-node 1
-#SBATCH -c 5
-#SBATCH --time 00:05:00
+#SBATCH --job-name d2q9-bgk
 #SBATCH --partition cpu
+#SBATCH --nodes=2
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=5
+#SBATCH --time=0:1:15
 #SBATCH --output TestingBigger.out
 
 echo Running on host `hostname`
@@ -20,6 +20,6 @@ echo CPUS per node : $SLURM_JOB_CPUS_PER_NODE
 
 
 #! Run the executable
-mpirun -np $SLURM_JOB_CPUS_PER_NODE ./d2q9-bgk input_1024x1024.params obstacles_1024x1024.dat
+mpirun -np $SLURM_JOB_CPUS_PER_NODE ./d2q9-bgk input_256x256.params obstacles_256x256.dat
 
 echo done!
