@@ -1,62 +1,29 @@
 Running on host compute516.bc4.acrc.priv
-Time is Fri Apr 20 21:17:24 BST 2018
+Time is Fri Apr 20 21:24:24 BST 2018
 Directory is /mnt/storage/home/sm15504/year3CW/flat_mpi_better/hpc_two
-Slurm job ID is 1118903
+Slurm job ID is 1118904
 This job runs on the following machines:
 compute[516,522]
 icc
 NUMBER OF NODES : 2
 CPUS per node : 5(x2)
-Rank: 1, startInd = 52, endInd : 103, haloTop : 103, haloBottom: 51, topRank :2, botrank :0 
-Rank: 0, startInd = 0, endInd : 52, haloTop : 52, haloBottom: 256, topRank :1, botrank :4 
-Rank: 3, startInd = 154, endInd : 205, haloTop : 205, haloBottom: 153, topRank :4, botrank :2 
-Rank: 2, startInd = 103, endInd : 154, haloTop : 154, haloBottom: 102, topRank :3, botrank :1 
 Rank: 4, startInd = 205, endInd : 256, haloTop : 0, haloBottom: 204, topRank :0, botrank :3 
-Master Starting to Gather data 
-Worker 1's limits are lower : 52, upper : 104 
-Master is trying to get work from 1 
-Worker 2 trying to send 
-Worker 2 lower : 103 upper : 154  
-Worker 1 trying to send 
-Worker 1 lower : 52 upper : 103  
-Worker 4 trying to send 
-Worker 4 lower : 205 upper : 256  
-Worker 3 trying to send 
-Worker 3 lower : 154 upper : 205  
-Finished gatherData for rank 1
-Worker 2's limits are lower : 103, upper : 155 
-Master is trying to get work from 2 
-Worker 1 has SENT THE DATA! 
-Leaving the gatherData Function! 
-Finished gatherData for rank 2
-Worker 3's limits are lower : 154, upper : 206 
-Master is trying to get work from 3 
-Worker 2 has SENT THE DATA! 
-Leaving the gatherData Function! 
-Finished gatherData for rank 3
-Worker 4's limits are lower : 205, upper : 256 
-Master is trying to get work from 4 
-Worker 3 has SENT THE DATA! 
-Leaving the gatherData Function! 
-Finished gatherData for rank 4
-MASTER HAS FINISHED GATHERING 
-Leaving the gatherData Function! 
-Worker 4 has SENT THE DATA! 
-Leaving the gatherData Function! 
+Rank: 3, startInd = 154, endInd : 205, haloTop : 205, haloBottom: 153, topRank :4, botrank :2 
+Rank: 0, startInd = 0, endInd : 52, haloTop : 52, haloBottom: 256, topRank :1, botrank :4 
+Rank: 1, startInd = 52, endInd : 103, haloTop : 103, haloBottom: 51, topRank :2, botrank :0 
+Rank: 2, startInd = 103, endInd : 154, haloTop : 154, haloBottom: 102, topRank :3, botrank :1 
 WORKER 4 HAS FINISHED TIMERSTEPS!
 ---Worker 4 is leaving---
-WORKER 3 HAS FINISHED TIMERSTEPS!
----Worker 3 is leaving---
 WORKER 2 HAS FINISHED TIMERSTEPS!
 ---Worker 2 is leaving---
+WORKER 3 HAS FINISHED TIMERSTEPS!
+---Worker 3 is leaving---
+MASTER HAS FINISHED TIMESTEPS 
 WORKER 1 HAS FINISHED TIMERSTEPS!
 ---Worker 1 is leaving---
-MASTER HAS FINISHED TIMESTEPS 
-Master has survived! 
-Worker 0 check! 
-Elapsed user CPU time:		40.851273 (s)
-Elapsed system CPU time:	0.026000 (s)
+Elapsed user CPU time:		41.151195 (s)
+Elapsed system CPU time:	0.027000 (s)
 ==done==
-Reynolds number:		4.611357688904E+00
-Elapsed time:			40.856076 (s)
+Reynolds number:		4.609437942505E+00
+Elapsed time:			41.156498 (s)
 done!

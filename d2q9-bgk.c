@@ -215,6 +215,7 @@ int main(int argc, char* argv[])
   if(rank == MASTER){
    gettimeofday(&timstr, NULL);
    tic = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
+   printf("Number of workers being run : %d", size);
  }
 
   numberOfIterationsDone = 0;
@@ -239,11 +240,11 @@ int main(int argc, char* argv[])
 
   MPI_Finalize();
 
-  if(rank == MASTER){ printf("MASTER HAS FINISHED TIMESTEPS \n");}
-  else{ printf("WORKER %d HAS FINISHED TIMERSTEPS!\n",rank);}
+  //if(rank == MASTER){ printf("MASTER HAS FINISHED TIMESTEPS \n");}
+  //else{ printf("WORKER %d HAS FINISHED TIMERSTEPS!\n",rank);}
 
   if(rank != MASTER){
-    printf("---Worker %d is leaving---\n",rank );
+   // printf("---Worker %d is leaving---\n",rank );
    return EXIT_SUCCESS;
   }
 
@@ -892,7 +893,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
       local_rows = params->ny;
 
 
-    printf("Rank: %d, startInd = %d, endInd : %d, haloTop : %d, haloBottom: %d, topRank :%d, botrank :%d \n",rank,myStartInd,myEndInd,haloTop,haloBottom,topRank,botRank);
+    //printf("Rank: %d, startInd = %d, endInd : %d, haloTop : %d, haloBottom: %d, topRank :%d, botrank :%d \n",rank,myStartInd,myEndInd,haloTop,haloBottom,topRank,botRank);
 
     /* main grid */
     *cells_ptr = (t_speed*)malloc(sizeof(t_speed) * (bigY * params->nx));
