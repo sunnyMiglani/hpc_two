@@ -20,6 +20,6 @@ echo CPUS per node : $SLURM_JOB_CPUS_PER_NODE
 
 
 #! Run the executable
-mpirun -np $SLURM_JOB_CPUS_PER_NODE ./d2q9-bgk input_256x256.params obstacles_256x256.dat
+mpirun -np $SLURM_JOB_CPUS_PER_NODE ./d2q9-bgk input_1024x1024.params obstacles_1024x1024.dat
 
 echo done!
