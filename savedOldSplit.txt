@@ -1,0 +1,5 @@
+Rank: 0, startInd = 0, endInd : 26, haloTop : 26, haloBottom: 128, topRank :1, botrank :4 
+Rank: 1, startInd = 26, endInd : 52, haloTop : 52, haloBottom: 25, topRank :2, botrank :0 
+Rank: 2, startInd = 51, endInd : 77, haloTop : 77, haloBottom: 50, topRank :3, botrank :1 
+Rank: 3, startInd = 76, endInd : 102, haloTop : 102, haloBottom: 75, topRank :4, botrank :2 
+Rank: 4, startInd = 101, endInd : 128, haloTop : 0, haloBottom: 100, topRank :0, botrank :3
