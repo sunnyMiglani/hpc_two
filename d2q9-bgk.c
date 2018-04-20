@@ -247,8 +247,6 @@ int main(int argc, char* argv[])
    return EXIT_SUCCESS;
   }
 
-  printf("Master has survived! \n");
-  printf("Worker %d check! \n",rank );
 
   if(rank == MASTER){
   gettimeofday(&timstr, NULL);
@@ -275,15 +273,6 @@ int main(int argc, char* argv[])
 
 
 void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
-
-  // printf("Worker %d is starting halo Exchange! \n", rank);
-  /*
-  MPI_Sendrecv(const void *sendbuf, int sendcount, MPI_Datatype sendtype,
-                int dest, int sendtag,
-                void *recvbuf, int recvcount, MPI_Datatype recvtype,
-                int source, int recvtag,
-                MPI_Comm comm, MPI_Status *status)
-  */
 
 
  // printf("Worker %d sent ind %d to worker %d. Worker %d received into ind %d from worker %d\n",rank,myStartInd,botRank,rank,haloTop,topRank);
