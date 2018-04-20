@@ -378,40 +378,40 @@ int getLimitsFromRankUpper(int rank){
 // Currently implementing Idea 1 due to ease.
 void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
     if(rank == MASTER){
-        printf("Master Starting to Gather data \n");
+        // printf("Master Starting to Gather data \n");
         for(int i = 1; i < size; i ++){
 
             int this_lowerLim = getLimitsFromRankLower(i); // Basically the y limit lower
             int this_upperLim = getLimitsFromRankUpper(i); // Basically the y limit higher
 
-
-            printf("Worker %d's limits are lower : %d, upper : %d \n",i,this_lowerLim,this_upperLim);
+//
+            // printf("Worker %d's limits are lower : %d, upper : %d \n",i,this_lowerLim,this_upperLim);
 
 
             void* recvPointer = &cells[0 + this_lowerLim*params.nx];
             int recieveSize = params.nx * abs(this_lowerLim - this_upperLim);
 
-            printf("Master is trying to get work from %d \n",i);
+            // printf("Master is trying to get work from %d \n",i);
 
             MPI_Recv(recvPointer, recieveSize, cells_struct, i, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-            printf("Finished gatherData for rank %d\n",i);
+            // printf("Finished gatherData for rank %d\n",i);
         }
-	printf("MASTER HAS FINISHED GATHERING \n");
+	// printf("MASTER HAS FINISHED GATHERING \n");
     }
     else{
-        printf("Worker %d trying to send \n",rank);
+        // printf("Worker %d trying to send \n",rank);
 
         void* sendbuffer = &cells[0 + myStartInd*params.nx];
         int sendSize = params.nx * abs(myStartInd - myEndInd);
 
-        printf("Worker %d lower : %d upper : %d  \n",rank, myStartInd, myEndInd);
+        // printf("Worker %d lower : %d upper : %d  \n",rank, myStartInd, myEndInd);
 
         MPI_Send(sendbuffer, sendSize, cells_struct, 0, 1, MPI_COMM_WORLD);
 
-        printf("Worker %d has SENT THE DATA! \n",rank);
+        // printf("Worker %d has SENT THE DATA! \n",rank);
     }
-    printf("Leaving the gatherData Function! \n");
+    // printf("Leaving the gatherData Function! \n");
 }
 
 int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
