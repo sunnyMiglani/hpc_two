@@ -879,18 +879,18 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
 
     if(rank != MASTER){
         if(rank == size-1){
-            myStartInd = (offset * rank)+1;
+            myStartInd = (offset * rank) + 1;
             myEndInd = bigY;
 
             haloTop = 0;
-            haloBottom = myStartInd -1;
+            haloBottom = myStartInd - 1;
 
             topRank = 0;
             botRank = rank-1;
         }
         else{
-            myStartInd = (offset * rank)+1;
-            myEndInd = myStartInd + offset + 1;
+            myStartInd = (offset * rank) + 1;
+            myEndInd = myStartInd + offset + 2;
 
             haloTop = myEndInd;
             haloBottom = myStartInd -1;
