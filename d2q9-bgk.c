@@ -215,7 +215,7 @@ int main(int argc, char* argv[])
   if(rank == MASTER){
    gettimeofday(&timstr, NULL);
    tic = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
-   printf("Number of workers being run : %d", size);
+   printf("Number of workers being run : %d\n", size);
  }
 
   numberOfIterationsDone = 0;
