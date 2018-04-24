@@ -3,7 +3,7 @@
 #SBATCH --job-name d2q9-bgk
 #SBATCH --partition cpu
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=2
+#SBATCH --ntasks-per-node=10
 #SBATCH --time=0:20:15
 #SBATCH --output TestingRectangular.out
 
