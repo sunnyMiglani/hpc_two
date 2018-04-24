@@ -2,10 +2,10 @@
 
 #SBATCH --job-name d2q9-bgk
 #SBATCH --partition cpu
-#SBATCH --nodes=4
-#SBATCH --ntasks-per-node=20
-#SBATCH --time=0:7:15
-#SBATCH --output TestingMultipleSizesN4T10.out
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=2
+#SBATCH --time=0:20:15
+#SBATCH --output TestingMultipleSizesN1T20.out
 
 echo Running on host `hostname`
 echo Time is `date`
