@@ -222,7 +222,7 @@ int main(int argc, char* argv[])
   /* iterate for maxIters timesteps */
   for (int tt = 0; tt < params.maxIters; tt++)
   {
-    printf("Worker %d is doing iteration %d \n",rank, tt);
+   // printf("Worker %d is doing iteration %d \n",rank, tt);
     func_timestep(params, cells, tmp_cells, obstacles);
     float this_avgV = func_gatherVelocity(params,cells,obstacles);
     ++numberOfIterationsDone;
@@ -312,7 +312,8 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
     }
 
     // printf("Workers %d have collect stuff %d \n",rank,numOfCells);
-    // printf("Workers %d have average velocity %f \n",rank,av);
+    printf("Workers %d have average velocity %f \n",rank,av);
+    if(av != av){ printf("NAN AT ITERATION : %d", numberOfIterationsDone);}
     return (av/numOfCells);
 }
 
@@ -643,7 +644,7 @@ float av_velocity_forAll(const t_param params, t_speed* cells, int* obstacles)
 
 
     /* loop over all non-blocked cells */
-    for (int jj = 0; jj < params->ny; jj++)
+    for (int jj = 0; jj < params.ny; jj++)
     {
       for (int ii = 0; ii < params.nx; ii++)
       {
