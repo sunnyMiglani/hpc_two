@@ -1,43 +1,38 @@
-Running on host compute239.bc4.acrc.priv
-Time is Tue Apr 24 00:07:58 BST 2018
+Running on host compute087.bc4.acrc.priv
+Time is Tue Apr 24 20:01:46 BST 2018
 Directory is /mnt/storage/home/sm15504/year3CW/flat_mpi_better/hpc_two
-Slurm job ID is 1122618
+Slurm job ID is 1124211
 This job runs on the following machines:
-compute239
+compute087
 icc
 NUMBER OF NODES : 1
 CPUS per node : 2
 --------- Size : 128 --------------
 --------Number of workers being run : 2--------
-Elapsed user CPU time:		13.515974 (s)
-Elapsed system CPU time:	0.004000 (s)
+Elapsed user CPU time:		13.522108 (s)
+Elapsed system CPU time:	0.009001 (s)
 ==done==
 Reynolds number:		7.552209854126E+00
-Elapsed time:			13.513025 (s)
+Elapsed time:			13.521005 (s)
 ----------------------------------
 
 
 
 ---------- Size : 256 --------------
 --------Number of workers being run : 2--------
-Elapsed user CPU time:		106.359743 (s)
-Elapsed system CPU time:	0.008000 (s)
+Elapsed user CPU time:		106.390438 (s)
+Elapsed system CPU time:	0.006999 (s)
 ==done==
 Reynolds number:		8.326689720154E+00
-Elapsed time:			106.359193 (s)
+Elapsed time:			106.389873 (s)
 ----------------------------------
 
 
 
 --------- Size : 1024 ------------
 --------Number of workers being run : 2--------
-Elapsed user CPU time:		440.854616 (s)
-Elapsed system CPU time:	0.060993 (s)
-==done==
-Reynolds number:		3.415840566158E-01
-Elapsed time:			441.040719 (s)
-----------------------------------
-
-
-
-done!
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: got SIGCONT
+slurmstepd: error: *** STEP 1124211.2 ON compute087 CANCELLED AT 2018-04-24T20:06:27 ***
+slurmstepd: error: *** JOB 1124211 ON compute087 CANCELLED AT 2018-04-24T20:06:27 ***
+srun: forcing job termination
