@@ -222,7 +222,7 @@ int main(int argc, char* argv[])
   /* iterate for maxIters timesteps */
   for (int tt = 0; tt < params.maxIters; tt++)
   {
-    //printf("Worker %d is doing iteration %d \n",rank, tt);
+    printf("Worker %d is doing iteration %d \n",rank, tt);
     func_timestep(params, cells, tmp_cells, obstacles);
     float this_avgV = func_gatherVelocity(params,cells,obstacles);
     ++numberOfIterationsDone;
@@ -944,10 +944,11 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
     die(message, __LINE__, __FILE__);
   }
 
+  printf("Worker %d about to go to blocked cells list! \n",rank);
   /* read-in the blocked cells list */
   while ((retval = fscanf(fp, "%d %d %d\n", &xx, &yy, &blocked)) != EOF)
   {
-    
+
     /* some checks */
     if (retval != 3) die("expected 3 values per line in obstacle file", __LINE__, __FILE__);
 
@@ -961,6 +962,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
     /* assign to array */
     (*obstacles_ptr)[xx + yy*params->nx] = blocked;
   }
+  printf("Worker %d got through blocked cells list! \n",rank);
 
   /* and close the file */
   fclose(fp);
