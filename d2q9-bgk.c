@@ -207,7 +207,6 @@ int main(int argc, char* argv[])
   MPI_Type_create_struct(items,&block_lengths,&offset,&this_type,&cells_struct);
   MPI_Type_commit(&cells_struct);
 
-  if(rank == MASTER) { printf(" --- Number of workers : %d -------- \n ", size);} 
 
   /* initialise our data structures and load values from file */
   func_initialise(paramfile, obstaclefile, &params, &cells, &tmp_cells, &obstacles, &av_vels);
@@ -223,7 +222,7 @@ int main(int argc, char* argv[])
   /* iterate for maxIters timesteps */
   for (int tt = 0; tt < params.maxIters; tt++)
   {
-    //printf("Worker %d is doing iteration %d \n",rank, tt);
+    printf("Worker %d is doing iteration %d \n",rank, tt);
     func_timestep(params, cells, tmp_cells, obstacles);
     float this_avgV = func_gatherVelocity(params,cells,obstacles);
     ++numberOfIterationsDone;
@@ -313,7 +312,7 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
     }
 
     // printf("Workers %d have collect stuff %d \n",rank,numOfCells);
-    printf("Workers %d have average velocity %f \n",rank,av);
+    // printf("Workers %d have average velocity %f \n",rank,av);
     return (av/numOfCells);
 }
 
@@ -644,7 +643,7 @@ float av_velocity_forAll(const t_param params, t_speed* cells, int* obstacles)
 
 
     /* loop over all non-blocked cells */
-    for (int jj = 0; jj < local_rows; jj++)
+    for (int jj = 0; jj < params->ny; jj++)
     {
       for (int ii = 0; ii < params.nx; ii++)
       {
@@ -819,8 +818,6 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
                t_param* params, t_speed** cells_ptr, t_speed** tmp_cells_ptr,
                int** obstacles_ptr, float** av_vels_ptr)
 {
-
-  printf("Worker %d in the intitialise! \n",rank);
   char   message[1024];  /* message buffer */
   FILE*   fp;            /* file pointer */
   int    xx, yy;         /* generic array indices */
@@ -852,7 +849,6 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
     if (retval != 1) die("could not read param file: omega", __LINE__, __FILE__);
     /* and close up the file */
     fclose(fp);
-
 
 
     bigY = params->ny;
@@ -894,16 +890,16 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
     }
 
 
-    printf("Rank: %d, startInd = %d, endInd : %d, haloTop : %d, haloBottom: %d, topRank :%d, botrank :%d \n",rank,myStartInd,myEndInd,haloTop,haloBottom,topRank,botRank);
+    //printf("Rank: %d, startInd = %d, endInd : %d, haloTop : %d, haloBottom: %d, topRank :%d, botrank :%d \n",rank,myStartInd,myEndInd,haloTop,haloBottom,topRank,botRank);
 
     /* main grid */
-    *cells_ptr = (t_speed*)malloc(sizeof(t_speed) * (bigY * params->nx));
+    *cells_ptr = (t_speed*)malloc(sizeof(t_speed) * (params->ny * params->nx));
     if (*cells_ptr == NULL) die("cannot allocate memory for cells", __LINE__, __FILE__);
     /* 'helper' grid, used as scratch space */
-    *tmp_cells_ptr = (t_speed*)malloc(sizeof(t_speed) * (bigY * params->nx));
+    *tmp_cells_ptr = (t_speed*)malloc(sizeof(t_speed) * (params->ny * params->nx));
     if (*tmp_cells_ptr == NULL) die("cannot allocate memory for tmp_cells", __LINE__, __FILE__);
     /* the map of obstacles */
-    *obstacles_ptr = malloc(sizeof(int) * (bigY * params->nx));
+    *obstacles_ptr = malloc(sizeof(int) * (params->ny * params->nx));
     if (*obstacles_ptr == NULL) die("cannot allocate column memory for obstacles", __LINE__, __FILE__);
 
   /* initialise densities */
@@ -948,7 +944,6 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
     die(message, __LINE__, __FILE__);
   }
 
-  printf("Worker %d about to go to blocked cells list! \n",rank);
   /* read-in the blocked cells list */
   while ((retval = fscanf(fp, "%d %d %d\n", &xx, &yy, &blocked)) != EOF)
   {
@@ -966,7 +961,6 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
     /* assign to array */
     (*obstacles_ptr)[xx + yy*params->nx] = blocked;
   }
-  printf("Worker %d got through blocked cells list! \n",rank);
 
   /* and close the file */
   fclose(fp);
