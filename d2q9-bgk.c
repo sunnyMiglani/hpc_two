@@ -851,8 +851,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
     fclose(fp);
 
 
-    bigX = params->nx;
-    bigY = params->ny;
+
     int offset = floor(bigY/size);
 
     if(rank == 0){ // First worker --> MASTER
@@ -889,8 +888,6 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
             botRank = rank-1;
         }
     }
-      local_cols = params->nx;
-      local_rows = params->ny;
 
 
     //printf("Rank: %d, startInd = %d, endInd : %d, haloTop : %d, haloBottom: %d, topRank :%d, botrank :%d \n",rank,myStartInd,myEndInd,haloTop,haloBottom,topRank,botRank);
@@ -950,10 +947,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
   /* read-in the blocked cells list */
   while ((retval = fscanf(fp, "%d %d %d\n", &xx, &yy, &blocked)) != EOF)
   {
-    if( yy < 0 || yy > bigY -1){
-      printf("Obstacle y coord out of range! %d for worker %d with (%d,%d) \n",yy,rank,params->startInd, params->endInd);
-    }
-
+    
     /* some checks */
     if (retval != 3) die("expected 3 values per line in obstacle file", __LINE__, __FILE__);
 
