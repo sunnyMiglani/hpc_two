@@ -459,7 +459,7 @@ int func_accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
 }
 
 int getHaloCellsForY(int attempt){
-    if(attempt > myEndInd){
+    if(attempt >= myEndInd){
       return haloTop;
     }
     if(attempt < myStartInd){
