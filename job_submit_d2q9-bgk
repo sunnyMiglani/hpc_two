@@ -18,15 +18,15 @@ echo NUMBER OF NODES : $SLURM_NNODES
 echo CPUS per node : $SLURM_JOB_CPUS_PER_NODE
 
 echo --------- Size : 128x128 --------------
-mpirun -np $SLURM_JOB_CPUS_PER_NODE ./d2q9-bgk input_1024x1024.params obstacles_1024x1024.dat
+mpirun -np $SLURM_JOB_CPUS_PER_NODE ./d2q9-bgk input_128x128.params obstacles_128x128.dat
 echo done!
 
 echo --------- Size : 128x256 --------------
-mpirun -np $SLURM_JOB_CPUS_PER_NODE ./d2q9-bgk input_1024x1024.params obstacles_1024x1024.dat
+mpirun -np $SLURM_JOB_CPUS_PER_NODE ./d2q9-bgk input_128x256.params obstacles_128x256.dat
 echo done!
 
 echo --------- Size : 256x256 --------------
-mpirun -np $SLURM_JOB_CPUS_PER_NODE ./d2q9-bgk input_1024x1024.params obstacles_1024x1024.dat
+mpirun -np $SLURM_JOB_CPUS_PER_NODE ./d2q9-bgk input_256x256.params obstacles_256x256.dat
 echo done!
 
 
