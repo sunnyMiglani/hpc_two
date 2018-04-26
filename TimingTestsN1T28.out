@@ -1,0 +1,41 @@
+Running on host compute398.bc4.acrc.priv
+Time is Fri Apr 27 00:10:57 BST 2018
+Directory is /mnt/storage/home/sm15504/year3CW/flat_mpi_better/hpc_two
+Slurm job ID is 1126595
+This job runs on the following machines:
+compute398
+icc
+NUMBER OF NODES : 1
+CPUS per node : 28
+--------- Size : 128x128 --------------
+--------Number of workers being run : 28--------
+Elapsed user CPU time:		4.111868 (s)
+Elapsed system CPU time:	0.094973 (s)
+==done==
+Reynolds number:		9.757672309875E+00
+Elapsed time:			4.189896 (s)
+done!
+--------- Size : 128x256 --------------
+--------Number of workers being run : 28--------
+Elapsed user CPU time:		2.836320 (s)
+Elapsed system CPU time:	0.023002 (s)
+==done==
+Reynolds number:		3.717264556885E+01
+Elapsed time:			2.839611 (s)
+done!
+--------- Size : 256x256 --------------
+--------Number of workers being run : 28--------
+Elapsed user CPU time:		10.464260 (s)
+Elapsed system CPU time:	0.052991 (s)
+==done==
+Reynolds number:		1.006754398346E+01
+Elapsed time:			10.503934 (s)
+done!
+--------- Size : 1024x1024 --------------
+--------Number of workers being run : 28--------
+Elapsed user CPU time:		50.078392 (s)
+Elapsed system CPU time:	0.372010 (s)
+==done==
+Reynolds number:		3.377146005630E+00
+Elapsed time:			50.433442 (s)
+done!
