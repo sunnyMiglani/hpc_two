@@ -859,7 +859,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
       myStartInd = 0;
       myEndInd = offset+1;
 
-      haloBottom = bigY; // bottom overflows to top.
+      haloBottom = bigY-1; // bottom overflows to top.
       haloTop = myEndInd; // one above my upper limit
 
       topRank = rank+1; // 1
