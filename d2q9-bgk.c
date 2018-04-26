@@ -312,8 +312,8 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
     }
 
     // printf("Workers %d have collect stuff %d \n",rank,numOfCells);
-    printf("Workers %d have average velocity %f \n",rank,av);
-    if(av != av){ printf("NAN AT ITERATION : %d", numberOfIterationsDone);}
+    // printf("Workers %d have average velocity %f \n",rank,av);
+    // if(av != av){ printf("NAN AT ITERATION : %d", numberOfIterationsDone);}
     return (av/numOfCells);
 }
 
@@ -891,7 +891,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
     }
 
 
-    printf("Rank: %d, startInd = %d, endInd : %d, haloTop : %d, haloBottom: %d, topRank :%d, botrank :%d \n",rank,myStartInd,myEndInd,haloTop,haloBottom,topRank,botRank);
+    // printf("Rank: %d, startInd = %d, endInd : %d, haloTop : %d, haloBottom: %d, topRank :%d, botrank :%d \n",rank,myStartInd,myEndInd,haloTop,haloBottom,topRank,botRank);
 
     /* main grid */
     *cells_ptr = (t_speed*)malloc(sizeof(t_speed) * (params->ny * params->nx));
