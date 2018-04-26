@@ -891,7 +891,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
     }
 
 
-    //printf("Rank: %d, startInd = %d, endInd : %d, haloTop : %d, haloBottom: %d, topRank :%d, botrank :%d \n",rank,myStartInd,myEndInd,haloTop,haloBottom,topRank,botRank);
+    printf("Rank: %d, startInd = %d, endInd : %d, haloTop : %d, haloBottom: %d, topRank :%d, botrank :%d \n",rank,myStartInd,myEndInd,haloTop,haloBottom,topRank,botRank);
 
     /* main grid */
     *cells_ptr = (t_speed*)malloc(sizeof(t_speed) * (params->ny * params->nx));
@@ -1001,7 +1001,7 @@ float calc_reynolds(const t_param params, t_speed* cells, int* obstacles)
 {
   const float viscosity = 1.f / 6.f * (2.f / params.omega - 1.f);
 
-  return av_velocity(params, cells, obstacles) * params.reynolds_dim / viscosity;
+  return av_velocity_forAll(params, cells, obstacles) * params.reynolds_dim / viscosity;
 }
 
 float total_density(const t_param params, t_speed* cells)
