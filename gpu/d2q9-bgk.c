@@ -92,11 +92,11 @@ int initialise(const char* paramfile, const char* obstaclefile,
 ** timestep calls, in order, the functions:
 ** accelerate_flow(), propagate(), rebound() & collision()
 */
-int timestep(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega,, t_speed* cells, t_speed* tmp_cells, int* obstacles);
-int accelerate_flow(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega,, t_speed* cells, int* obstacles);
-int propagate(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega,, t_speed* cells, t_speed* tmp_cells);
-int rebound(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega,, t_speed* cells, t_speed* tmp_cells, int* obstacles);
-int collision(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega,, t_speed* cells, t_speed* tmp_cells, int* obstacles);
+int timestep(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, t_speed* tmp_cells, int* obstacles);
+int accelerate_flow(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, int* obstacles);
+int propagate(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, t_speed* tmp_cells);
+int rebound(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, t_speed* tmp_cells, int* obstacles);
+int collision(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, t_speed* tmp_cells, int* obstacles);
 int write_values(const t_param params, t_speed* cells, int* obstacles, float* av_vels);
 
 /* finalise, including freeing up allocated memory */
@@ -108,7 +108,7 @@ int finalise(const t_param* params, t_speed** cells_ptr, t_speed** tmp_cells_ptr
 float total_density(const t_param params, t_speed* cells);
 
 /* compute average velocity */
-float av_velocity(const t_param params, t_speed* cells, int* obstacles);
+float av_velocity(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, int* obstacles);
 
 /* calculate Reynolds number */
 float calc_reynolds(const t_param params, t_speed* cells, int* obstacles);
@@ -165,8 +165,8 @@ int main(int argc, char* argv[])
 
   for (int tt = 0; tt < params.maxIters; tt++)
   {
-    timestep(nx,ny,maxIters,reynolds_dim,density,accel,omega, cells, tmp_cells, obstacles);
-    av_vels[tt] = av_velocity(params, cells, obstacles);
+    timestep( nx , ny , maxIters, reynolds_dim, density, accel,omega, cells, tmp_cells, obstacles);
+    av_vels[tt] = av_velocity(nx , ny , maxIters, reynolds_dim, density, accel,omega, cells, obstacles);
 #ifdef DEBUG
     printf("==timestep: %d==\n", tt);
     printf("av velocity: %.12E\n", av_vels[tt]);
@@ -194,16 +194,16 @@ int main(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int timestep(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega,, t_speed* cells, t_speed* tmp_cells, int* obstacles)
+int timestep(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
-  accelerate_flow(nx, ny, maxIters, reynolds_dim, density, accel, omega,, cells, obstacles);
-  propagate(nx, ny, maxIters, reynolds_dim, density, accel, omega,, cells, tmp_cells);
-  rebound(nx, ny, maxIters, reynolds_dim, density, accel, omega,, cells, tmp_cells, obstacles);
-  collision(nx, ny, maxIters, reynolds_dim, density, accel, omega,, cells, tmp_cells, obstacles);
+  accelerate_flow(nx, ny, maxIters, reynolds_dim, density, accel, omega, cells, obstacles);
+  propagate(nx, ny, maxIters, reynolds_dim, density, accel, omega, cells, tmp_cells);
+  rebound(nx, ny, maxIters, reynolds_dim, density, accel, omega, cells, tmp_cells, obstacles);
+  collision(nx, ny, maxIters, reynolds_dim, density, accel, omega, cells, tmp_cells, obstacles);
   return EXIT_SUCCESS;
 }
 
-int accelerate_flow(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega,, t_speed* cells, int* obstacles)
+int accelerate_flow(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, int* obstacles)
 {
   /* compute weighting factors */
   float w1 = density * accel / 9.f;
@@ -235,7 +235,7 @@ int accelerate_flow(int nx, int ny, int maxIters, int reynolds_dim, float densit
   return EXIT_SUCCESS;
 }
 
-int propagate(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega,, t_speed* cells, t_speed* tmp_cells)
+int propagate(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, t_speed* tmp_cells)
 {
   /* loop over _all_ cells */
   for (int jj = 0; jj < ny; jj++)
@@ -266,7 +266,7 @@ int propagate(int nx, int ny, int maxIters, int reynolds_dim, float density, flo
   return EXIT_SUCCESS;
 }
 
-int rebound(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega,, t_speed* cells, t_speed* tmp_cells, int* obstacles)
+int rebound(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
   /* loop over the cells in the grid */
   for (int jj = 0; jj < ny; jj++)
@@ -293,7 +293,7 @@ int rebound(int nx, int ny, int maxIters, int reynolds_dim, float density, float
   return EXIT_SUCCESS;
 }
 
-int collision(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega,, t_speed* cells, t_speed* tmp_cells, int* obstacles)
+int collision(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
   const float c_sq = 1.f / 3.f; /* square of speed of sound */
   const float w0 = 4.f / 9.f;  /* weighting factor */
@@ -396,7 +396,7 @@ int collision(int nx, int ny, int maxIters, int reynolds_dim, float density, flo
   return EXIT_SUCCESS;
 }
 
-float av_velocity(const t_param params, t_speed* cells, int* obstacles)
+float av_velocity(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, int* obstacles)
 {
   int    tot_cells = 0;  /* no. of cells used in calculation */
   float tot_u;          /* accumulated magnitudes of velocity for each cell */
@@ -628,7 +628,7 @@ float calc_reynolds(const t_param params, t_speed* cells, int* obstacles)
 {
   const float viscosity = 1.f / 6.f * (2.f / params.omega - 1.f);
 
-  return av_velocity(params, cells, obstacles) * params.reynolds_dim / viscosity;
+  return av_velocity(params.nx , params.ny , params.maxIters, params.reynolds_dim, params.density, params.accel,params.omega, cells, obstacles) * params.reynolds_dim / viscosity;
 }
 
 float total_density(const t_param params, t_speed* cells)
