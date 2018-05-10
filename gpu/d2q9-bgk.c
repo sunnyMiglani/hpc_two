@@ -212,6 +212,7 @@ int main(int argc, char* argv[])
 #endif
   }
   #pragma omp target exit data map(from:cells)
+ {}
 
 
   gettimeofday(&timstr, NULL);
