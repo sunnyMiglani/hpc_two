@@ -199,6 +199,7 @@ int main(int argc, char* argv[])
 
 
   #pragma omp target enter data map(to:nx,ny,maxIters,reynolds_dim,density,accel,omega,cells,tmp_cells,obstacles)
+  {}
   for (int tt = 0; tt < params.maxIters; tt++)
   {
     timestep( nx , ny , maxIters, reynolds_dim, density, accel,omega, cells, tmp_cells, obstacles);
@@ -499,7 +500,7 @@ float av_velocity_noDiv(int nx, int ny, int maxIters, int reynolds_dim, float de
   tot_u = 0.f;
 
   /* loop over all non-blocked cells */
- #pragma omp target teams distribute parallel for simd reduce(+:tot_u)
+  #pragma omp target teams distribute parallel for simd reduction(+:tot_u)
   for (int jj = 0; jj < ny; jj++)
   {
     for (int ii = 0; ii < nx; ii++)

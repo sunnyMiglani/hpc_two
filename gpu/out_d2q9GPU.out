@@ -1,11 +1,11 @@
 Running on host gpu28.bc4.acrc.priv
-Time is Thu May 10 16:45:53 BST 2018
+Time is Thu May 10 19:46:08 BST 2018
 Directory is /mnt/storage/home/sm15504/year3CW/flat_mpi_better/hpc_two/gpu
-Slurm job ID is 1169135
+Slurm job ID is 1169511
 This job runs on the following machines:
 gpu28
 ==done==
-Reynolds number:		1.302112293243E+01
-Elapsed time:			2.805703 (s)
-Elapsed user CPU time:		77.550664 (s)
-Elapsed system CPU time:	0.107984 (s)
+Reynolds number:		9.751927375793E+00
+Elapsed time:			30.721110 (s)
+Elapsed user CPU time:		753.877365 (s)
+Elapsed system CPU time:	12.679599 (s)
