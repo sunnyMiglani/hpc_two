@@ -500,7 +500,7 @@ float av_velocity_noDiv(int nx, int ny, int maxIters, int reynolds_dim, float de
   tot_u = 0.f;
 
   /* loop over all non-blocked cells */
-  #pragma omp target teams distribute parallel for simd reduction(+:tot_u)
+  #pragma omp parallel for reduction(+:tot_u)
   for (int jj = 0; jj < ny; jj++)
   {
     for (int ii = 0; ii < nx; ii++)
