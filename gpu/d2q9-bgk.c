@@ -118,6 +118,26 @@ void die(const char* message, const int line, const char* file);
 void usage(const char* exe);
 
 /*
+    ############## GPU STEPS ##################
+    Notes :
+    1. Cannot use structs for params, need to send individual values
+    2. Need to map values to GPU, this forces CPU to talk to GPU.
+    3. GPU has a LOT of space, don't need to worry about size.
+    4. To receive values, need to map back
+    5. All splitting up of the "map" to different workers is done automatically by OpenMP
+
+    Steps :
+    1. Convert the params struct to raw values.
+    2. Map the params data along with cells to the GPU before itererations / timesteps starts.
+    3. apply pragma SIMD relavent functions.
+    4. Average velocity -> Send back the tot_u cell values, not the divided value.
+    5. The number of obstacles and cells can actually be found in the params files.
+    6. Gathering the data is only at the end of all the timesteps, and can be done by simply mapping the data back.
+    7. In terms of getting the data back from the
+*/
+
+
+/*
 ** main program:
 ** initialise, timestep loop, finalise
 */
@@ -129,7 +149,7 @@ int main(int argc, char* argv[])
   t_speed* cells     = NULL;    /* grid containing fluid densities */
   t_speed* tmp_cells = NULL;    /* scratch space */
   int*     obstacles = NULL;    /* grid indicating which cells are blocked */
-  float* av_vels   = NULL;     /* a record of the av. velocity computed for each timestep */
+  float* av_vels   = NULL;      /* a record of the av. velocity computed for each timestep */
   struct timeval timstr;        /* structure to hold elapsed time */
   struct rusage ru;             /* structure to hold CPU time--system and user */
   double tic, toc;              /* floating point numbers to calculate elapsed wallclock time */
