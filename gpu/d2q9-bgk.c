@@ -78,6 +78,9 @@ typedef struct
   float speeds[NSPEEDS];
 } t_speed;
 
+int numOfNotObstacles = 0;
+
+
 /*
 ** function prototypes
 */
@@ -189,7 +192,8 @@ int main(int argc, char* argv[])
   for (int tt = 0; tt < params.maxIters; tt++)
   {
     timestep( nx , ny , maxIters, reynolds_dim, density, accel,omega, cells, tmp_cells, obstacles);
-    av_vels[tt] = av_velocity_noDiv(nx , ny , maxIters, reynolds_dim, density, accel,omega, cells, obstacles);
+    int tot_u_this = av_velocity_noDiv(nx , ny , maxIters, reynolds_dim, density, accel,omega, cells, obstacles);
+    av_vels[tt] = tot_u_this/numOfNotObstacles;
 #ifdef DEBUG
     printf("==timestep: %d==\n", tt);
     printf("av velocity: %.12E\n", av_vels[tt]);
@@ -481,6 +485,7 @@ float av_velocity_noDiv(int nx, int ny, int maxIters, int reynolds_dim, float de
   tot_u = 0.f;
 
   /* loop over all non-blocked cells */
+  #pragma omp reduce(+:tot_u)
   for (int jj = 0; jj < ny; jj++)
   {
     for (int ii = 0; ii < nx; ii++)
@@ -665,6 +670,16 @@ int initialise(const char* paramfile, const char* obstaclefile,
 
     /* assign to array */
     (*obstacles_ptr)[xx + yy*params->nx] = blocked;
+  }
+
+  for (int jj = 0; jj < params->ny; jj++)
+  {
+    for (int ii = 0; ii < params->nx; ii++)
+    {
+      if (!obstacles[ii + jj*nx]){
+          numOfNotObstacles +=1;
+      }
+    }
   }
 
   /* and close the file */
