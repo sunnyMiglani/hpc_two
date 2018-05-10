@@ -175,11 +175,11 @@ int main(int argc, char* argv[])
   initialise(paramfile, obstaclefile, &params, &cells, &tmp_cells, &obstacles, &av_vels);
 
 
-    for (int jj = 0; jj < params->ny; jj++)
+    for (int jj = 0; jj < params.ny; jj++)
     {
-      for (int ii = 0; ii < params->nx; ii++)
+      for (int ii = 0; ii < params.nx; ii++)
       {
-        if (!obstacles[ii + jj*nx]){
+        if (!obstacles[ii + jj*params.nx]){
             numOfNotObstacles +=1;
         }
       }
