@@ -1,0 +1,11 @@
+Running on host compute068.bc4.acrc.priv
+Time is Thu May 10 15:16:15 BST 2018
+Directory is /mnt/storage/home/sm15504/year3CW/flat_mpi_better/hpc_two/gpu
+Slurm job ID is 1169053
+This job runs on the following machines:
+compute068
+==done==
+Reynolds number:		9.757355690002E+00
+Elapsed time:			25.370633 (s)
+Elapsed user CPU time:		25.359521 (s)
+Elapsed system CPU time:	0.004001 (s)
