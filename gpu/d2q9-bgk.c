@@ -109,6 +109,7 @@ float total_density(const t_param params, t_speed* cells);
 
 /* compute average velocity */
 float av_velocity(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, int* obstacles);
+float av_velocity_noDiv(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, int* obstacles);
 
 /* calculate Reynolds number */
 float calc_reynolds(const t_param params, t_speed* cells, int* obstacles);
@@ -183,16 +184,20 @@ int main(int argc, char* argv[])
   float omega = params.omega;
 
 
+  #pragma omp target enter data map(to:nx,ny,maxIters,reynolds_dim,density,accel,omega,cells,tmp_cells,obstacles);
+  #pragma omp parallel for simd
   for (int tt = 0; tt < params.maxIters; tt++)
   {
     timestep( nx , ny , maxIters, reynolds_dim, density, accel,omega, cells, tmp_cells, obstacles);
-    av_vels[tt] = av_velocity(nx , ny , maxIters, reynolds_dim, density, accel,omega, cells, obstacles);
+    av_vels[tt] = av_velocity_noDiv(nx , ny , maxIters, reynolds_dim, density, accel,omega, cells, obstacles);
 #ifdef DEBUG
     printf("==timestep: %d==\n", tt);
     printf("av velocity: %.12E\n", av_vels[tt]);
     printf("tot density: %.12E\n", total_density(params, cells));
 #endif
   }
+  #pragma omp target exit data map(from:cells);
+
 
   gettimeofday(&timstr, NULL);
   toc = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
@@ -232,6 +237,7 @@ int accelerate_flow(int nx, int ny, int maxIters, int reynolds_dim, float densit
   /* modify the 2nd row of the grid */
   int jj = ny - 2;
 
+  #pragma omp parallel for simd
   for (int ii = 0; ii < nx; ii++)
   {
     /* if the cell is not occupied and
@@ -258,6 +264,7 @@ int accelerate_flow(int nx, int ny, int maxIters, int reynolds_dim, float densit
 int propagate(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, t_speed* tmp_cells)
 {
   /* loop over _all_ cells */
+  #pragma omp parallel for simd
   for (int jj = 0; jj < ny; jj++)
   {
     for (int ii = 0; ii < nx; ii++)
@@ -289,6 +296,7 @@ int propagate(int nx, int ny, int maxIters, int reynolds_dim, float density, flo
 int rebound(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
   /* loop over the cells in the grid */
+  #pragma omp parallel for simd
   for (int jj = 0; jj < ny; jj++)
   {
     for (int ii = 0; ii < nx; ii++)
@@ -324,6 +332,7 @@ int collision(int nx, int ny, int maxIters, int reynolds_dim, float density, flo
   ** NB the collision step is called after
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
+  #pragma omp parallel for simd
   for (int jj = 0; jj < ny; jj++)
   {
     for (int ii = 0; ii < nx; ii++)
@@ -425,6 +434,7 @@ float av_velocity(int nx, int ny, int maxIters, int reynolds_dim, float density,
   tot_u = 0.f;
 
   /* loop over all non-blocked cells */
+  #pragma omp parallel for simd
   for (int jj = 0; jj < ny; jj++)
   {
     for (int ii = 0; ii < nx; ii++)
@@ -466,6 +476,59 @@ float av_velocity(int nx, int ny, int maxIters, int reynolds_dim, float density,
 
   return tot_u / (float)tot_cells;
 }
+
+float av_velocity_noDiv(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, int* obstacles)
+{
+  int    tot_cells = 0;  /* no. of cells used in calculation */
+  float tot_u;          /* accumulated magnitudes of velocity for each cell */
+
+  /* initialise */
+  tot_u = 0.f;
+
+  /* loop over all non-blocked cells */
+  #pragma omp parallel for simd 
+  for (int jj = 0; jj < ny; jj++)
+  {
+    for (int ii = 0; ii < nx; ii++)
+    {
+      /* ignore occupied cells */
+      if (!obstacles[ii + jj*nx])
+      {
+        /* local density total */
+        float local_density = 0.f;
+
+        for (int kk = 0; kk < NSPEEDS; kk++)
+        {
+          local_density += cells[ii + jj*nx].speeds[kk];
+        }
+
+        /* x-component of velocity */
+        float u_x = (cells[ii + jj*nx].speeds[1]
+                      + cells[ii + jj*nx].speeds[5]
+                      + cells[ii + jj*nx].speeds[8]
+                      - (cells[ii + jj*nx].speeds[3]
+                         + cells[ii + jj*nx].speeds[6]
+                         + cells[ii + jj*nx].speeds[7]))
+                     / local_density;
+        /* compute y velocity component */
+        float u_y = (cells[ii + jj*nx].speeds[2]
+                      + cells[ii + jj*nx].speeds[5]
+                      + cells[ii + jj*nx].speeds[6]
+                      - (cells[ii + jj*nx].speeds[4]
+                         + cells[ii + jj*nx].speeds[7]
+                         + cells[ii + jj*nx].speeds[8]))
+                     / local_density;
+        /* accumulate the norm of x- and y- velocity components */
+        tot_u += sqrtf((u_x * u_x) + (u_y * u_y));
+        /* increase counter of inspected cells */
+        ++tot_cells;
+      }
+    }
+  }
+
+  return tot_u;
+}
+
 
 int initialise(const char* paramfile, const char* obstaclefile,
                t_param* params, t_speed** cells_ptr, t_speed** tmp_cells_ptr,
