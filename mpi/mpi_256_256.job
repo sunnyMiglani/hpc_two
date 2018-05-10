@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#SBATCH --job-name d2q9-bgk
+#SBATCH --time 00:15:00
+#SBATCH --partition serial
+
+echo Running on host `hostname`
+echo Time is `date`
+echo Directory is `pwd`
+echo Slurm job ID is $SLURM_JOB_ID
+echo This job runs on the following machines:
+echo `echo $SLURM_JOB_NODELIST | uniq`
+echo NODES : $SLURM_NNODES
+echo CPUS : $SLURM_JOB_CPUS_PER_NODE
+
+#! Run the executable
+mpirun -np $SLURM_JOB_CPUS_PER_NODE ./d2q9-bgk input_256x256.params obstacles_256x256.dat
