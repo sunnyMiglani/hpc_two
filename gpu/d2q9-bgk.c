@@ -184,7 +184,7 @@ int main(int argc, char* argv[])
   float omega = params.omega;
 
 
-  #pragma omp target enter data map(to:nx,ny,maxIters,reynolds_dim,density,accel,omega,cells,tmp_cells,obstacles);
+  #pragma omp target enter data map(to:nx,ny,maxIters,reynolds_dim,density,accel,omega,cells,tmp_cells,obstacles)
   #pragma omp parallel for simd
   for (int tt = 0; tt < params.maxIters; tt++)
   {
@@ -196,7 +196,7 @@ int main(int argc, char* argv[])
     printf("tot density: %.12E\n", total_density(params, cells));
 #endif
   }
-  #pragma omp target exit data map(from:cells);
+  #pragma omp target exit data map(from:cells)
 
 
   gettimeofday(&timstr, NULL);
@@ -237,7 +237,6 @@ int accelerate_flow(int nx, int ny, int maxIters, int reynolds_dim, float densit
   /* modify the 2nd row of the grid */
   int jj = ny - 2;
 
-  #pragma omp parallel for simd
   for (int ii = 0; ii < nx; ii++)
   {
     /* if the cell is not occupied and
@@ -264,7 +263,6 @@ int accelerate_flow(int nx, int ny, int maxIters, int reynolds_dim, float densit
 int propagate(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, t_speed* tmp_cells)
 {
   /* loop over _all_ cells */
-  #pragma omp parallel for simd
   for (int jj = 0; jj < ny; jj++)
   {
     for (int ii = 0; ii < nx; ii++)
@@ -296,7 +294,6 @@ int propagate(int nx, int ny, int maxIters, int reynolds_dim, float density, flo
 int rebound(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
   /* loop over the cells in the grid */
-  #pragma omp parallel for simd
   for (int jj = 0; jj < ny; jj++)
   {
     for (int ii = 0; ii < nx; ii++)
@@ -332,7 +329,6 @@ int collision(int nx, int ny, int maxIters, int reynolds_dim, float density, flo
   ** NB the collision step is called after
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
-  #pragma omp parallel for simd
   for (int jj = 0; jj < ny; jj++)
   {
     for (int ii = 0; ii < nx; ii++)
@@ -434,7 +430,6 @@ float av_velocity(int nx, int ny, int maxIters, int reynolds_dim, float density,
   tot_u = 0.f;
 
   /* loop over all non-blocked cells */
-  #pragma omp parallel for simd
   for (int jj = 0; jj < ny; jj++)
   {
     for (int ii = 0; ii < nx; ii++)
@@ -486,7 +481,6 @@ float av_velocity_noDiv(int nx, int ny, int maxIters, int reynolds_dim, float de
   tot_u = 0.f;
 
   /* loop over all non-blocked cells */
-  #pragma omp parallel for simd 
   for (int jj = 0; jj < ny; jj++)
   {
     for (int ii = 0; ii < nx; ii++)
