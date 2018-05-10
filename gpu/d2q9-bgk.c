@@ -251,7 +251,7 @@ int accelerate_flow(int nx, int ny, int maxIters, int reynolds_dim, float densit
   /* modify the 2nd row of the grid */
   int jj = ny - 2;
 
-  #pragma omp teams distribute parallel for simd //collapse(2)
+  #pragma omp target teams distribute parallel for simd //collapse(2)
   for (int ii = 0; ii < nx; ii++)
   {
     /* if the cell is not occupied and
@@ -278,7 +278,7 @@ int accelerate_flow(int nx, int ny, int maxIters, int reynolds_dim, float densit
 int propagate(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, t_speed* tmp_cells)
 {
   /* loop over _all_ cells */
-  #pragma omp teams distribute parallel for simd
+  #pragma omp target teams distribute parallel for simd
   for (int jj = 0; jj < ny; jj++)
   {
     for (int ii = 0; ii < nx; ii++)
@@ -310,7 +310,7 @@ int propagate(int nx, int ny, int maxIters, int reynolds_dim, float density, flo
 int rebound(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
   /* loop over the cells in the grid */
-  #pragma omp teams distribute parallel for simd
+#pragma omp target teams distribute parallel for simd
   for (int jj = 0; jj < ny; jj++)
   {
     for (int ii = 0; ii < nx; ii++)
@@ -346,7 +346,7 @@ int collision(int nx, int ny, int maxIters, int reynolds_dim, float density, flo
   ** NB the collision step is called after
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
-  #pragma omp teams distribute parallel for simd
+#pragma omp target teams distribute parallel for simd
   for (int jj = 0; jj < ny; jj++)
   {
     for (int ii = 0; ii < nx; ii++)
@@ -499,7 +499,7 @@ float av_velocity_noDiv(int nx, int ny, int maxIters, int reynolds_dim, float de
   tot_u = 0.f;
 
   /* loop over all non-blocked cells */
- #pragma omp teams distribute parallel for simd reduce(+:tot_u)
+ #pragma omp target teams distribute parallel for simd reduce(+:tot_u)
   for (int jj = 0; jj < ny; jj++)
   {
     for (int ii = 0; ii < nx; ii++)
