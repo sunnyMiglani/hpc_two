@@ -174,6 +174,17 @@ int main(int argc, char* argv[])
   /* initialise our data structures and load values from file */
   initialise(paramfile, obstaclefile, &params, &cells, &tmp_cells, &obstacles, &av_vels);
 
+
+    for (int jj = 0; jj < params->ny; jj++)
+    {
+      for (int ii = 0; ii < params->nx; ii++)
+      {
+        if (!obstacles[ii + jj*nx]){
+            numOfNotObstacles +=1;
+        }
+      }
+    }
+
   /* iterate for maxIters timesteps */
   gettimeofday(&timstr, NULL);
   tic = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
@@ -672,15 +683,6 @@ int initialise(const char* paramfile, const char* obstaclefile,
     (*obstacles_ptr)[xx + yy*params->nx] = blocked;
   }
 
-  for (int jj = 0; jj < params->ny; jj++)
-  {
-    for (int ii = 0; ii < params->nx; ii++)
-    {
-      if (!obstacles[ii + jj*nx]){
-          numOfNotObstacles +=1;
-      }
-    }
-  }
 
   /* and close the file */
   fclose(fp);
