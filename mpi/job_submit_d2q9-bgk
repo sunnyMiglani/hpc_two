@@ -1,11 +1,10 @@
 #!/bin/bash
-
 #SBATCH --job-name d2q9-bgk
 #SBATCH --partition serial
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=2
+#SBATCH --ntasks-per-node=8
 #SBATCH --time=1:25:15
-#SBATCH --output TimingTestsN2T1.out
+#SBATCH --output TimingTestsN1T8.out
 
 echo Running on host `hostname`
 echo Time is `date`

@@ -1,0 +1,33 @@
+Running on host compute068.bc4.acrc.priv
+Time is Thu May 10 15:18:27 BST 2018
+Directory is /mnt/storage/home/sm15504/year3CW/flat_mpi_better/hpc_two/mpi
+Slurm job ID is 1169056
+This job runs on the following machines:
+compute068
+icc
+NUMBER OF NODES : 1
+CPUS per node : 2
+--------- Size : 128x128 --------------
+Error at line 834 of file d2q9-bgk.c:
+could not open input parameter file: input_128x128.params
+Error at line 834 of file d2q9-bgk.c:
+could not open input parameter file: input_128x128.params
+done!
+--------- Size : 128x256 --------------
+Error at line 834 of file d2q9-bgk.c:
+could not open input parameter file: input_128x256.params
+Error at line 834 of file d2q9-bgk.c:
+could not open input parameter file: input_128x256.params
+done!
+--------- Size : 256x256 --------------
+Error at line 834 of file d2q9-bgk.c:
+could not open input parameter file: input_256x256.params
+Error at line 834 of file d2q9-bgk.c:
+could not open input parameter file: input_256x256.params
+done!
+--------- Size : 1024x1024 --------------
+Error at line 834 of file d2q9-bgk.c:
+could not open input parameter file: input_1024x1024.params
+Error at line 834 of file d2q9-bgk.c:
+could not open input parameter file: input_1024x1024.params
+done!
