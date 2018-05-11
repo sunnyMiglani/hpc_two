@@ -1,0 +1,16 @@
+Running on host compute423.bc4.acrc.priv
+Time is Sat Apr 21 10:00:24 UTC 2018
+Directory is /mnt/storage/home/sm15504/year3CW/flat_mpi_better/hpc_two
+Slurm job ID is 1119025
+This job runs on the following machines:
+compute[423,426-427,430]
+icc
+NUMBER OF NODES : 4
+CPUS per node : 28(x4)
+Number of workers being run : 28
+Elapsed user CPU time:		10.115316 (s)
+Elapsed system CPU time:	0.060007 (s)
+==done==
+Reynolds number:		6.545629501343E-01
+Elapsed time:			10.153971 (s)
+done!
