@@ -498,7 +498,7 @@ int func_propagate(int nx, int ny, int maxIters, int reynolds_dim, float density
 
   /* loop over _all_ cells */
 
-  #pragma omp target teams distribute parallel for simd
+  #pragma omp target teams distribute parallel for simd{
   for (int jj = myStartInd; jj < myEndInd; jj++)
   {
     for (int ii = 0; ii < nx; ii++)
@@ -526,6 +526,7 @@ int func_propagate(int nx, int ny, int maxIters, int reynolds_dim, float density
       tmp_cells[ii + jj*nx].speeds[8] = cells[x_w + y_n*nx].speeds[8]; /* south-east */
     }
   }
+}
 
   return EXIT_SUCCESS;
 }
