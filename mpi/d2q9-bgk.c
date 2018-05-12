@@ -298,7 +298,6 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
 
     //if(rank == MASTER){printf("Collect has value : %f before reduce\n",collect);}
     MPI_Reduce(&av, &collect, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&numOfCells, &collect_cells , 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     //if(rank == MASTER){printf("Collect has value : %f after reduce\n",collect);}
 
 
@@ -306,7 +305,7 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
     if(rank == MASTER){
         // collect_cells += numOfCells;
         // printf("Master has av as : %f\n",collect);
-        collect = (collect/(float) collect_cells);
+        collect = (collect/(float) numOfCells);
         av = collect;
         return collect;
     }
@@ -966,11 +965,22 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
   /* and close the file */
   fclose(fp);
 
+  for (int jj = 0; jj < params->ny; jj++)
+  {
+    for (int ii = 0; ii < params->nx; ii++)
+    {
+      if(!obstacles){
+          numOfCells +=1;
+      }
+    }
+  }
+
   /*
   ** allocate space to hold a record of the avarage velocities computed
   ** at each timestep
   */
   *av_vels_ptr = (float*)malloc(sizeof(float) * params->maxIters);
+
 
   return EXIT_SUCCESS;
 }
