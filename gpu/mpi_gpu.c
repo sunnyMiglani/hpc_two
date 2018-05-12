@@ -115,23 +115,23 @@ typedef struct
 */
 
 /* load params, allocate memory, load obstacles & initialise fluid particle densities */
-int func_initialise(const char* paramfile, const char* obstaclefile,
+int initialise(const char* paramfile, const char* obstaclefile,
                t_param* params, t_speed** cells_ptr, t_speed** tmp_cells_ptr,
                int** obstacles_ptr, float** av_vels_ptr);
 
 /*
 ** The main calculation methods.
 ** timestep calls, in order, the functions:
-** func_accelerate_flow(), func_propagate(), func_rebound() & func_collision()
+** accelerate_flow(), propagate(), rebound() & collision()
 */
-int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
-int func_accelerate_flow(const t_param params, t_speed* cells, int* obstacles);
-int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells);
-int func_rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
-int func_collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
-int func_write_values(const t_param params, t_speed* cells, int* obstacles, float* av_vels);
-float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles);
-void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
+int timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
+int accelerate_flow(const t_param params, t_speed* cells, int* obstacles);
+int propagate(const t_param params, t_speed* cells, t_speed* tmp_cells);
+int rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
+int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
+int write_values(const t_param params, t_speed* cells, int* obstacles, float* av_vels);
+float gatherVelocity(const t_param params,  t_speed *cells, int* obstacles);
+void gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
 
 
 /* finalise, including freeing up allocated memory */
@@ -209,7 +209,7 @@ int main(int argc, char* argv[])
 
 
   /* initialise our data structures and load values from file */
-  func_initialise(paramfile, obstaclefile, &params, &cells, &tmp_cells, &obstacles, &av_vels);
+  initialise(paramfile, obstaclefile, &params, &cells, &tmp_cells, &obstacles, &av_vels);
 
   for (int jj = 0; jj < params.ny; jj++)
   {
@@ -233,8 +233,8 @@ int main(int argc, char* argv[])
   for (int tt = 0; tt < params.maxIters; tt++)
   {
    // printf("Worker %d is doing iteration %d \n",rank, tt);
-    func_timestep(params, cells, tmp_cells, obstacles);
-    float this_avgV = func_gatherVelocity(params,cells,obstacles);
+    timestep(params, cells, tmp_cells, obstacles);
+    float this_avgV = gatherVelocity(params,cells,obstacles);
     ++numberOfIterationsDone;
     av_vels[tt] = this_avgV;
     if(rank == MASTER){
@@ -256,7 +256,7 @@ int main(int argc, char* argv[])
       systim = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
   }
 
-  func_gatherData(params,cells,tmp_cells,obstacles);
+  gatherData(params,cells,tmp_cells,obstacles);
 
   MPI_Finalize();
 
@@ -275,7 +275,7 @@ int main(int argc, char* argv[])
   printf("==done==\n");
   printf("Reynolds number:\t\t%.12E\n", calc_reynolds(params, cells, obstacles));
   printf("Elapsed time:\t\t\t%.6lf (s)\n", toc - tic);
-  func_write_values(params, cells, obstacles, av_vels);
+  write_values(params, cells, obstacles, av_vels);
  }
   /* write final values and free memory */
 
@@ -286,7 +286,7 @@ int main(int argc, char* argv[])
 }
 
 
-void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
+void haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
 
 
  // printf("Worker %d sent ind %d to worker %d. Worker %d received into ind %d from worker %d\n",rank,myStartInd,botRank,rank,haloTop,topRank);
@@ -298,7 +298,7 @@ void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells,
 }
 
 
-float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles){
+float gatherVelocity(const t_param params,  t_speed *cells, int* obstacles){
 
     int collect_cells;
     float av = av_velocity_withoutDiv(params, cells, obstacles);
@@ -379,7 +379,7 @@ int getLimitsFromRankUpper(int rank){
 
 
 // Currently implementing Idea 1 due to ease.
-void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
+void gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
     if(rank == MASTER){
         // printf("Master Starting to Gather data \n");
         for(int i = 1; i < size; i ++){
@@ -417,28 +417,28 @@ void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, i
     // printf("Leaving the gatherData Function! \n");
 }
 
-int func_timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
+int timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
     // printf("Worker %d starts timestep\n", rank);
     if(rank == size-1){
-    //printf("Worker %d starts func_accelerate_flow\n", rank);
-    func_accelerate_flow(params, cells, obstacles);
+    //printf("Worker %d starts accelerate_flow\n", rank);
+    accelerate_flow(params, cells, obstacles);
     }
     // printf("Worker %d starts Propogate\n", rank);
-    func_propagate(params, cells, tmp_cells);
-    // printf("Worker %d starts func_rebound\n", rank);
-    func_rebound(params, cells, tmp_cells, obstacles);
-    // printf("Worker %d starts func_colli\n", rank);
-    func_collision(params, cells, tmp_cells, obstacles);
+    propagate(params, cells, tmp_cells);
+    // printf("Worker %d starts rebound\n", rank);
+    rebound(params, cells, tmp_cells, obstacles);
+    // printf("Worker %d starts colli\n", rank);
+    collision(params, cells, tmp_cells, obstacles);
     // printf("Worker %d starts halo\n", rank);
-    func_haloExchange(params,cells,tmp_cells,obstacles);
+    haloExchange(params,cells,tmp_cells,obstacles);
     // printf("Worker %d starts gathering data\n ",rank);
-    // func_gatherData(params,cells,tmp_cells,obstacles);
+    // gatherData(params,cells,tmp_cells,obstacles);
     // printf("Worker %d finishes timestep\n", rank);
     return EXIT_SUCCESS;
 }
 
-int func_accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
+int accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
 {
 
   /* compute weighting factors */
@@ -480,7 +480,7 @@ int getHaloCellsForY(int attempt){
   return attempt;
 }
 
-int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
+int propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
 {
   // This is the function that requries making sure that the loops look at Halo'd cells.
 
@@ -516,7 +516,7 @@ int func_propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
   return EXIT_SUCCESS;
 }
 
-int func_rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
+int rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
   /* loop over the cells in the grid */
   for (int jj = myStartInd; jj < myEndInd; jj++)
@@ -543,7 +543,7 @@ int func_rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* 
   return EXIT_SUCCESS;
 }
 
-int func_collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
+int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
   const float c_sq = 1.f / 3.f; /* square of speed of sound */
   const float w0 = 4.f / 9.f;  /* weighting factor */
@@ -827,7 +827,7 @@ float av_velocity(const t_param params, t_speed* cells, int* obstacles)
 ** a 1D array of these structs.
 */
 
-int func_initialise(const char* paramfile, const char* obstaclefile,
+int initialise(const char* paramfile, const char* obstaclefile,
                t_param* params, t_speed** cells_ptr, t_speed** tmp_cells_ptr,
                int** obstacles_ptr, float** av_vels_ptr)
 {
@@ -1037,7 +1037,7 @@ float total_density(const t_param params, t_speed* cells)
   return total;
 }
 
-int func_write_values(const t_param params, t_speed* cells, int* obstacles, float* av_vels)
+int write_values(const t_param params, t_speed* cells, int* obstacles, float* av_vels)
 {
   FILE* fp;                     /* file pointer */
   const float c_sq = 1.f / 3.f; /* sq. of speed of sound */
