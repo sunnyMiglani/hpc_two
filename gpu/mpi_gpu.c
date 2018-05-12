@@ -498,9 +498,9 @@ int func_propagate(int nx, int ny, int maxIters, int reynolds_dim, float density
 
   /* loop over _all_ cells */
 
-  #pragma omp target teams distribute parallel for simd{
   for (int jj = myStartInd; jj < myEndInd; jj++)
   {
+    #pragma omp target teams distribute parallel for simd
     for (int ii = 0; ii < nx; ii++)
     {
       /* determine indices of axis-direction neighbours
@@ -525,9 +525,7 @@ int func_propagate(int nx, int ny, int maxIters, int reynolds_dim, float density
       tmp_cells[ii + jj*nx].speeds[7] = cells[x_e + y_n*nx].speeds[7]; /* south-west */
       tmp_cells[ii + jj*nx].speeds[8] = cells[x_w + y_n*nx].speeds[8]; /* south-east */
     }
-  }
 }
-
   return EXIT_SUCCESS;
 }
 
@@ -571,7 +569,7 @@ int func_collision(int nx, int ny, int maxIters, int reynolds_dim, float density
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
 
- #pragma omp target teams distribute parallel for simd
+  //#pragma omp target teams distribute parallel for simd
   for (int jj = myStartInd; jj < myEndInd; jj++)
   {
     for (int ii = 0; ii < nx; ii++)
