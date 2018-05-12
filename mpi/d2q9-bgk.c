@@ -211,6 +211,16 @@ int main(int argc, char* argv[])
   /* initialise our data structures and load values from file */
   func_initialise(paramfile, obstaclefile, &params, &cells, &tmp_cells, &obstacles, &av_vels);
 
+  for (int jj = 0; jj < params->ny; jj++)
+  {
+    for (int ii = 0; ii < params->nx; ii++)
+    {
+      if(!obstacles[ii + jj*params.nx]){
+          numOfCells +=1;
+      }
+    }
+  }
+
 
   if(rank == MASTER){
    gettimeofday(&timstr, NULL);
@@ -235,6 +245,16 @@ int main(int argc, char* argv[])
           #endif
     }
   }
+  
+  if(rank == MASTER){
+      gettimeofday(&timstr, NULL);
+      toc = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
+      getrusage(RUSAGE_SELF, &ru);
+      timstr = ru.ru_utime;
+      usrtim = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
+      timstr = ru.ru_stime;
+      systim = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
+  }
 
   func_gatherData(params,cells,tmp_cells,obstacles);
 
@@ -250,13 +270,6 @@ int main(int argc, char* argv[])
 
 
   if(rank == MASTER){
-  gettimeofday(&timstr, NULL);
-  toc = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
-  getrusage(RUSAGE_SELF, &ru);
-  timstr = ru.ru_utime;
-  usrtim = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
-  timstr = ru.ru_stime;
-  systim = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
   printf("Elapsed user CPU time:\t\t%.6lf (s)\n", usrtim);
   printf("Elapsed system CPU time:\t%.6lf (s)\n", systim);
   printf("==done==\n");
@@ -965,15 +978,7 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
   /* and close the file */
   fclose(fp);
 
-  for (int jj = 0; jj < params->ny; jj++)
-  {
-    for (int ii = 0; ii < params->nx; ii++)
-    {
-      if(!obstacles){
-          numOfCells +=1;
-      }
-    }
-  }
+
 
   /*
   ** allocate space to hold a record of the avarage velocities computed
