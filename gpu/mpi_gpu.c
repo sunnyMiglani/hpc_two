@@ -505,7 +505,7 @@ int func_propagate(int nx, int ny, int maxIters, int reynolds_dim, float density
     {
       /* determine indices of axis-direction neighbours
       ** respecting periodic boundary conditions (wrap around) */
-      int y_n = getHaloCellsForY(jj + 1);
+      int y_n = (jj+1 >= myEndInd)? haloTop : attempt; //getHaloCellsForY(jj + 1);
       int x_e = (ii + 1) % nx;
       int y_s = (jj == 0) ? (jj + ny - 1) : (jj - 1); //getHaloCellsForY(jj); //(jj == 0) ? (jj + ny - 1) : (jj - 1);
       int x_w = (ii == 0) ? (ii + nx - 1) : (ii - 1);
