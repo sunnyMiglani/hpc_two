@@ -126,7 +126,7 @@ int initialise(const char* paramfile, const char* obstaclefile,
 */
 int timestep(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, t_speed* tmp_cells, int* obstacles);
 int accelerate_flow(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, int* obstacles);
-int propagate(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega t_speed* cells, t_speed* tmp_cells);
+int propagate(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, t_speed* tmp_cells);
 int rebound(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, t_speed* tmp_cells, int* obstacles);
 int collision(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, t_speed* tmp_cells, int* obstacles);
 void gatherData(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, t_speed* tmp_cells, int* obstacles);
@@ -265,7 +265,7 @@ int main(int argc, char* argv[])
       systim = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
   }
 
-  gatherData(params,cells,tmp_cells,obstacles);
+  gatherData(nx , ny , maxIters, reynolds_dim, density, accel,omega,cells,tmp_cells,obstacles);
 
   MPI_Finalize();
 
@@ -310,7 +310,7 @@ void haloExchange(int nx, int ny, int maxIters, int reynolds_dim, float density,
 float gatherVelocity(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega,  t_speed *cells, int* obstacles){
 
     int collect_cells;
-    float av = av_velocity_withoutDiv(params, cells, obstacles);
+    float av = av_velocity_withoutDiv(nx , ny , maxIters, reynolds_dim, density, accel,omega, cells, obstacles);
     float collect = 0;
 
     /*
@@ -431,16 +431,16 @@ int timestep(int nx, int ny, int maxIters, int reynolds_dim, float density, floa
     // printf("Worker %d starts timestep\n", rank);
     if(rank == size-1){
     //printf("Worker %d starts accelerate_flow\n", rank);
-    accelerate_flow( nx , ny , maxIters, reynolds_dim, density, accel,omega,, cells, obstacles);
+    accelerate_flow( nx , ny , maxIters, reynolds_dim, density, accel,omega, cells, obstacles);
     }
     // printf("Worker %d starts Propogate\n", rank);
-    propagate( nx , ny , maxIters, reynolds_dim, density, accel,omega,, cells, tmp_cells);
+    propagate( nx , ny , maxIters, reynolds_dim, density, accel,omega, cells, tmp_cells);
     // printf("Worker %d starts rebound\n", rank);
-    rebound( nx , ny , maxIters, reynolds_dim, density, accel,omega,, cells, tmp_cells, obstacles);
+    rebound( nx , ny , maxIters, reynolds_dim, density, accel,omega, cells, tmp_cells, obstacles);
     // printf("Worker %d starts colli\n", rank);
-    collision( nx , ny , maxIters, reynolds_dim, density, accel,omega,, cells, tmp_cells, obstacles);
+    collision( nx , ny , maxIters, reynolds_dim, density, accel,omega, cells, tmp_cells, obstacles);
     // printf("Worker %d starts halo\n", rank);
-    haloExchange( nx , ny , maxIters, reynolds_dim, density, accel,omega,,cells,tmp_cells,obstacles);
+    haloExchange( nx , ny , maxIters, reynolds_dim, density, accel,omega,cells,tmp_cells,obstacles);
     // printf("Worker %d starts gathering data\n ",rank);
     // gatherData(params,cells,tmp_cells,obstacles);
     // printf("Worker %d finishes timestep\n", rank);
@@ -530,21 +530,21 @@ int rebound(int nx, int ny, int maxIters, int reynolds_dim, float density, float
   /* loop over the cells in the grid */
   for (int jj = myStartInd; jj < myEndInd; jj++)
   {
-    for (int ii = 0; ii < params.nx; ii++)
+    for (int ii = 0; ii < nx; ii++)
     {
       /* if the cell contains an obstacle */
-      if (obstacles[jj*params.nx + ii])
+      if (obstacles[jj*nx + ii])
       {
         /* called after propagate, so taking values from scratch space
         ** mirroring, and writing into main grid */
-        cells[ii + jj*params.nx].speeds[1] = tmp_cells[ii + jj*params.nx].speeds[3];
-        cells[ii + jj*params.nx].speeds[2] = tmp_cells[ii + jj*params.nx].speeds[4];
-        cells[ii + jj*params.nx].speeds[3] = tmp_cells[ii + jj*params.nx].speeds[1];
-        cells[ii + jj*params.nx].speeds[4] = tmp_cells[ii + jj*params.nx].speeds[2];
-        cells[ii + jj*params.nx].speeds[5] = tmp_cells[ii + jj*params.nx].speeds[7];
-        cells[ii + jj*params.nx].speeds[6] = tmp_cells[ii + jj*params.nx].speeds[8];
-        cells[ii + jj*params.nx].speeds[7] = tmp_cells[ii + jj*params.nx].speeds[5];
-        cells[ii + jj*params.nx].speeds[8] = tmp_cells[ii + jj*params.nx].speeds[6];
+        cells[ii + jj*nx].speeds[1] = tmp_cells[ii + jj*nx].speeds[3];
+        cells[ii + jj*nx].speeds[2] = tmp_cells[ii + jj*nx].speeds[4];
+        cells[ii + jj*nx].speeds[3] = tmp_cells[ii + jj*nx].speeds[1];
+        cells[ii + jj*nx].speeds[4] = tmp_cells[ii + jj*nx].speeds[2];
+        cells[ii + jj*nx].speeds[5] = tmp_cells[ii + jj*nx].speeds[7];
+        cells[ii + jj*nx].speeds[6] = tmp_cells[ii + jj*nx].speeds[8];
+        cells[ii + jj*nx].speeds[7] = tmp_cells[ii + jj*nx].speeds[5];
+        cells[ii + jj*nx].speeds[8] = tmp_cells[ii + jj*nx].speeds[6];
       }
     }
   }
