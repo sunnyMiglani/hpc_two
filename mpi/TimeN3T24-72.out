@@ -1,41 +1,41 @@
-Running on host compute239.bc4.acrc.priv
-Time is Fri May 11 21:27:07 BST 2018
+Running on host compute241.bc4.acrc.priv
+Time is Sat May 12 12:24:28 BST 2018
 Directory is /mnt/storage/home/sm15504/year3CW/flat_mpi_better/hpc_two/mpi
-Slurm job ID is 1171732
+Slurm job ID is 1172245
 This job runs on the following machines:
-compute[239,416-417]
+compute[241,411,505]
 icc
 NUMBER OF NODES : 3
 CPUS per node : 24(x3)
 --------- Size : 128x128 --------------
 --------Number of workers being run : 72--------
-Elapsed user CPU time:		60.524158 (s)
-Elapsed system CPU time:	0.448001 (s)
+Elapsed user CPU time:		12.290096 (s)
+Elapsed system CPU time:	0.109089 (s)
 ==done==
 Reynolds number:		9.757672309875E+00
-Elapsed time:			60.854493 (s)
+Elapsed time:			12.288921 (s)
 done!
 --------- Size : 128x256 --------------
 --------Number of workers being run : 72--------
-Elapsed user CPU time:		33.312507 (s)
-Elapsed system CPU time:	0.257019 (s)
+Elapsed user CPU time:		9.427620 (s)
+Elapsed system CPU time:	0.085978 (s)
 ==done==
 Reynolds number:		3.717264556885E+01
-Elapsed time:			33.457270 (s)
+Elapsed time:			9.439735 (s)
 done!
 --------- Size : 256x256 --------------
 --------Number of workers being run : 72--------
-Elapsed user CPU time:		105.230343 (s)
-Elapsed system CPU time:	0.718029 (s)
+Elapsed user CPU time:		36.675032 (s)
+Elapsed system CPU time:	0.128000 (s)
 ==done==
 Reynolds number:		1.006754398346E+01
-Elapsed time:			105.837414 (s)
+Elapsed time:			36.735537 (s)
 done!
 --------- Size : 1024x1024 --------------
 --------Number of workers being run : 72--------
-Elapsed user CPU time:		45.366556 (s)
-Elapsed system CPU time:	0.376988 (s)
+Elapsed user CPU time:		25.812406 (s)
+Elapsed system CPU time:	0.140996 (s)
 ==done==
 Reynolds number:		3.377146005630E+00
-Elapsed time:			45.654620 (s)
+Elapsed time:			25.870920 (s)
 done!

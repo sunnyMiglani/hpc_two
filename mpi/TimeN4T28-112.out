@@ -1,42 +1,41 @@
-Running on host compute270.bc4.acrc.priv
-Time is Fri May 11 21:38:52 BST 2018
+Running on host compute241.bc4.acrc.priv
+Time is Sat May 12 12:25:59 BST 2018
 Directory is /mnt/storage/home/sm15504/year3CW/flat_mpi_better/hpc_two/mpi
-Slurm job ID is 1171749
+Slurm job ID is 1172254
 This job runs on the following machines:
-compute[270,273,416-417]
+compute[241,245,248,411]
 icc
 NUMBER OF NODES : 4
 CPUS per node : 28(x4)
 --------- Size : 128x128 --------------
 --------Number of workers being run : 112--------
-Elapsed user CPU time:		63.926427 (s)
-Elapsed system CPU time:	1.688648 (s)
+Elapsed user CPU time:		3.708207 (s)
+Elapsed system CPU time:	0.047002 (s)
 ==done==
 Reynolds number:		9.757672309875E+00
-Elapsed time:			130.889707 (s)
+Elapsed time:			3.657450 (s)
 done!
 --------- Size : 128x256 --------------
 --------Number of workers being run : 112--------
-Elapsed user CPU time:		79.180190 (s)
-Elapsed system CPU time:	2.074237 (s)
+Elapsed user CPU time:		7.547050 (s)
+Elapsed system CPU time:	0.072019 (s)
 ==done==
 Reynolds number:		3.717264556885E+01
-Elapsed time:			162.241002 (s)
+Elapsed time:			7.517525 (s)
 done!
 --------- Size : 256x256 --------------
 --------Number of workers being run : 112--------
-srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
-slurmstepd: error: *** STEP 1171749.2 ON compute270 CANCELLED AT 2018-05-11T21:50:11 DUE TO TIME LIMIT ***
-slurmstepd: error: *** JOB 1171749 ON compute270 CANCELLED AT 2018-05-11T21:50:11 DUE TO TIME LIMIT ***
-srun: got SIGCONT
-
-===================================================================================
-=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
-=   PID 12402 RUNNING AT compute417
-=   EXIT CODE: 15
-=   CLEANING UP REMAINING PROCESSES
-=   YOU CAN IGNORE THE BELOW CLEANUP MESSAGES
-===================================================================================
-   Intel(R) MPI Library troubleshooting guide:
-      https://software.intel.com/node/561764
-===================================================================================
+Elapsed user CPU time:		28.968597 (s)
+Elapsed system CPU time:	0.131025 (s)
+==done==
+Reynolds number:		1.006754398346E+01
+Elapsed time:			29.012139 (s)
+done!
+--------- Size : 1024x1024 --------------
+--------Number of workers being run : 112--------
+Elapsed user CPU time:		20.984985 (s)
+Elapsed system CPU time:	0.154977 (s)
+==done==
+Reynolds number:		3.377146005630E+00
+Elapsed time:			21.035643 (s)
+done!

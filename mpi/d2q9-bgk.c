@@ -211,9 +211,9 @@ int main(int argc, char* argv[])
   /* initialise our data structures and load values from file */
   func_initialise(paramfile, obstaclefile, &params, &cells, &tmp_cells, &obstacles, &av_vels);
 
-  for (int jj = 0; jj < params->ny; jj++)
+  for (int jj = 0; jj < params.ny; jj++)
   {
-    for (int ii = 0; ii < params->nx; ii++)
+    for (int ii = 0; ii < params.nx; ii++)
     {
       if(!obstacles[ii + jj*params.nx]){
           numOfCells +=1;
@@ -410,7 +410,7 @@ void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, i
 
         // printf("Worker %d lower : %d upper : %d  \n",rank, myStartInd, myEndInd);
 
-        MPI_Send(sendbuffer, sendSize, cells_struct, 0, 1, MPI_COMM_WORLD);
+        MPI_Ssend(sendbuffer, sendSize, cells_struct, 0, 1, MPI_COMM_WORLD);
 
         // printf("Worker %d has SENT THE DATA! \n",rank);
     }
@@ -749,7 +749,7 @@ float av_velocity_withoutDiv(const t_param params, t_speed* cells, int* obstacle
     }
   }
 
-  numOfCells = tot_cells;
+  //numOfCells = tot_cells;
   numOfObstacles = tot_obs;
 
 

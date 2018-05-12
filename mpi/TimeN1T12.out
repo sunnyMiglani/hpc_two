@@ -1,0 +1,41 @@
+Running on host compute068.bc4.acrc.priv
+Time is Sat May 12 12:15:52 BST 2018
+Directory is /mnt/storage/home/sm15504/year3CW/flat_mpi_better/hpc_two/mpi
+Slurm job ID is 1172255
+This job runs on the following machines:
+compute068
+icc
+NUMBER OF NODES : 1
+CPUS per node : 12
+--------- Size : 128x128 --------------
+--------Number of workers being run : 12--------
+Elapsed user CPU time:		3.689588 (s)
+Elapsed system CPU time:	0.042018 (s)
+==done==
+Reynolds number:		9.757672309875E+00
+Elapsed time:			3.709036 (s)
+done!
+--------- Size : 128x256 --------------
+--------Number of workers being run : 12--------
+Elapsed user CPU time:		5.240828 (s)
+Elapsed system CPU time:	0.048645 (s)
+==done==
+Reynolds number:		3.717264556885E+01
+Elapsed time:			5.477087 (s)
+done!
+--------- Size : 256x256 --------------
+--------Number of workers being run : 12--------
+Elapsed user CPU time:		20.730430 (s)
+Elapsed system CPU time:	0.069011 (s)
+==done==
+Reynolds number:		1.006754398346E+01
+Elapsed time:			20.823490 (s)
+done!
+--------- Size : 1024x1024 --------------
+--------Number of workers being run : 12--------
+Elapsed user CPU time:		86.934206 (s)
+Elapsed system CPU time:	0.062003 (s)
+==done==
+Reynolds number:		3.377146005630E+00
+Elapsed time:			86.964122 (s)
+done!
