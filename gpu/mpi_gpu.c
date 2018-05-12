@@ -303,9 +303,9 @@ void func_haloExchange(int nx, int ny, int maxIters, int reynolds_dim, float den
 
 
  // printf("Worker %d sent ind %d to worker %d. Worker %d received into ind %d from worker %d\n",rank,myStartInd,botRank,rank,haloTop,topRank);
-  int val = MPI_Sendrecv(&cells[0 + myStartInd*params.nx], params.nx, cells_struct,botRank,0,&cells[0 + haloTop*params.nx],params.nx,cells_struct, topRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+  int val = MPI_Sendrecv(&cells[0 + myStartInd*nx], nx, cells_struct,botRank,0,&cells[0 + haloTop*nx],nx,cells_struct, topRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
  // printf("Worker %d sent ind %d to worker %d Worker %d received into ind %d from worker %d\n",rank,myEndInd,topRank,rank,haloBottom,botRank);
-  int valTwo = MPI_Sendrecv(&cells[0 + (myEndInd-1)*params.nx], params.nx, cells_struct,topRank,0,&cells[0 + haloBottom*params.nx],params.nx,cells_struct,botRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+  int valTwo = MPI_Sendrecv(&cells[0 + (myEndInd-1)*nx], nx, cells_struct,topRank,0,&cells[0 + haloBottom*nx],nx,cells_struct,botRank,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   // printf("Worker %d Finished Halo Exchange \n",rank);
 
 }
