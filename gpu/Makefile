@@ -1,6 +1,6 @@
 # Makefile
 
-EXE=d2q9-bgk
+EXE=mpi_gpu
 
 CUDA_PATH=/mnt/storage/easybuild/software/CUDA/8.0.44
 CC=clang

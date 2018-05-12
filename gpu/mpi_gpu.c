@@ -63,6 +63,7 @@
 #define FINALSTATEFILE  "final_state.dat"
 #define AVVELSFILE      "av_vels.dat"
 
+#define offsetof(s,m) (size_t)(unsigned long)&(((s *)0)->m)
 
 #define MASTER 0
 #define NTYPES 9
@@ -200,10 +201,11 @@ int main(int argc, char* argv[])
   MPI_Comm_size(MPI_COMM_WORLD, &size);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-  MPI_Datatype this_type = {MPI_FLOAT};
   const MPI_Aint offset = {
       offsetof(t_speed,speeds)
   };
+
+  MPI_Datatype this_type = {MPI_FLOAT};
   MPI_Type_create_struct(items,&block_lengths,&offset,&this_type,&cells_struct);
   MPI_Type_commit(&cells_struct);
 
