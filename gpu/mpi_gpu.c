@@ -299,7 +299,7 @@ int main(int argc, char* argv[])
 }
 
 
-void func_haloExchange(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles){
+void func_haloExchange(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, t_speed* tmp_cells, int* obstacles){
 
 
  // printf("Worker %d sent ind %d to worker %d. Worker %d received into ind %d from worker %d\n",rank,myStartInd,botRank,rank,haloTop,topRank);
@@ -673,12 +673,12 @@ float av_velocity_forAll(const t_param params, t_speed* cells, int* obstacles)
 
     #pragma omp target teams distribute parallel for simd
     /* loop over all non-blocked cells */
-    for (int jj = 0; jj < ny; jj++)
+    for (int jj = 0; jj < params.ny; jj++)
     {
-      for (int ii = 0; ii < nx; ii++)
+      for (int ii = 0; ii < params.nx; ii++)
       {
         /* ignore occupied cells */
-        if (!obstacles[ii + jj*nx])
+        if (!obstacles[ii + jj*params.nx])
         {
           /* local density total */
           float local_density = 0.f;
