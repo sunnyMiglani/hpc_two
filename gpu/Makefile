@@ -1,16 +1,16 @@
-# Makefile
+## Makefile
 
 EXE=mpi_gpu
 
+CC=mpiicc
 CUDA_PATH=/mnt/storage/easybuild/software/CUDA/8.0.44
-CC=clang
-CFLAGS= -std=c99 -Wall -O3 -fopenmp=libomp -fopenmp-targets=nvptx64-nvidia-cuda --cuda-path=$(CUDA_PATH)
+CFLAGS= -std=c99 -Wall -Ofast -cc=clang -fopenmp=libomp -fopenmp-targets=nvptx64-nvidia-cuda --cuda-path=$(CUDA_PATH)
 LIBS = -lm
 
 FINAL_STATE_FILE=./final_state.dat
 AV_VELS_FILE=./av_vels.dat
-REF_FINAL_STATE_FILE=check/128x128.final_state.dat
-REF_AV_VELS_FILE=check/128x128.av_vels.dat
+REF_FINAL_STATE_FILE=check/1024x1024.final_state.dat
+REF_AV_VELS_FILE=check/1024x1024.av_vels.dat
 
 all: $(EXE)
 
