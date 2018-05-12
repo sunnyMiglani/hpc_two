@@ -77,8 +77,8 @@ int bigY;
 int haloTop;
 int haloBottom;
 
-int myStartInd;
-int myEndInd;
+int myStartInd = 0;
+int myEndInd = 0;
 
 int numOfObstacles;
 int numOfCells;
@@ -495,11 +495,10 @@ int getHaloCellsForY(int attempt){
 
 int func_propagate(int nx, int ny, int maxIters, int reynolds_dim, float density, float accel, float omega, t_speed* cells, t_speed* tmp_cells)
 {
-  // This is the function that requries making sure that the loops look at Halo'd cells.
 
   /* loop over _all_ cells */
-  
-  //#pragma omp target teams distribute parallel for simd
+
+  #pragma omp target teams distribute parallel for simd
   for (int jj = myStartInd; jj < myEndInd; jj++)
   {
     for (int ii = 0; ii < nx; ii++)
@@ -570,7 +569,7 @@ int func_collision(int nx, int ny, int maxIters, int reynolds_dim, float density
   ** NB the collision step is called after
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
- 
+
  #pragma omp target teams distribute parallel for simd
   for (int jj = myStartInd; jj < myEndInd; jj++)
   {
