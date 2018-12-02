@@ -1,0 +1,34 @@
+Running on host gpu28.bc4.acrc.priv
+Time is Sat May 12 16:04:41 BST 2018
+Directory is /mnt/storage/home/sm15504/year3CW/flat_mpi_better/hpc_two/gpu
+Slurm job ID is 1172301
+This job runs on the following machines:
+gpu28
+------- 128x128 --------------
+==done==
+Reynolds number:		9.757292747498E+00
+Elapsed time:			31.071026 (s)
+Elapsed user CPU time:		847.464256 (s)
+Elapsed system CPU time:	2.745078 (s)
+-----------------------------
+-------- 128x256 -------------
+==done==
+Reynolds number:		3.717272186279E+01
+Elapsed time:			61.001664 (s)
+Elapsed user CPU time:		1689.814474 (s)
+Elapsed system CPU time:	6.351881 (s)
+------------------------------
+--------- 256x256 -----------
+==done==
+Reynolds number:		1.006698703766E+01
+Elapsed time:			235.445748 (s)
+Elapsed user CPU time:		6541.699863 (s)
+Elapsed system CPU time:	16.470785 (s)
+-----------------------------
+-------- 1024x1024-----------
+==done==
+Reynolds number:		3.377161026001E+00
+Elapsed time:			931.244010 (s)
+Elapsed user CPU time:		25915.734794 (s)
+Elapsed system CPU time:	42.151433 (s)
+------------------------------

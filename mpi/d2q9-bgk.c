@@ -211,6 +211,16 @@ int main(int argc, char* argv[])
   /* initialise our data structures and load values from file */
   func_initialise(paramfile, obstaclefile, &params, &cells, &tmp_cells, &obstacles, &av_vels);
 
+  for (int jj = 0; jj < params.ny; jj++)
+  {
+    for (int ii = 0; ii < params.nx; ii++)
+    {
+      if(!obstacles[ii + jj*params.nx]){
+          numOfCells +=1;
+      }
+    }
+  }
+
 
   if(rank == MASTER){
    gettimeofday(&timstr, NULL);
@@ -235,6 +245,16 @@ int main(int argc, char* argv[])
           #endif
     }
   }
+  
+  if(rank == MASTER){
+      gettimeofday(&timstr, NULL);
+      toc = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
+      getrusage(RUSAGE_SELF, &ru);
+      timstr = ru.ru_utime;
+      usrtim = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
+      timstr = ru.ru_stime;
+      systim = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
+  }
 
   func_gatherData(params,cells,tmp_cells,obstacles);
 
@@ -250,13 +270,6 @@ int main(int argc, char* argv[])
 
 
   if(rank == MASTER){
-  gettimeofday(&timstr, NULL);
-  toc = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
-  getrusage(RUSAGE_SELF, &ru);
-  timstr = ru.ru_utime;
-  usrtim = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
-  timstr = ru.ru_stime;
-  systim = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
   printf("Elapsed user CPU time:\t\t%.6lf (s)\n", usrtim);
   printf("Elapsed system CPU time:\t%.6lf (s)\n", systim);
   printf("==done==\n");
@@ -298,7 +311,6 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
 
     //if(rank == MASTER){printf("Collect has value : %f before reduce\n",collect);}
     MPI_Reduce(&av, &collect, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&numOfCells, &collect_cells , 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     //if(rank == MASTER){printf("Collect has value : %f after reduce\n",collect);}
 
 
@@ -306,7 +318,7 @@ float func_gatherVelocity(const t_param params,  t_speed *cells, int* obstacles)
     if(rank == MASTER){
         // collect_cells += numOfCells;
         // printf("Master has av as : %f\n",collect);
-        collect = (collect/(float) collect_cells);
+        collect = (collect/(float) numOfCells);
         av = collect;
         return collect;
     }
@@ -398,7 +410,7 @@ void func_gatherData(const t_param params, t_speed* cells, t_speed* tmp_cells, i
 
         // printf("Worker %d lower : %d upper : %d  \n",rank, myStartInd, myEndInd);
 
-        MPI_Send(sendbuffer, sendSize, cells_struct, 0, 1, MPI_COMM_WORLD);
+        MPI_Ssend(sendbuffer, sendSize, cells_struct, 0, 1, MPI_COMM_WORLD);
 
         // printf("Worker %d has SENT THE DATA! \n",rank);
     }
@@ -737,7 +749,7 @@ float av_velocity_withoutDiv(const t_param params, t_speed* cells, int* obstacle
     }
   }
 
-  numOfCells = tot_cells;
+  //numOfCells = tot_cells;
   numOfObstacles = tot_obs;
 
 
@@ -966,11 +978,14 @@ int func_initialise(const char* paramfile, const char* obstaclefile,
   /* and close the file */
   fclose(fp);
 
+
+
   /*
   ** allocate space to hold a record of the avarage velocities computed
   ** at each timestep
   */
   *av_vels_ptr = (float*)malloc(sizeof(float) * params->maxIters);
+
 
   return EXIT_SUCCESS;
 }
