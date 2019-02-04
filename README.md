@@ -6,3 +6,6 @@ Task:
 Implement a parallel GPU based solution to the given code
 
 
+
+# Caution
+This isn't a great implementation.
